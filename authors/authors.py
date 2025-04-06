@@ -63,7 +63,7 @@ def get_wikidata_batch(qids, max_retries=5):
       OPTIONAL {{ ?item wdt:P20 ?deathPlace . }}
       OPTIONAL {{ ?item wdt:P18 ?image . }}
       SERVICE wikibase:label {{
-        bd:serviceParam wikibase:language "de,en" .
+        bd:serviceParam wikibase:language "en" .
       }}
     }}
     """
