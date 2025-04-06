@@ -32,7 +32,7 @@ The `authors` script reads a list of Wikidata QIDs from a CSV file and creates R
 
 The script also uses `PROV-O` (`prov:wasDerivedFrom`) to link data back to Wikidata.
 
-📎 A **visual documentation** of the authors data model is included in the `authors` folder.
+📎 A [visual documentation](https://github.com/laurauntner/wikidata-to-cidoc-crm/blob/main/authors/authors.png) of the authors data model is included in the `authors` folder.
 
 ### Requirements
 
