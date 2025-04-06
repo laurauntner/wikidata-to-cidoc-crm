@@ -106,7 +106,7 @@ Q469571
     rdfs:label "1791-10-12"^^xsd:date .
 
 <https://sappho.com/gender/Q6581072> a ecrm:E55_Type ;
-    rdfs:label "weiblich"@en ;
+    rdfs:label "female"@en ;
     ecrm:P2_has_type <https://sappho.com/gender_type/wikidata> ;
     owl:sameAs <http://www.wikidata.org/entity/Q6581072> .
 
