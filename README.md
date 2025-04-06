@@ -41,8 +41,8 @@ Install dependencies with:
 
 ```
 pip install rdflib requests tqdm
-
 ```
+
 ### Example Input
 ```
 qid
