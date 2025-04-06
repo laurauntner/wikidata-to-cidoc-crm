@@ -20,6 +20,7 @@ import requests
 from tqdm import tqdm
 
 # Namespaces
+CRM = Namespace("http://www.cidoc-crm.org/cidoc-crm/") # CIDOC CRM
 ECRM = Namespace("http://erlangen-crm.org/current/")  # eCRM - CIDOC CRM (OWL version)
 PROV = Namespace("http://www.w3.org/ns/prov#")  # PROV-O - Provenance Ontology
 WD = "http://www.wikidata.org/entity/"  # Base URI for Wikidata entities
@@ -27,10 +28,26 @@ SAPPHO_BASE_URI = "https://sappho.com/"  # Base URI for Sappho
 
 # Create the RDF graph
 g = Graph()
+g.bind("crm", CRM)
 g.bind("ecrm", ECRM)
 g.bind("prov", PROV)
 g.bind("owl", OWL)
 g.bind("rdfs", RDFS)
+
+# CIDOC CRM alignment
+
+used_terms = [
+    "E21_Person", "E67_Birth", "E69_Death", "E52_Time-Span", "E53_Place",
+    "E36_Visual_Item", "E38_Image", "E55_Type", "E42_Identifier", "E82_Actor_Appellation",
+    "P1_is_identified_by", "P2_has_type", "P4_has_time_span", "P7_took_place_at",
+    "P65_shows_visual_item", "P98i_was_born", "P100i_died_in", "P131_is_identified_by",
+    "P138_represents"
+]
+
+for term in used_terms:
+    ecrm_uri = ECRM.term(term)
+    crm_uri = CRM.term(term)
+    g.add((ecrm_uri, OWL.sameAs, crm_uri))
 
 # Function to get Wikidata data in batches
 def get_wikidata_batch(qids, max_retries=5):
