@@ -1,6 +1,6 @@
 # Wikidata to CIDOC CRM
 
-This repository contains Python scripts that transform structured data from Wikidata into RDF using CIDOC CRM (OWL version, [eCRM](https://erlangen-crm.org/docs/ecrm/current/)) and related models.  
+This repository contains Python scripts that transform structured data from Wikidata into RDF using CIDOC CRM (OWL version, [eCRM](https://erlangen-crm.org/docs/ecrm/current/)) and related models. To improve inference capabilities, all ECRM classes and properties have been mapped to CIDOC CRM using `owl:sameAs`.
 
 The scripts are developed in the context of the project [Sappho Digital](https://sappho-digital.com/) by [Laura Untner](https://orcid.org/0000-0002-9649-0870).
 
