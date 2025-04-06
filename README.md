@@ -76,6 +76,9 @@ Q469571
     rdfs:label "Q469571" ;
     ecrm:P2_has_type <https://sappho.com/id_type/wikidata> .
 
+<https://sappho.com/id_type/wikidata> a ecrm:E55_Type ;
+    rdfs:label "Wikidata ID"@en .
+
 <https://sappho.com/birth/Q469571> a ecrm:E67_Birth ;
     rdfs:label "Birth of Anna Louisa Karsch"@en ;
     ecrm:P4_has_time_span <https://sappho.com/timespan/17221201> ;
@@ -88,10 +91,27 @@ Q469571
     ecrm:P7_took_place_at <https://sappho.com/place/Q64> ;
     prov:wasDerivedFrom <http://www.wikidata.org/entity/Q469571> .
 
+<https://sappho.com/place/Q64> a ecrm:E53_Place ;
+    rdfs:label "Berlin"@en ;
+    owl:sameAs <http://www.wikidata.org/entity/Q64> .
+
+<https://sappho.com/place/Q659063> a ecrm:E53_Place ;
+    rdfs:label "Skąpe"@en ;
+    owl:sameAs <http://www.wikidata.org/entity/Q659063> .
+
+<https://sappho.com/timespan/17221201> a ecrm:E52_Time-Span ;
+    rdfs:label "1722-12-01"^^xsd:date .
+
+<https://sappho.com/timespan/17911012> a ecrm:E52_Time-Span ;
+    rdfs:label "1791-10-12"^^xsd:date .
+
 <https://sappho.com/gender/Q6581072> a ecrm:E55_Type ;
     rdfs:label "weiblich"@en ;
     ecrm:P2_has_type <https://sappho.com/gender_type/wikidata> ;
     owl:sameAs <http://www.wikidata.org/entity/Q6581072> .
+
+<https://sappho.com/gender_type/wikidata> a ecrm:E55_Type ;
+    rdfs:label "Wikidata Gender"@en .
 
 <https://sappho.com/image/Q469571> a ecrm:E38_Image ;
     ecrm:P65_shows_visual_item <https://sappho.com/visual_item/Q469571> ;
