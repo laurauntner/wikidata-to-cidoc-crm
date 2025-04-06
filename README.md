@@ -1,6 +1,7 @@
 # Wikidata to CIDOC CRM
 
 This repository contains Python scripts that transform structured data from Wikidata into RDF using CIDOC CRM (OWL version, [eCRM](https://erlangen-crm.org/docs/ecrm/current/)) and related models.  
+
 The scripts are developed in the context of the project [Sappho Digital](https://sappho-digital.com/) by [Laura Untner](https://orcid.org/0000-0002-9649-0870).
 
 The repository is under active development. Currently, only the `authors` module is available. Future modules will also model:
@@ -42,7 +43,6 @@ Install dependencies with:
 pip install rdflib requests tqdm
 
 ```
-
 ### Example Input
 ```
 qid
