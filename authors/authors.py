@@ -1,0 +1,192 @@
+"""
+This script retrieves person data from Wikidata based on a list of QIDs (from a CSV file)
+and transforms it into CIDOC CRM (OWL/eCRM) RDF triples, using the following entities:
+
+- E21_Person with identifiers, names, birth/death events
+- E67_Birth and E69_Death linked to time-spans and places
+- E55_Type for gender and identifier types (with deduplication)
+- E38_Image and E36_Visual_Item for person portraits
+- PROV-O used for provenance linking to Wikidata entities
+
+The output is serialized as Turtle and written to 'authors.ttl'.
+"""
+
+import csv
+import time
+import rdflib
+from rdflib import Graph, Literal, RDF, RDFS, Namespace, URIRef
+from rdflib.namespace import OWL, XSD
+import requests
+from tqdm import tqdm
+
+# Namespaces
+ECRM = Namespace("http://erlangen-crm.org/current/")  # eCRM - CIDOC CRM (OWL version)
+PROV = Namespace("http://www.w3.org/ns/prov#")  # PROV-O - Provenance Ontology
+WD = "http://www.wikidata.org/entity/"  # Base URI for Wikidata entities
+SAPPHO_BASE_URI = "https://sappho.com/"  # Base URI for Sappho
+
+# Create the RDF graph
+g = Graph()
+g.bind("ecrm", ECRM)
+g.bind("prov", PROV)
+g.bind("owl", OWL)
+g.bind("rdfs", RDFS)
+
+# Function to get Wikidata data in batches
+def get_wikidata_batch(qids, max_retries=5):
+    values = " ".join(f"wd:{qid}" for qid in qids)
+    endpoint = "https://query.wikidata.org/sparql"
+    query = f"""
+    SELECT ?item ?itemLabel ?gender ?genderLabel ?birthPlace ?birthPlaceLabel ?birthDate ?deathPlace ?deathPlaceLabel ?deathDate ?image WHERE {{
+      VALUES ?item {{ {values} }}
+      OPTIONAL {{ ?item wdt:P21 ?gender . }}
+      OPTIONAL {{ ?item wdt:P569 ?birthDate . }}
+      OPTIONAL {{ ?item wdt:P19 ?birthPlace . }}
+      OPTIONAL {{ ?item wdt:P570 ?deathDate . }}
+      OPTIONAL {{ ?item wdt:P20 ?deathPlace . }}
+      OPTIONAL {{ ?item wdt:P18 ?image . }}
+      SERVICE wikibase:label {{
+        bd:serviceParam wikibase:language "de,en" .
+      }}
+    }}
+    """
+    headers = {
+        "Accept": "application/sparql-results+json",
+        "User-Agent": "SapphoDataIntegrationBot/1.0 (laurauntner@example.com)"
+    }
+    for attempt in range(1, max_retries + 1):
+        try:
+            r = requests.get(endpoint, params={"query": query}, headers=headers, timeout=90)
+            r.raise_for_status()
+            results = r.json()["results"]["bindings"]
+            grouped = {}
+            for b in results:
+                uri = b["item"]["value"]
+                qid = uri.split("/")[-1]
+                if qid not in grouped:
+                    grouped[qid] = []
+                grouped[qid].append(b)
+            return grouped
+        except requests.exceptions.RequestException as e:
+            wait = 5 * attempt
+            print(f"[RETRY {attempt}] Batch request failed: {e} – retrying in {wait}s...")
+            time.sleep(wait)
+    print("[ERROR] Maximum retries reached. Skipping batch.")
+    return {}
+
+# Load QIDs
+all_qids = []
+with open("author-qids.csv", newline="") as csvfile:
+    reader = csv.reader(csvfile)
+    for row in reader:
+        qid = row[0].strip()
+        if qid.startswith("Q"):
+            all_qids.append(qid)
+
+# Processing
+batch_size = 20
+gender_cache = {}
+place_cache = {}
+time_span_cache = {}
+
+def format_date(iso_string):
+    return iso_string.split("T")[0]
+
+for i in tqdm(range(0, len(all_qids), batch_size)):
+    batch = all_qids[i:i+batch_size]
+    batch_data = get_wikidata_batch(batch)
+    for qid in batch:
+        uri = f"http://www.wikidata.org/entity/{qid}"
+        bindings = batch_data.get(qid, [])
+        if not bindings:
+            continue
+
+        b = bindings[0]
+        label = b.get("itemLabel", {}).get("value", "").strip()
+        if not label:
+            label = f"Unknown ({qid})"
+
+        person_uri = URIRef(f"{SAPPHO_BASE_URI}person/{qid}")
+        name_uri = URIRef(f"{SAPPHO_BASE_URI}appellation/{qid}")
+        identifier_uri = URIRef(f"{SAPPHO_BASE_URI}identifier/{qid}")
+
+        # Person core data
+        g.add((person_uri, RDF.type, ECRM.E21_Person))
+        g.add((person_uri, OWL.sameAs, URIRef(uri)))
+        g.add((person_uri, ECRM.P131_is_identified_by, name_uri))
+        g.add((name_uri, RDF.type, ECRM.E82_Actor_Appellation))
+        g.add((name_uri, RDFS.label, Literal(label, lang="en")))
+        g.add((name_uri, PROV.wasDerivedFrom, URIRef(uri)))
+        g.add((person_uri, RDFS.label, Literal(label, lang="en")))
+
+        g.add((person_uri, ECRM.P1_is_identified_by, identifier_uri))
+        g.add((identifier_uri, RDF.type, ECRM.E42_Identifier))
+        g.add((identifier_uri, RDFS.label, Literal(qid)))
+        g.add((identifier_uri, ECRM.P2_has_type, URIRef(f"{SAPPHO_BASE_URI}id_type/wikidata")))
+        g.add((URIRef(f"{SAPPHO_BASE_URI}id_type/wikidata"), RDF.type, ECRM.E55_Type))
+        g.add((URIRef(f"{SAPPHO_BASE_URI}id_type/wikidata"), RDFS.label, Literal("Wikidata ID", lang="en")))
+
+        def create_timespan_uri(date_value):
+            return URIRef(f"{SAPPHO_BASE_URI}timespan/{date_value.replace('-', '')}")
+
+        for event_type, date_key, place_key, class_uri, inverse_prop in [
+            ("birth", "birthDate", "birthPlace", ECRM.E67_Birth, ECRM.P98i_was_born),
+            ("death", "deathDate", "deathPlace", ECRM.E69_Death, ECRM.P100i_died_in)
+        ]:
+            has_date = date_key in b
+            has_place = place_key in b
+            if has_date or has_place:
+                event_uri = URIRef(f"{SAPPHO_BASE_URI}{event_type}/{qid}")
+                g.add((person_uri, inverse_prop, event_uri))
+                g.add((event_uri, RDF.type, class_uri))
+                g.add((event_uri, RDFS.label, Literal(f"{event_type.capitalize()} of {label}", lang="en")))
+                g.add((event_uri, PROV.wasDerivedFrom, URIRef(uri)))
+
+                if has_date:
+                    date_value = format_date(b[date_key]["value"])
+                    date_uri = create_timespan_uri(date_value)
+                    if date_uri not in time_span_cache:
+                        g.add((date_uri, RDF.type, ECRM.term("E52_Time-Span")))
+                        g.add((date_uri, RDFS.label, Literal(date_value, datatype=XSD.date)))
+                        time_span_cache[date_uri] = date_uri
+                    g.add((event_uri, ECRM.P4_has_time_span, date_uri))
+
+                if has_place:
+                    wikidata_place_uri = b[place_key]["value"]
+                    place_id = wikidata_place_uri.split("/")[-1]
+                    place_uri = URIRef(f"{SAPPHO_BASE_URI}place/{place_id}")
+                    place_label = b.get(f"{place_key}Label", {}).get("value")
+                    g.add((event_uri, ECRM.P7_took_place_at, place_uri))
+                    g.add((place_uri, RDF.type, ECRM.E53_Place))
+                    g.add((place_uri, OWL.sameAs, URIRef(wikidata_place_uri)))
+                    if place_label:
+                        g.add((place_uri, RDFS.label, Literal(place_label, lang="en")))
+
+        gender_uri_raw = b.get("gender", {}).get("value")
+        gender_label = b.get("genderLabel", {}).get("value")
+        if gender_uri_raw and gender_label:
+            if gender_uri_raw not in gender_cache:
+                sappho_gender_uri = URIRef(f"{SAPPHO_BASE_URI}gender/{gender_uri_raw.split('/')[-1]}")
+                g.add((sappho_gender_uri, RDF.type, ECRM.E55_Type))
+                g.add((sappho_gender_uri, RDFS.label, Literal(gender_label, lang="en")))
+                g.add((sappho_gender_uri, OWL.sameAs, URIRef(gender_uri_raw)))
+                g.add((sappho_gender_uri, ECRM.P2_has_type, URIRef(f"{SAPPHO_BASE_URI}gender_type/wikidata")))
+                g.add((URIRef(f"{SAPPHO_BASE_URI}gender_type/wikidata"), RDF.type, ECRM.E55_Type))
+                g.add((URIRef(f"{SAPPHO_BASE_URI}gender_type/wikidata"), RDFS.label, Literal("Wikidata Gender", lang="en")))
+                gender_cache[gender_uri_raw] = sappho_gender_uri
+            g.add((person_uri, ECRM.P2_has_type, gender_cache[gender_uri_raw]))
+
+        image_url = b.get("image", {}).get("value")
+        if image_url:
+            image_instance_uri = URIRef(f"{SAPPHO_BASE_URI}image/{qid}")
+            visual_item_uri = URIRef(f"{SAPPHO_BASE_URI}visual_item/{qid}")
+            g.add((visual_item_uri, RDF.type, ECRM.E36_Visual_Item))
+            g.add((visual_item_uri, RDFS.label, Literal(f"Visual representation of {label}", lang="en")))
+            g.add((visual_item_uri, ECRM.P138_represents, person_uri))
+            g.add((image_instance_uri, RDF.type, ECRM.E38_Image))
+            g.add((image_instance_uri, ECRM.P65_shows_visual_item, visual_item_uri))
+            g.add((image_instance_uri, RDFS.seeAlso, URIRef(image_url)))
+            g.add((image_instance_uri, PROV.wasDerivedFrom, URIRef(uri)))
+
+# Serialize
+g.serialize(destination="authors.ttl", format="turtle")
