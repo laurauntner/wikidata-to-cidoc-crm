@@ -48,7 +48,7 @@ pip install rdflib requests tqdm
 qid
 Q469571
 ```
-(This is Anna Louisa Karsch.)
+(This is [Anna Louisa Karsch](https://www.wikidata.org/wiki/Q469571).)
 
 ### Example Output
 
