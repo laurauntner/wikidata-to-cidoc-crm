@@ -121,4 +121,25 @@ Q469571
 <https://sappho.com/visual_item/Q469571> a ecrm:E36_Visual_Item ;
     rdfs:label "Visual representation of Anna Louisa Karsch"@en ;
     ecrm:P138_represents <https://sappho.com/person/Q469571> .
+
+ecrm:E21_Person owl:sameAs crm:E21_Person .
+ecrm:E67_Birth owl:sameAs crm:E67_Birth .
+ecrm:E69_Death owl:sameAs crm:E69_Death .
+ecrm:E52_Time-Span owl:sameAs crm:E52_Time-Span .
+ecrm:E53_Place owl:sameAs crm:E53_Place .
+ecrm:E36_Visual_Item owl:sameAs crm:E36_Visual_Item .
+ecrm:E38_Image owl:sameAs crm:E38_Image .
+ecrm:E55_Type owl:sameAs crm:E55_Type .
+ecrm:E42_Identifier owl:sameAs crm:E42_Identifier .
+ecrm:E82_Actor_Appellation owl:sameAs crm:E82_Actor_Appellation .
+
+ecrm:P1_is_identified_by owl:sameAs crm:P1_is_identified_by .
+ecrm:P2_has_type owl:sameAs crm:P2_has_type .
+ecrm:P4_has_time_span owl:sameAs crm:P4_has_time_span .
+ecrm:P7_took_place_at owl:sameAs crm:P7_took_place_at .
+ecrm:P65_shows_visual_item owl:sameAs crm:P65_shows_visual_item .
+ecrm:P98i_was_born owl:sameAs crm:P98i_was_born .
+ecrm:P100i_died_in owl:sameAs crm:P100i_died_in .
+ecrm:P131_is_identified_by owl:sameAs crm:P131_is_identified_by .
+ecrm:P138_represents owl:sameAs crm:P138_represents .
 ```
