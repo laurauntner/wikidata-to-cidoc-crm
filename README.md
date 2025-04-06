@@ -19,7 +19,7 @@ The goal is to enable CIDOC CRM-based semantic enrichment from Wikidata and othe
 
 ## Authors Module
 
-The `authors` script reads a list of Wikidata QIDs from a CSV file and creates RDF triples using CIDOC CRM (eCRM). It models:
+The `authors.py` script reads a list of Wikidata QIDs from a CSV file and creates RDF triples using CIDOC CRM (eCRM). It models:
 
 - `E21_Person` with:
   - `E82_Actor_Appellation` (names)
