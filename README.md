@@ -31,6 +31,8 @@ The `authors.py` script reads a list of Wikidata QIDs from a CSV file and create
   - `E36_Visual_Item` (visual representation)
   - `E38_Image` (image reference with Wikimedia `seeAlso`)
 
+As you can see, the script currently models only basic information but can be dynamically extended.
+
 The script also uses `PROV-O` (`prov:wasDerivedFrom`) to link data back to Wikidata.
 
 📎 A [visual documentation](https://github.com/laurauntner/wikidata-to-cidoc-crm/blob/main/authors/authors.png) of the authors data model is included in the `authors` folder.
