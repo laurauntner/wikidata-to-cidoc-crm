@@ -44,7 +44,7 @@ used_terms = [
     # Properties
     "P1_is_identified_by", "P1i_identifies",
     "P2_has_type", "P2i_is_type_of",
-    "P4_has_time_span", "P4i_is_time_span_of",
+    "P4_has_time-span", "P4i_is_time-span_of",
     "P7_took_place_at", "P7i_witnessed",
     "P65_shows_visual_item", "P65i_is_shown_by",
     "P98i_was_born", "P98_brought_into_life",
@@ -61,7 +61,7 @@ for term in used_terms:
 inverse_property_pairs = [
     ("P1_is_identified_by", "P1i_identifies"),
     ("P2_has_type", "P2i_is_type_of"),
-    ("P4_has_time_span", "P4i_is_time_span_of"),
+    ("P4_has_time-span", "P4i_is_time-span_of"),
     ("P7_took_place_at", "P7i_witnessed"),
     ("P65_shows_visual_item", "P65i_is_shown_by"),
     ("P98_brought_into_life", "P98i_was_born"),
@@ -190,7 +190,7 @@ for i in tqdm(range(0, len(all_qids), batch_size)):
                         g.add((date_uri, RDF.type, ECRM.term("E52_Time-Span")))
                         g.add((date_uri, RDFS.label, Literal(date_value, datatype=XSD.date)))
                         time_span_cache[date_uri] = date_uri
-                    g.add((event_uri, ECRM.P4_has_time_span, date_uri))
+                    g.add((event_uri, ECRM["P4_has_time-span"], date_uri))
 
                 if has_place:
                     wikidata_place_uri = b[place_key]["value"]
