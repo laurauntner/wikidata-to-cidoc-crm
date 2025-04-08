@@ -34,20 +34,35 @@ g.bind("prov", PROV)
 g.bind("owl", OWL)
 g.bind("rdfs", RDFS)
 
-# CIDOC CRM alignment
+# CIDOC CRM alignment and property inverses
 
 used_terms = [
+    # Classes
     "E21_Person", "E67_Birth", "E69_Death", "E52_Time-Span", "E53_Place",
     "E36_Visual_Item", "E38_Image", "E55_Type", "E42_Identifier", "E82_Actor_Appellation",
+
+    # Properties
     "P1_is_identified_by", "P2_has_type", "P4_has_time_span", "P7_took_place_at",
     "P65_shows_visual_item", "P98i_was_born", "P100i_died_in", "P131_is_identified_by",
-    "P138_represents"
+    "P138_represents", "P65i_is_shown_by", "P98_brought_into_life", "P100_was_death_of",
+    "P138i_has_representation"
 ]
 
 for term in used_terms:
     ecrm_uri = ECRM.term(term)
     crm_uri = CRM.term(term)
     g.add((ecrm_uri, OWL.sameAs, crm_uri))
+    
+inverse_property_pairs = [
+    ("P98_brought_into_life", "P98i_was_born"),
+    ("P100_was_death_of", "P100i_died_in"),
+    ("P138_represents", "P138i_has_representation"),
+    ("P65_shows_visual_item", "P65i_is_shown_by"),
+]
+
+for direct, inverse in inverse_property_pairs:
+    g.add((ECRM.term(direct), OWL.inverseOf, ECRM.term(inverse)))
+    g.add((ECRM.term(inverse), OWL.inverseOf, ECRM.term(direct)))
 
 # Function to get Wikidata data in batches
 def get_wikidata_batch(qids, max_retries=5):
