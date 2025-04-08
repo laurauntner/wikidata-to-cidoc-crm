@@ -139,9 +139,22 @@ ecrm:P1_is_identified_by owl:sameAs crm:P1_is_identified_by .
 ecrm:P2_has_type owl:sameAs crm:P2_has_type .
 ecrm:P4_has_time_span owl:sameAs crm:P4_has_time_span .
 ecrm:P7_took_place_at owl:sameAs crm:P7_took_place_at .
-ecrm:P65_shows_visual_item owl:sameAs crm:P65_shows_visual_item .
-ecrm:P98i_was_born owl:sameAs crm:P98i_was_born .
-ecrm:P100i_died_in owl:sameAs crm:P100i_died_in .
+ecrm:P65_shows_visual_item owl:inverseOf ecrm:P65i_is_shown_by ;
+    owl:sameAs crm:P65_shows_visual_item .
+ecrm:P65i_is_shown_by owl:inverseOf ecrm:P65_shows_visual_item ;
+    owl:sameAs crm:P65i_is_shown_by .
+ecrm:P98_brought_into_life owl:inverseOf ecrm:P98i_was_born ;
+    owl:sameAs crm:P98_brought_into_life .
+ecrm:P98i_was_born owl:inverseOf ecrm:P98_brought_into_life ;
+    owl:sameAs crm:P98i_was_born .
+ecrm:P100_was_death_of owl:inverseOf ecrm:P100i_died_in ;
+    owl:sameAs crm:P100_was_death_of .
+ecrm:P100i_died_in owl:inverseOf ecrm:P100_was_death_of ;
+    owl:sameAs crm:P100i_died_in .
 ecrm:P131_is_identified_by owl:sameAs crm:P131_is_identified_by .
-ecrm:P138_represents owl:sameAs crm:P138_represents .
+ecrm:P138_represents owl:inverseOf ecrm:P138i_has_representation ;
+    owl:sameAs crm:P138_represents .
+ecrm:P138i_has_representation owl:inverseOf ecrm:P138_represents ;
+    owl:sameAs crm:P138i_has_representation .
+
 ```
