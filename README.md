@@ -142,7 +142,7 @@ ecrm:P2_has_type owl:inverseOf ecrm:P2i_is_type_of ;
     owl:sameAs crm:P2_has_type .
 ecrm:P4_has_time-span owl:inverseOf ecrm:P4i_is_time-span_of ;
     owl:sameAs crm:P4_has_time-span .
-ecrm:P7_took_place_at owl:inverseOf ecrm:P7i witnessed ;
+ecrm:P7_took_place_at owl:inverseOf ecrm:P7i_witnessed ;
     owl:sameAs crm:P7_took_place_at .
 ecrm:P65_shows_visual_item owl:inverseOf ecrm:P65i_is_shown_by ;
     owl:sameAs crm:P65_shows_visual_item .
