@@ -55,6 +55,7 @@ Q469571
 ### Example Output
 
 ```
+@prefix crm: <http://www.cidoc-crm.org/cidoc-crm/> .
 @prefix ecrm: <http://erlangen-crm.org/current/> .
 @prefix owl: <http://www.w3.org/2002/07/owl#> .
 @prefix prov: <http://www.w3.org/ns/prov#> .
