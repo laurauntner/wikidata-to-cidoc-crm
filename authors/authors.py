@@ -49,7 +49,7 @@ used_terms = [
     "P65_shows_visual_item", "P65i_is_shown_by",
     "P98i_was_born", "P98_brought_into_life",
     "P100i_died_in", "P100_was_death_of",
-    "P131_is_identified_by",
+    "P131_is_identified_by", "P131i identifies",
     "P138_represents", "P138i_has_representation"
 ]
 
