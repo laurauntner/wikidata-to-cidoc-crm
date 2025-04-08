@@ -42,10 +42,15 @@ used_terms = [
     "E36_Visual_Item", "E38_Image", "E55_Type", "E42_Identifier", "E82_Actor_Appellation",
 
     # Properties
-    "P1_is_identified_by", "P2_has_type", "P4_has_time_span", "P7_took_place_at",
-    "P65_shows_visual_item", "P98i_was_born", "P100i_died_in", "P131_is_identified_by",
-    "P138_represents", "P65i_is_shown_by", "P98_brought_into_life", "P100_was_death_of",
-    "P138i_has_representation"
+    "P1_is_identified_by", "P1i_identifies",
+    "P2_has_type", "P2i_is_type_of",
+    "P4_has_time_span", "P4i_is_time_span_of",
+    "P7_took_place_at", "P7i_witnessed",
+    "P65_shows_visual_item", "P65i_is_shown_by",
+    "P98i_was_born", "P98_brought_into_life",
+    "P100i_died_in", "P100_was_death_of",
+    "P131_is_identified_by",
+    "P138_represents", "P138i_has_representation"
 ]
 
 for term in used_terms:
@@ -54,10 +59,14 @@ for term in used_terms:
     g.add((ecrm_uri, OWL.sameAs, crm_uri))
     
 inverse_property_pairs = [
+    ("P1_is_identified_by", "P1i_identifies"),
+    ("P2_has_type", "P2i_is_type_of"),
+    ("P4_has_time_span", "P4i_is_time_span_of"),
+    ("P7_took_place_at", "P7i_witnessed"),
+    ("P65_shows_visual_item", "P65i_is_shown_by"),
     ("P98_brought_into_life", "P98i_was_born"),
     ("P100_was_death_of", "P100i_died_in"),
-    ("P138_represents", "P138i_has_representation"),
-    ("P65_shows_visual_item", "P65i_is_shown_by"),
+    ("P138_represents", "P138i_has_representation")
 ]
 
 for direct, inverse in inverse_property_pairs:
