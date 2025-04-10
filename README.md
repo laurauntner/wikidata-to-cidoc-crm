@@ -10,7 +10,7 @@ The repository is under active development. Currently, only the `authors` module
 - Textual relations using [INTRO](https://github.com/BOberreither/INTRO)
 - Extended ontology alignments
 
-The goal is to enable CIDOC CRM-based semantic enrichment from Wikidata and other linked data sources.
+The goal is to enable CIDOC CRM-based semantic enrichment from Wikidata and other linked data sources. Please note that these scripts are not magical. Data that is not available in Wikidata cannot appear in the triples.
 
 > ⚠️ **Note:** All URIs currently use the `https://sappho.com/` base. Please adapt this to your own environment as needed.  
 > 💡 **Reuse is encouraged**. The scripts are open for reuse. If you use or build on them, a reference to the Sappho Digital project would be appreciated.
