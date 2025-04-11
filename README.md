@@ -55,12 +55,7 @@ Q469571
 ### Example Output
 
 ```
-@prefix crm: <http://www.cidoc-crm.org/cidoc-crm/> .
-@prefix ecrm: <http://erlangen-crm.org/current/> .
-@prefix owl: <http://www.w3.org/2002/07/owl#> .
-@prefix prov: <http://www.w3.org/ns/prov#> .
-@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
-@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+# Namespace declarations and mappings to CRM are applied but not shown in this exemplary output.
 
 <https://sappho.com/person/Q469571> a ecrm:E21_Person ;
     rdfs:label "Anna Louisa Karsch"@en ;
@@ -124,37 +119,5 @@ Q469571
 <https://sappho.com/visual_item/Q469571> a ecrm:E36_Visual_Item ;
     rdfs:label "Visual representation of Anna Louisa Karsch"@en ;
     ecrm:P138_represents <https://sappho.com/person/Q469571> .
-
-ecrm:E21_Person owl:sameAs crm:E21_Person .
-ecrm:E67_Birth owl:sameAs crm:E67_Birth .
-ecrm:E69_Death owl:sameAs crm:E69_Death .
-ecrm:E52_Time-Span owl:sameAs crm:E52_Time-Span .
-ecrm:E53_Place owl:sameAs crm:E53_Place .
-ecrm:E36_Visual_Item owl:sameAs crm:E36_Visual_Item .
-ecrm:E38_Image owl:sameAs crm:E38_Image .
-ecrm:E55_Type owl:sameAs crm:E55_Type .
-ecrm:E42_Identifier owl:sameAs crm:E42_Identifier .
-ecrm:E82_Actor_Appellation owl:sameAs crm:E82_Actor_Appellation .
-
-ecrm:P1_is_identified_by owl:inverseOf ecrm:P1i_identifies ;
-    owl:sameAs crm:P1_is_identified_by .
-ecrm:P2_has_type owl:inverseOf ecrm:P2i_is_type_of ;
-    owl:sameAs crm:P2_has_type .
-ecrm:P4_has_time-span owl:inverseOf ecrm:P4i_is_time-span_of ;
-    owl:sameAs crm:P4_has_time-span .
-ecrm:P7_took_place_at owl:inverseOf ecrm:P7i_witnessed ;
-    owl:sameAs crm:P7_took_place_at .
-ecrm:P65_shows_visual_item owl:inverseOf ecrm:P65i_is_shown_by ;
-    owl:sameAs crm:P65_shows_visual_item .
-ecrm:P65i_is_shown_by owl:inverseOf ecrm:P65_shows_visual_item ;
-    owl:sameAs crm:P65i_is_shown_by .
-ecrm:P98_brought_into_life owl:inverseOf ecrm:P98i_was_born ;
-    owl:sameAs crm:P98_brought_into_life .
-ecrm:P100_was_death_of owl:inverseOf ecrm:P100i_died_in ;
-    owl:sameAs crm:P100_was_death_of .
-ecrm:P131_is_identified_by owl:inverseOf ecrm:P131i_identifies ;
-    owl:sameAs crm:P131_is_identified_by .
-ecrm:P138_represents owl:inverseOf ecrm:P138i_has_representation ;
-    owl:sameAs crm:P138_represents .
 
 ```
