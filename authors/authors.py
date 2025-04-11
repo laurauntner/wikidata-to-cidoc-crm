@@ -1,12 +1,6 @@
 """
 This script retrieves person data from Wikidata based on a list of QIDs (from a CSV file)
-and transforms it into CIDOC CRM (OWL/eCRM) RDF triples, using the following entities:
-
-- E21_Person with identifiers, names, birth/death events
-- E67_Birth and E69_Death linked to time-spans and places
-- E55_Type for gender and identifier types (with deduplication)
-- E38_Image and E36_Visual_Item for person portraits
-- PROV-O used for provenance linking to Wikidata entities
+and transforms it into CIDOC CRM (OWL/eCRM) RDF triples.
 
 The output is serialized as Turtle and written to 'authors.ttl'.
 """
