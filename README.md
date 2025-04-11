@@ -131,17 +131,17 @@ The [works.py](https://github.com/laurauntner/wikidata-to-cidoc-crm/blob/main/wo
 - `F1_Work` (abstract works) and `F27_Work_Creation` with:
   - `E21_Person` (authors)
   - `E42_Identifier` (Wikidata QIDs)
-- `F2_Expression` (realizations of a work) and `F28_Expression_Creation` with:
+- `F2_Expression` (realizations of abstract works) and `F28_Expression_Creation` with:
   - `E52_Time-Span` (creation years)
   - `E35_Title` and `E62_String` (titles)
   - `E55_Type` (genres)
-  - `E73_Information_Object` (digital surrogates of the expression)
+  - `E73_Information_Object` (digital surrogates of expressions)
 - `F3_Manifestation` (publications of an expression) and `F30_Manifestation_Creation` with:
   - `E21_Person` (editors) with `E82_Actor_Appellation` (names)
   - `E40_Legal_Body` (publishers)
   - `E52_Time-Span` (publication years)
   - `E53_Place` (publication places)
-- `F5_Item` (specific copies of a manifestation) and `F32_Item_Production_Event`
+- `F5_Item` (specific copies of manifestations) and `F32_Item_Production_Event`
 
 Translators are not modeled per default, but the data model can, of course, be extended or adapted accordingly.
 
