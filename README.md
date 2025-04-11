@@ -129,13 +129,13 @@ Q469571
 The [works.py](https://github.com/laurauntner/wikidata-to-cidoc-crm/blob/main/works/works.py) script reads a list of Wikidata QIDs from a CSV file and creates RDF triples using CIDOC CRM (eCRM, mapped to CRM) and LRMoo (mapped to FRBRoo). It models:
 
 - `F1_Work` (abstract works) and `F27_Work_Creation` with:
-  - `E35_Title` and `E62_String` (titles)
   - `E21_Person` (authors)
   - `E42_Identifier` (Wikidata QIDs)
-  - `E55_Type` (genres)
-  - `E73_Information_Object` (digital surrogates of the work)
 - `F2_Expression` (realizations of a work) and `F28_Expression_Creation` with:
   - `E52_Time-Span` (creation years)
+  - `E35_Title` and `E62_String` (titles)
+  - `E55_Type` (genres)
+  - `E73_Information_Object` (digital surrogates of the expression)
 - `F3_Manifestation` (publications of an expression) and `F30_Manifestation_Creation` with:
   - `E21_Person` (editors) with `E82_Actor_Appellation` (names)
   - `E40_Legal_Body` (publishers)
