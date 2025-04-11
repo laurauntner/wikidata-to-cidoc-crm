@@ -4,7 +4,7 @@ This repository contains Python scripts that transform structured data from [Wik
 
 The scripts are developed in the context of the project [Sappho Digital](https://sappho-digital.com/) by [Laura Untner](https://orcid.org/0000-0002-9649-0870).
 
-The repository is under active development. Currently, the `authors` and `works` modules are available. The scripts model only basic information but can be dynamically extended.
+The repository is under active development. Currently, the `authors` and `works` modules are available. They model basic information based on data from Wikidata and can be dynamically extended. The modules can be used independently of each other, but a unification is also planned.
 
 Future modules will also model:
 - Textual relations using [INTRO](https://github.com/BOberreither/INTRO)
@@ -30,7 +30,7 @@ pip install rdflib requests tqdm
 
 ## Authors Module
 
-The [authors.py](https://github.com/laurauntner/wikidata-to-cidoc-crm/blob/main/authors/authors.py) script reads a list of Wikidata QIDs from a CSV file and creates RDF triples using CIDOC CRM (eCRM). It models:
+The [authors.py](https://github.com/laurauntner/wikidata-to-cidoc-crm/blob/main/authors/authors.py) script reads a list of Wikidata QIDs from a CSV file and creates RDF triples using CIDOC CRM (eCRM, mapped to CRM). It models:
 
 - `E21_Person` with:
   - `E82_Actor_Appellation` (names)
@@ -45,10 +45,12 @@ The [authors.py](https://github.com/laurauntner/wikidata-to-cidoc-crm/blob/main/
 📎 A [visual documentation](https://github.com/laurauntner/wikidata-to-cidoc-crm/blob/main/authors/authors.png) of the authors data model is included in the `authors` folder.
 
 ### Example Input
+
 ```
 qid
 Q469571
 ```
+
 (This is [Anna Louisa Karsch](https://www.wikidata.org/wiki/Q469571).)
 
 ### Example Output
@@ -118,5 +120,119 @@ Q469571
 <https://sappho.com/visual_item/Q469571> a ecrm:E36_Visual_Item ;
     rdfs:label "Visual representation of Anna Louisa Karsch"@en ;
     ecrm:P138_represents <https://sappho.com/person/Q469571> .
+```
 
+## Works Module
+
+The [works.py](https://github.com/laurauntner/wikidata-to-cidoc-crm/blob/main/works/works.py) script reads a list of Wikidata QIDs from a CSV file and creates RDF triples using CIDOC CRM (eCRM, mapped to CRM) and LRMoo (mapped to FRBRoo). It models:
+
+
+Translators are not modeled, but the model can, of course, be extended or adapted accordingly.
+
+### Example Input
+
+```
+qid
+Q1242002
+```
+(This is the tragedy [Sappho](https://www.wikidata.org/wiki/Q469571) written by Franz Grillparzer.)
+
+### Example Output
+
+```
+# Namespace declarations and mappings to CRM are applied but not shown in this exemplary output.
+
+<https://sappho-digital.com/work_creation/Q1242002> a lrmoo:F27_Work_Creation ;
+    rdfs:label "Work creation of Sappho"@en ;
+    ecrm:P14_carried_out_by <https://sappho-digital.com/person/Q154438> ;
+    lrmoo:R16_created <https://sappho-digital.com/work/Q1242002> ;
+    prov:wasDerivedFrom <http://www.wikidata.org/entity/Q1242002> .
+
+<https://sappho-digital.com/work/Q1242002> a lrmoo:F1_Work ;
+    rdfs:label "Work of Sappho"@en ;
+    ecrm:P102_has_title <https://sappho-digital.com/title/Q1242002> ;
+    ecrm:P14_carried_out_by <https://sappho-digital.com/person/Q154438> ;
+    ecrm:P1_is_identified_by <https://sappho-digital.com/identifier/Q1242002> ;
+    ecrm:P2_has_type <https://sappho-digital.com/genre/Q80930> ;
+    lrmoo:R3_is_realised_in <https://sappho-digital.com/expression/Q1242002> ;
+    owl:sameAs <http://www.wikidata.org/entity/Q1242002> .
+
+<https://sappho-digital.com/title/Q1242002> a ecrm:E35_Title ;
+    ecrm:P190_has_symbolic_content <https://sappho-digital.com/title_string/Q1242002> .
+
+<https://sappho-digital.com/title_string/Q1242002> a ecrm:E62_String ;
+    rdfs:label "Sappho" .
+
+<https://sappho-digital.com/person/Q154438> a ecrm:E21_Person ;
+    rdfs:label "Franz Grillparzer" ;
+    owl:sameAs <http://www.wikidata.org/entity/Q154438> .
+
+<https://sappho-digital.com/identifier/Q1242002> a ecrm:E42_Identifier ;
+    rdfs:label "Q1242002" ;
+    ecrm:P2_has_type <https://sappho.com/id_type/wikidata> .
+
+<https://sappho.com/id_type/wikidata> a ecrm:E55_Type ;
+    rdfs:label "Wikidata ID"@en ;
+    owl:sameAs <https://www.wikidata.org/wiki/Q43649390> .
+
+<https://sappho-digital.com/genre/Q80930> a ecrm:E55_Type ;
+    rdfs:label "tragedy"@en ;
+    ecrm:P2_has_type <https://sappho-digital.com/genre_type/wikidata> ;
+    owl:sameAs <http://www.wikidata.org/entity/Q80930> .
+
+<https://sappho-digital.com/genre_type/wikidata> a ecrm:E55_Type ;
+    rdfs:label "Wikidata Genre"@en .
+
+<https://sappho-digital.com/digital/Q1242002> a ecrm:E73_Information_Object ;
+    rdfs:label "Digital copy of Sappho"@en ;
+    ecrm:P138_represents <https://sappho-digital.com/work/Q1242002> ;
+    rdfs:seeAlso <http://www.zeno.org/nid/20004898184> ;
+    prov:wasDerivedFrom <http://www.wikidata.org/entity/Q1242002> .
+
+<https://sappho-digital.com/expression_creation/Q1242002> a lrmoo:F28_Expression_Creation ;
+    rdfs:label "Expression creation of Sappho"@en ;
+    ecrm:P14_carried_out_by <https://sappho-digital.com/person/Q154438> ;
+    ecrm:P4_has_time-span <https://sappho-digital.com/timespan/1817> ;
+    lrmoo:R17_created <https://sappho-digital.com/expression/Q1242002> ;
+    lrmoo:R19_created_a_realisation_of <https://sappho-digital.com/work/Q1242002> ;
+    prov:wasDerivedFrom <http://www.wikidata.org/entity/Q1242002> .
+
+<https://sappho-digital.com/timespan/1817> a ecrm:E52_Time-Span ;
+    rdfs:label "1817"^^xsd:gYear .
+
+<https://sappho-digital.com/expression/Q1242002> a lrmoo:F2_Expression ;
+    rdfs:label "Expression of Sappho"@en .
+
+<https://sappho-digital.com/manifestation_creation/Q1242002> a lrmoo:F30_Manifestation_Creation ;
+    rdfs:label "Manifestation creation of Sappho"@en ;
+    ecrm:P14_carried_out_by <https://sappho-digital.com/person/Q154438>,
+        <https://sappho-digital.com/publisher/Q133849481> ;
+    ecrm:P4_has_time-span <https://sappho-digital.com/timespan/1819> ;
+    ecrm:P7_took_place_at <https://sappho-digital.com/place/Q1741> ;
+    lrmoo:R24_created <https://sappho-digital.com/manifestation/Q1242002> ;
+    prov:wasDerivedFrom <http://www.wikidata.org/entity/Q1242002> .
+
+<https://sappho-digital.com/publisher/Q133849481> a ecrm:E40_Legal_Body ;
+    rdfs:label "Wallishausser’sche Buchhandlung"@en ;
+    owl:sameAs <http://www.wikidata.org/entity/Q133849481> .
+
+<https://sappho-digital.com/timespan/1819> a ecrm:E52_Time-Span ;
+    rdfs:label "1819"^^xsd:gYear .
+
+<https://sappho-digital.com/place/Q1741> a ecrm:E53_Place ;
+    rdfs:label "Vienna"@en ;
+    owl:sameAs <http://www.wikidata.org/entity/Q1741> .
+
+<https://sappho-digital.com/manifestation/Q1242002> a lrmoo:F3_Manifestation ;
+    rdfs:label "Manifestation of Sappho"@en ;
+    lrmoo:R4_embodies <https://sappho-digital.com/expression/Q1242002> .
+
+<https://sappho-digital.com/item_production/Q1242002> a lrmoo:F32_Item_Production_Event ;
+    rdfs:label "Item production event of Sappho"@en ;
+    lrmoo:R27_materialized <https://sappho-digital.com/manifestation/Q1242002> ;
+    lrmoo:R28_produced <https://sappho-digital.com/item/Q1242002> .
+
+<https://sappho-digital.com/item/Q1242002> a lrmoo:F5_Item ;
+    rdfs:label "Item of Sappho"@en ;
+    lrmoo:R7_exemplifies <https://sappho-digital.com/manifestation/Q1242002> .
 ```
