@@ -1,6 +1,6 @@
 # Wikidata to CIDOC CRM
 
-This repository contains Python scripts that transform structured data from Wikidata into RDF using CIDOC CRM (OWL version, [eCRM](https://erlangen-crm.org/docs/ecrm/current/)) and models based on CIDOC CRM: LRMoo and INTRO. To improve inference capabilities, all ECRM classes and properties have been mapped to CIDOC CRM using `owl:sameAs`. Also, all LRMoo classes and properties have been mapped to FRBRoo.
+This repository contains Python scripts that transform structured data from [Wikidata](https://www.wikidata.org/) into RDF using [CIDOC CRM](https://cidoc-crm.org/) (OWL version, [eCRM](https://erlangen-crm.org/docs/ecrm/current/)) and models based on CIDOC CRM: [LRMoo](https://repository.ifla.org/handle/20.500.14598/3677) and [INTRO](https://github.com/BOberreither/INTRO). To improve inference capabilities, all ECRM classes and properties have been mapped to CIDOC CRM using `owl:sameAs`. Also, all LRMoo classes and properties have been mapped to [FRBRoo](https://www.iflastandards.info/fr/frbr/frbroo).
 
 The scripts are developed in the context of the project [Sappho Digital](https://sappho-digital.com/) by [Laura Untner](https://orcid.org/0000-0002-9649-0870).
 
@@ -11,7 +11,7 @@ Future modules will also model:
 - A module that combines all modules
 - Extended ontology alignments
 
-The goal is to enable CIDOC CRM-based semantic enrichment from Wikidata and other linked data sources. The scripts also use `PROV-O` (`prov:wasDerivedFrom`) to link data back to Wikidata.
+The goal is to enable CIDOC CRM-based semantic enrichment from Wikidata and other linked data sources. The scripts also use [PROV-O](https://www.w3.org/TR/prov-o/) (`prov:wasDerivedFrom`) to link data back to Wikidata.
 
 Please note that these scripts are not magical. Data that is not available in Wikidata cannot appear in the triples.
 
@@ -30,7 +30,7 @@ pip install rdflib requests tqdm
 
 ## Authors Module
 
-The `authors.py` script reads a list of Wikidata QIDs from a CSV file and creates RDF triples using CIDOC CRM (eCRM). It models:
+The [authors.py](https://github.com/laurauntner/wikidata-to-cidoc-crm/blob/main/authors/authors.py) script reads a list of Wikidata QIDs from a CSV file and creates RDF triples using CIDOC CRM (eCRM). It models:
 
 - `E21_Person` with:
   - `E82_Actor_Appellation` (names)
