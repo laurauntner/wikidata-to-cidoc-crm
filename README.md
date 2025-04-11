@@ -15,6 +15,14 @@ The goal is to enable CIDOC CRM-based semantic enrichment from Wikidata and othe
 > ⚠️ **Note:** All URIs currently use the `https://sappho.com/` base. Please adapt this to your own environment as needed.  
 > 💡 **Reuse is encouraged**. The scripts are open for reuse. If you use or build on them, a reference to the Sappho Digital project would be appreciated.
 
+## Requirements
+
+Install dependencies with:
+
+```
+pip install rdflib requests tqdm
+```
+
 ---
 
 ## Authors Module
@@ -36,14 +44,6 @@ As you can see, the script currently models only basic information but can be dy
 The script also uses `PROV-O` (`prov:wasDerivedFrom`) to link data back to Wikidata.
 
 📎 A [visual documentation](https://github.com/laurauntner/wikidata-to-cidoc-crm/blob/main/authors/authors.png) of the authors data model is included in the `authors` folder.
-
-### Requirements
-
-Install dependencies with:
-
-```
-pip install rdflib requests tqdm
-```
 
 ### Example Input
 ```
