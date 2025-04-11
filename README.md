@@ -122,6 +122,8 @@ Q469571
     ecrm:P138_represents <https://sappho.com/person/Q469571> .
 ```
 
+---
+
 ## Works Module
 
 The [works.py](https://github.com/laurauntner/wikidata-to-cidoc-crm/blob/main/works/works.py) script reads a list of Wikidata QIDs from a CSV file and creates RDF triples using CIDOC CRM (eCRM, mapped to CRM) and LRMoo (mapped to FRBRoo). It models:
