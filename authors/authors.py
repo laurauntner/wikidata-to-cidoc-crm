@@ -36,29 +36,17 @@ g.bind("rdfs", RDFS)
 
 # CIDOC CRM alignment and property inverses
 
-used_terms = [
+ecrm_to_crm = [
     # Classes
     "E21_Person", "E67_Birth", "E69_Death", "E52_Time-Span", "E53_Place",
-    "E36_Visual_Item", "E38_Image", "E55_Type", "E42_Identifier", "E82_Actor_Appellation",
-
-    # Properties
-    "P1_is_identified_by", "P1i_identifies",
-    "P2_has_type", "P2i_is_type_of",
-    "P4_has_time-span", "P4i_is_time-span_of",
-    "P7_took_place_at", "P7i_witnessed",
-    "P65_shows_visual_item", "P65i_is_shown_by",
-    "P98i_was_born", "P98_brought_into_life",
-    "P100i_died_in", "P100_was_death_of",
-    "P131_is_identified_by", "P131i identifies",
-    "P138_represents", "P138i_has_representation"
+    "E36_Visual_Item", "E38_Image", "E55_Type", "E42_Identifier", "E82_Actor_Appellation"
 ]
 
-for term in used_terms:
-    ecrm_uri = ECRM.term(term)
-    crm_uri = CRM.term(term)
-    g.add((ecrm_uri, OWL.sameAs, crm_uri))
-    
-inverse_property_pairs = [
+for cls in ecrm_to_crm:
+    g.add((ECRM.term(cls), OWL.sameAs, CRM.term(cls)))
+
+# Properties
+ecrm_properties = [
     ("P1_is_identified_by", "P1i_identifies"),
     ("P2_has_type", "P2i_is_type_of"),
     ("P4_has_time-span", "P4i_is_time-span_of"),
@@ -66,12 +54,15 @@ inverse_property_pairs = [
     ("P65_shows_visual_item", "P65i_is_shown_by"),
     ("P98_brought_into_life", "P98i_was_born"),
     ("P100_was_death_of", "P100i_died_in"),
+    ("P131_is_identified_by", "P131i_identifies"),
     ("P138_represents", "P138i_has_representation")
 ]
 
-for direct, inverse in inverse_property_pairs:
+for direct, inverse in ecrm_properties:
     g.add((ECRM.term(direct), OWL.inverseOf, ECRM.term(inverse)))
+    g.add((ECRM.term(direct), OWL.sameAs, CRM.term(direct)))
     g.add((ECRM.term(inverse), OWL.inverseOf, ECRM.term(direct)))
+    g.add((ECRM.term(inverse), OWL.sameAs, CRM.term(inverse)))
 
 # Function to get Wikidata data in batches
 def get_wikidata_batch(qids, max_retries=5):
