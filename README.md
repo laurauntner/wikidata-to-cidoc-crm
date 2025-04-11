@@ -4,13 +4,16 @@ This repository contains Python scripts that transform structured data from Wiki
 
 The scripts are developed in the context of the project [Sappho Digital](https://sappho-digital.com/) by [Laura Untner](https://orcid.org/0000-0002-9649-0870).
 
-The repository is under active development. Currently, only the `authors` module is available. Future modules will also model:
+The repository is under active development. Currently, only the `authors` and the `works` modules are available. The scripts model only basic information but can be dynamically extended.
 
-- Works using [LRMoo](https://repository.ifla.org/handle/20.500.14598/3677)
+Future modules will also model:
 - Textual relations using [INTRO](https://github.com/BOberreither/INTRO)
+- A module that combines all modules
 - Extended ontology alignments
 
-The goal is to enable CIDOC CRM-based semantic enrichment from Wikidata and other linked data sources. Please note that these scripts are not magical. Data that is not available in Wikidata cannot appear in the triples.
+The goal is to enable CIDOC CRM-based semantic enrichment from Wikidata and other linked data sources. The scripts also use `PROV-O` (`prov:wasDerivedFrom`) to link data back to Wikidata.
+
+Please note that these scripts are not magical. Data that is not available in Wikidata cannot appear in the triples.
 
 > ⚠️ **Note:** All URIs currently use the `https://sappho.com/` base. Please adapt this to your own environment as needed.  
 > 💡 **Reuse is encouraged**. The scripts are open for reuse. If you use or build on them, a reference to the Sappho Digital project would be appreciated.
@@ -38,10 +41,6 @@ The `authors.py` script reads a list of Wikidata QIDs from a CSV file and create
   - `E55_Type` (gender)
   - `E36_Visual_Item` (visual representation)
   - `E38_Image` (image reference with Wikimedia `seeAlso`)
-
-As you can see, the script currently models only basic information but can be dynamically extended.
-
-The script also uses `PROV-O` (`prov:wasDerivedFrom`) to link data back to Wikidata.
 
 📎 A [visual documentation](https://github.com/laurauntner/wikidata-to-cidoc-crm/blob/main/authors/authors.png) of the authors data model is included in the `authors` folder.
 
