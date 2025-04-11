@@ -181,18 +181,6 @@ for i in tqdm(range(0, len(qids), 20)):
         g.add((work_uri, RDF.type, LRMOO.F1_Work))
         g.add((work_uri, RDFS.label, Literal(f"Work of {label}", lang="en")))
         g.add((work_uri, LRMOO.R3_is_realised_in, expression_uri))
-        g.add((work_uri, OWL.sameAs, URIRef(f"{WD}{qid}")))
-
-        identifier_uri = URIRef(f"{SAPPHO_BASE_URI}identifier/{qid}")
-        g.add((work_uri, ECRM.P1_is_identified_by, identifier_uri))
-        g.add((identifier_uri, RDF.type, ECRM.E42_Identifier))
-        g.add((identifier_uri, RDFS.label, Literal(qid)))
-        g.add((identifier_uri, ECRM.P2_has_type, URIRef("https://sappho.com/id_type/wikidata")))
-        
-        wikidata_id_type_uri = URIRef("https://sappho.com/id_type/wikidata")
-        g.add((wikidata_id_type_uri, RDF.type, ECRM.E55_Type))
-        g.add((wikidata_id_type_uri, RDFS.label, Literal("Wikidata ID", lang="en")))
-        g.add((wikidata_id_type_uri, OWL.sameAs, URIRef("https://www.wikidata.org/wiki/Q43649390")))
 
         # Work Creation
         work_creation_uri = URIRef(f"{SAPPHO_BASE_URI}work_creation/{qid}")
@@ -214,6 +202,16 @@ for i in tqdm(range(0, len(qids), 20)):
         # Expression
         g.add((expression_uri, RDF.type, LRMOO.F2_Expression))
         g.add((expression_uri, RDFS.label, Literal(f"Expression of {label}", lang="en")))                
+        identifier_uri = URIRef(f"{SAPPHO_BASE_URI}identifier/{qid}")
+        g.add((expression_uri, ECRM.P1_is_identified_by, identifier_uri))
+        g.add((identifier_uri, RDF.type, ECRM.E42_Identifier))
+        g.add((identifier_uri, RDFS.label, Literal(qid)))
+        g.add((identifier_uri, ECRM.P2_has_type, URIRef("https://sappho.com/id_type/wikidata")))
+        
+        wikidata_id_type_uri = URIRef("https://sappho.com/id_type/wikidata")
+        g.add((wikidata_id_type_uri, RDF.type, ECRM.E55_Type))
+        g.add((wikidata_id_type_uri, RDFS.label, Literal("Wikidata ID", lang="en")))
+        g.add((wikidata_id_type_uri, OWL.sameAs, URIRef("https://www.wikidata.org/wiki/Q43649390")))
         g.add((expression_uri, ECRM.P102_has_title, title_uri))
         g.add((title_uri, RDF.type, ECRM.E35_Title))
         g.add((title_uri, ECRM.P190_has_symbolic_content, title_string_uri))
@@ -233,6 +231,7 @@ for i in tqdm(range(0, len(qids), 20)):
                 g.add((URIRef(f"{SAPPHO_BASE_URI}genre_type/wikidata"), RDFS.label, Literal("Wikidata Genre", lang="en")))
             g.add((expression_uri, ECRM.P2_has_type, genre_cache[genre_qid]))
 
+        g.add((expression_uri, OWL.sameAs, URIRef(f"{WD}{qid}")))
         g.add((expression_uri, PROV.wasDerivedFrom, URIRef(f"{WD}{qid}")))
 
         # Expression Creation
