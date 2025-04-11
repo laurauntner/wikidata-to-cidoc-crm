@@ -169,9 +169,7 @@ Q1242002
 <https://sappho-digital.com/work/Q1242002> a lrmoo:F1_Work ;
     rdfs:label "Work of Sappho"@en ;
     ecrm:P14_carried_out_by <https://sappho-digital.com/person/Q154438> ;
-    ecrm:P1_is_identified_by <https://sappho-digital.com/identifier/Q1242002> ;
-    lrmoo:R3_is_realised_in <https://sappho-digital.com/expression/Q1242002> ;
-    owl:sameAs <http://www.wikidata.org/entity/Q1242002> .
+    lrmoo:R3_is_realised_in <https://sappho-digital.com/expression/Q1242002> .
 
 <https://sappho-digital.com/person/Q154438> a ecrm:E21_Person ;
     rdfs:label "Franz Grillparzer" ;
@@ -199,7 +197,10 @@ Q1242002
 <https://sappho-digital.com/expression/Q1242002> a lrmoo:F2_Expression ;
     rdfs:label "Expression of Sappho"@en ;
     ecrm:P102_has_title <https://sappho-digital.com/title/Q1242002> ;
-    ecrm:P2_has_type <https://sappho-digital.com/genre/Q80930> .
+    ecrm:P1_is_identified_by <https://sappho-digital.com/identifier/Q1242002> ;
+    ecrm:P2_has_type <https://sappho-digital.com/genre/Q80930> ;
+    owl:sameAs <http://www.wikidata.org/entity/Q1242002> ;
+    prov:wasDerivedFrom <http://www.wikidata.org/entity/Q1242002> .
 
 <https://sappho-digital.com/title/Q1242002> a ecrm:E35_Title ;
     ecrm:P190_has_symbolic_content <https://sappho-digital.com/title_string/Q1242002> .
