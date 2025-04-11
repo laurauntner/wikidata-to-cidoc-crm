@@ -128,8 +128,25 @@ Q469571
 
 The [works.py](https://github.com/laurauntner/wikidata-to-cidoc-crm/blob/main/works/works.py) script reads a list of Wikidata QIDs from a CSV file and creates RDF triples using CIDOC CRM (eCRM, mapped to CRM) and LRMoo (mapped to FRBRoo). It models:
 
+- `F1_Work` (abstract work) and `F27_Work_Creation` with:
+  - `E35_Title` and `E62_String` (titles)
+  - `E21_Person` (authors)
+    - editors in `F30_Manifestation_Creation` also have an `E82_Actor_Appellation` (name)
+  - `E42_Identifier` (Wikidata QIDs)
+  - `E55_Type` (genres)
+  - `E52_Time-Span` (creation years)
+  - `E73_Information_Object` (digital surrogates of the work)
+- `F2_Expression` (realization of a work) and `F28_Expression_Creation`
+- `F3_Manifestation` (publication of an expression) and `F30_Manifestation_Creation` with:
+  - `E21_Person` (editors) with `E82_Actor_Appellation` (name)
+  - `E40_Legal_Body` (publishers)
+  - `E52_Time-Span` (publication years)
+  - `E53_Place` (publication places)
+- `F5_Item` (specific copy of a manifestation) and `F32_Item_Production_Event`
 
-Translators are not modeled, but the model can, of course, be extended or adapted accordingly.
+Translators are not modeled per default, but the data model can, of course, be extended or adapted accordingly.
+
+📎 A [visual documentation](https://github.com/laurauntner/wikidata-to-cidoc-crm/blob/main/works/works.png) of the works data model is included in the `works` folder.
 
 ### Example Input
 
