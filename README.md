@@ -175,14 +175,6 @@ Q1242002
     rdfs:label "Franz Grillparzer" ;
     owl:sameAs <http://www.wikidata.org/entity/Q154438> .
 
-<https://sappho-digital.com/identifier/Q1242002> a ecrm:E42_Identifier ;
-    rdfs:label "Q1242002" ;
-    ecrm:P2_has_type <https://sappho.com/id_type/wikidata> .
-
-<https://sappho.com/id_type/wikidata> a ecrm:E55_Type ;
-    rdfs:label "Wikidata ID"@en ;
-    owl:sameAs <https://www.wikidata.org/wiki/Q43649390> .
-
 <https://sappho-digital.com/expression_creation/Q1242002> a lrmoo:F28_Expression_Creation ;
     rdfs:label "Expression creation of Sappho"@en ;
     ecrm:P14_carried_out_by <https://sappho-digital.com/person/Q154438> ;
@@ -207,6 +199,14 @@ Q1242002
 
 <https://sappho-digital.com/title_string/Q1242002> a ecrm:E62_String ;
     rdfs:label "Sappho"@de .
+
+<https://sappho-digital.com/identifier/Q1242002> a ecrm:E42_Identifier ;
+    rdfs:label "Q1242002" ;
+    ecrm:P2_has_type <https://sappho.com/id_type/wikidata> .
+
+<https://sappho.com/id_type/wikidata> a ecrm:E55_Type ;
+    rdfs:label "Wikidata ID"@en ;
+    owl:sameAs <https://www.wikidata.org/wiki/Q43649390> .
 
 <https://sappho-digital.com/genre/Q80930> a ecrm:E55_Type ;
     rdfs:label "tragedy"@en ;
