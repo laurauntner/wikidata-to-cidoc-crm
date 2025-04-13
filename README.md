@@ -130,12 +130,12 @@ The [works.py](https://github.com/laurauntner/wikidata-to-cidoc-crm/blob/main/wo
 
 - `F1_Work` (abstract works) and `F27_Work_Creation` with:
   - `E21_Person` (authors)
-  - `E42_Identifier` (Wikidata QIDs)
 - `F2_Expression` (realizations of abstract works) and `F28_Expression_Creation` with:
   - `E52_Time-Span` (creation years)
   - `E35_Title` and `E62_String` (titles)
+  - `E42_Identifier` (Wikidata QIDs)
   - `E55_Type` (genres)
-  - `E73_Information_Object` (digital surrogates of expressions)
+  - `E73_Information_Object` (digital surrogates)
 - `F3_Manifestation` (publications of expressions) and `F30_Manifestation_Creation` with:
   - `E21_Person` (editors) with `E82_Actor_Appellation` (names)
   - `E40_Legal_Body` (publishers)
