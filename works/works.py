@@ -98,7 +98,6 @@ lrmoo_properties = [
 for lr_direct, lr_inverse, fr_direct, fr_inverse in lrmoo_properties:
     g.add((LRMOO.term(lr_direct), OWL.inverseOf, LRMOO.term(lr_inverse)))
     g.add((LRMOO.term(lr_inverse), OWL.inverseOf, LRMOO.term(lr_direct)))
-    # Equivalences
     g.add((LRMOO.term(lr_direct), OWL.sameAs, FRBROO.term(fr_direct)))
     g.add((LRMOO.term(lr_inverse), OWL.sameAs, FRBROO.term(fr_inverse)))
 
