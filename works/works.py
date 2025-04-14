@@ -84,22 +84,23 @@ for lr, fr in lrmoo_to_frbroo.items():
     g.add((LRMOO.term(lr), OWL.sameAs, FRBROO.term(fr)))
 
 lrmoo_properties = [
-    ("R3_is_realised_in", "R3i_realises"),
-    ("R4_embodies", "R4i_is_embodied_in"),
-    ("R7_exemplifies", "R7i_is_exemplified_by"),
-    ("R16_created", "R16i_was_created_by"),
-    ("R17_created", "R17i_was_created_by"),
-    ("R19_created_a_realisation_of", "R19i_was_realised_through"),
-    ("R24_created", "R24i_was_created_through"),
-    ("R27_materialized", "R27i_was_materialized_by"),
-    ("R28_produced", "R28i_was_produced_by"),
-    ("R71_has_part", "R71i_is_part_of")
+    ("R3_is_realised_in", "R3i_realises", "R3_is_realised_in", "R3i_realises"),
+    ("R4_embodies", "R4i_is_embodied_in", "R4i_comprises_carriers_of", "R4_carriers_provided_by"),
+    ("R7_exemplifies", "R7i_is_exemplified_by", "R7_is_example_of", "R7i_has_example"),
+    ("R16_created", "R16i_was_created_by", "R16_initiated", "R16i_was_initiated_by"),
+    ("R17_created", "R17i_was_created_by", "R17_created", "R17i_was_created_by"),
+    ("R19_created_a_realisation_of", "R19i_was_realised_through", "R19_created_a_realisation_of", "R19i_was_realised_through"),
+    ("R24_created", "R24i_was_created_through", "R24_created", "R24i_was_created_through"),
+    ("R27_materialized", "R27i_was_materialized_by", "R27_used_as_source_material", "R27i_was_used_by"),
+    ("R28_produced", "R28i_was_produced_by", "R28_produced", "R28i_was_produced_by"),
 ]
-for direct, inverse in lrmoo_properties:
-    g.add((LRMOO.term(direct), OWL.inverseOf, LRMOO.term(inverse)))
-    g.add((LRMOO.term(inverse), OWL.inverseOf, LRMOO.term(direct)))
-    g.add((LRMOO.term(direct), OWL.sameAs, FRBROO.term(direct)))
-    g.add((LRMOO.term(inverse), OWL.sameAs, FRBROO.term(inverse)))
+
+for lr_direct, lr_inverse, fr_direct, fr_inverse in lrmoo_properties:
+    g.add((LRMOO.term(lr_direct), OWL.inverseOf, LRMOO.term(lr_inverse)))
+    g.add((LRMOO.term(lr_inverse), OWL.inverseOf, LRMOO.term(lr_direct)))
+    # Equivalences
+    g.add((LRMOO.term(lr_direct), OWL.sameAs, FRBROO.term(fr_direct)))
+    g.add((LRMOO.term(lr_inverse), OWL.sameAs, FRBROO.term(fr_inverse)))
 
 # Caches for deduplication
 genre_cache = {}
