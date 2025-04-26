@@ -138,6 +138,7 @@ The [works.py](https://github.com/laurauntner/wikidata-to-cidoc-crm/blob/main/wo
   - `E73_Information_Object` (digital surrogates)
 - `F3_Manifestation` (publications of expressions) and `F30_Manifestation_Creation` with:
   - `E21_Person` (editors) with `E82_Actor_Appellation` (names)
+  - `E35_Title` and `E62_String` (titles)
   - `E40_Legal_Body` (publishers)
   - `E52_Time-Span` (publication years)
   - `E53_Place` (publication places)
@@ -188,16 +189,16 @@ Q1242002
 
 <https://sappho-digital.com/expression/Q1242002> a lrmoo:F2_Expression ;
     rdfs:label "Expression of Sappho"@en ;
-    ecrm:P102_has_title <https://sappho-digital.com/title/Q1242002> ;
+    ecrm:P102_has_title <https://sappho-digital.com/title/expression/Q1242002> ;
     ecrm:P1_is_identified_by <https://sappho-digital.com/identifier/Q1242002> ;
     ecrm:P2_has_type <https://sappho-digital.com/genre/Q80930> ;
     owl:sameAs <http://www.wikidata.org/entity/Q1242002> ;
     prov:wasDerivedFrom <http://www.wikidata.org/entity/Q1242002> .
 
-<https://sappho-digital.com/title/Q1242002> a ecrm:E35_Title ;
+<https://sappho-digital.com/title/expression/Q1242002> a ecrm:E35_Title ;
     ecrm:P190_has_symbolic_content <https://sappho-digital.com/title_string/Q1242002> .
 
-<https://sappho-digital.com/title_string/Q1242002> a ecrm:E62_String ;
+<https://sappho-digital.com/title_string/expression/Q1242002> a ecrm:E62_String ;
     rdfs:label "Sappho"@de .
 
 <https://sappho-digital.com/identifier/Q1242002> a ecrm:E42_Identifier ;
@@ -243,7 +244,14 @@ Q1242002
 
 <https://sappho-digital.com/manifestation/Q1242002> a lrmoo:F3_Manifestation ;
     rdfs:label "Manifestation of Sappho"@en ;
+    ecrm:P102_has_title <https://sappho-digital.com/title/manifestation/Q1242002> ;
     lrmoo:R4_embodies <https://sappho-digital.com/expression/Q1242002> .
+
+<https://sappho-digital.com/title/manifestation/Q1242002> a ecrm:E35_Title ;
+    ecrm:P190_has_symbolic_content <https://sappho-digital.com/title_string/manifestation/Q1242002> .
+
+<https://sappho-digital.com/title_string/manifestation/Q1242002> a ecrm:E62_String ;
+    rdfs:label "Sappho"@de .
 
 <https://sappho-digital.com/item_production/Q1242002> a lrmoo:F32_Item_Production_Event ;
     rdfs:label "Item production event of Sappho"@en ;
