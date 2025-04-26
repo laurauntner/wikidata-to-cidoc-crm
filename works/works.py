@@ -119,21 +119,23 @@ with open("work-qids.csv") as f:
 def query_wikidata(qids, max_retries=5):
     values = " ".join(f"wd:{qid}" for qid in qids)
     query = f"""
-    SELECT ?work ?workLabel ?title_de ?title_en ?genre ?genreLabel ?author ?authorLabel ?creation_date (MIN(?raw_pub_date) AS ?pub_date) ?pub_place ?pub_placeLabel ?publisher ?publisherLabel ?digitalCopy ?editor ?editorLabel WHERE {{
-      VALUES ?work {{ {values} }}
-      OPTIONAL {{ ?work wdt:P1476 ?title_de . FILTER(LANG(?title_de) = 'de') }}
-      OPTIONAL {{ ?work wdt:P1476 ?title_en . FILTER(LANG(?title_en) = 'en') }}
-      OPTIONAL {{ ?work wdt:P136 ?genre . }}
-      OPTIONAL {{ ?work wdt:P50 ?author . }}
-      OPTIONAL {{ ?work wdt:P577 ?raw_pub_date . }}
-      OPTIONAL {{ ?work wdt:P291 ?pub_place . }}
-      OPTIONAL {{ ?work wdt:P123 ?publisher . }}
-      OPTIONAL {{ ?work wdt:P953 ?digitalCopy . }}
-      OPTIONAL {{ ?work wdt:P98 ?editor . }}
-      OPTIONAL {{ {{ ?work wdt:P571 ?creation_date . }} UNION {{ ?work wdt:P2754 ?creation_date . }} }}
-      SERVICE wikibase:label {{ bd:serviceParam wikibase:language "en,de" }}
+    SELECT ?work ?workLabel ?title_de ?title_en ?genre ?genreLabel ?author ?authorLabel ?creation_date (MIN(?raw_pub_date) AS ?pub_date) ?pub_place ?pub_placeLabel ?publisher ?publisherLabel ?digitalCopy ?editor ?editorLabel ?publishedIn ?partOf WHERE {{
+    VALUES ?work {{ {values} }}
+    OPTIONAL {{ ?work wdt:P1476 ?title_de . FILTER(LANG(?title_de) = 'de') }}
+    OPTIONAL {{ ?work wdt:P1476 ?title_en . FILTER(LANG(?title_en) = 'en') }}
+    OPTIONAL {{ ?work wdt:P136 ?genre . }}
+    OPTIONAL {{ ?work wdt:P50 ?author . }}
+    OPTIONAL {{ ?work wdt:P577 ?raw_pub_date . }}
+    OPTIONAL {{ ?work wdt:P291 ?pub_place . }}
+    OPTIONAL {{ ?work wdt:P123 ?publisher . }}
+    OPTIONAL {{ ?work wdt:P953 ?digitalCopy . }}
+    OPTIONAL {{ ?work wdt:P98 ?editor . }}
+    OPTIONAL {{ ?work wdt:P1433 ?publishedIn . }}
+    OPTIONAL {{ ?work wdt:P361 ?partOf . }}
+    OPTIONAL {{ {{ ?work wdt:P571 ?creation_date . }} UNION {{ ?work wdt:P2754 ?creation_date . }} }}
+    SERVICE wikibase:label {{ bd:serviceParam wikibase:language "en,de" }}
     }}
-    GROUP BY ?work ?workLabel ?title_de ?title_en ?genre ?genreLabel ?author ?authorLabel ?creation_date ?pub_place ?pub_placeLabel ?publisher ?publisherLabel ?digitalCopy ?editor ?editorLabel
+    GROUP BY ?work ?workLabel ?title_de ?title_en ?genre ?genreLabel ?author ?authorLabel ?creation_date ?pub_place ?pub_placeLabel ?publisher ?publisherLabel ?digitalCopy ?editor ?editorLabel ?publishedIn ?partOf
     """
     headers = {
         "Accept": "application/sparql-results+json",
@@ -154,16 +156,58 @@ def query_wikidata(qids, max_retries=5):
     return []
 
 # Helper Functions for titles and years
-def label_for(title_de, title_en):
+def label_for(title_de, title_en, work_label):
     if title_de:
         return title_de, "de"
     elif title_en:
         return title_en, "en"
+    elif work_label:
+        return work_label, "de"
     else:
         return "Untitled", "en"
 
+def manifestation_label_for(r):
+    if "publishedInLabel" in r:
+        return r["publishedInLabel"]["value"], "de"
+    elif "partOfLabel" in r:
+        return r["partOfLabel"]["value"], "de"
+    elif "publishedIn" in r:
+        parent_qid = r["publishedIn"]["value"].split("/")[-1]
+        return fetch_label(parent_qid)
+    elif "partOf" in r:
+        parent_qid = r["partOf"]["value"].split("/")[-1]
+        return fetch_label(parent_qid)
+    else:
+        return None, None
+
 def extract_year(date_str):
     return date_str[:4] if date_str else None
+
+def fetch_label(qid):
+    query = f"""
+    SELECT ?label_de ?label_en WHERE {{
+      wd:{qid} rdfs:label ?label_de . FILTER(LANG(?label_de) = "de")
+      OPTIONAL {{ wd:{qid} rdfs:label ?label_en . FILTER(LANG(?label_en) = "en") }}
+    }}
+    """
+    headers = {
+        "Accept": "application/sparql-results+json",
+        "User-Agent": "SapphoWorkIntegrationBot/1.0 (contact@example.com)"
+    }
+    try:
+        r = requests.get("https://query.wikidata.org/sparql", params={"query": query}, headers=headers, timeout=30)
+        r.raise_for_status()
+        results = r.json()["results"]["bindings"]
+        if results:
+            label_de = results[0].get("label_de", {}).get("value")
+            label_en = results[0].get("label_en", {}).get("value")
+            if label_de:
+                return label_de, "de"
+            elif label_en:
+                return label_en, "en"
+    except Exception as e:
+        print(f"[WARN] Could not fetch label for {qid}: {e}")
+    return "Untitled", "en"
 
 # Process in Batches
 for i in tqdm(range(0, len(qids), 20)):
@@ -174,9 +218,13 @@ for i in tqdm(range(0, len(qids), 20)):
         qid = r["work"]["value"].split("/")[-1]
         work_uri = URIRef(f"{SAPPHO_BASE_URI}work/{qid}")
         expression_uri = URIRef(f"{SAPPHO_BASE_URI}expression/{qid}")
-        label, lang = label_for(r.get("title_de", {}).get("value"), r.get("title_en", {}).get("value"))
-        title_uri = URIRef(f"{SAPPHO_BASE_URI}title/{qid}")
-        title_string_uri = URIRef(f"{SAPPHO_BASE_URI}title_string/{qid}")
+        label, lang = label_for(
+            r.get("title_de", {}).get("value"),
+            r.get("title_en", {}).get("value"),
+            r.get("workLabel", {}).get("value")
+        )
+        title_uri = URIRef(f"{SAPPHO_BASE_URI}title/expression/{qid}")
+        title_string_uri = URIRef(f"{SAPPHO_BASE_URI}title_string/expression/{qid}")
 
         g.add((work_uri, RDF.type, LRMOO.F1_Work))
         g.add((work_uri, RDFS.label, Literal(f"Work of {label}", lang="en")))
@@ -260,6 +308,27 @@ for i in tqdm(range(0, len(qids), 20)):
         g.add((manifestation_uri, RDF.type, LRMOO.F3_Manifestation))
         g.add((manifestation_uri, RDFS.label, Literal(f"Manifestation of {label}", lang="en")))
         g.add((manifestation_uri, LRMOO.R4_embodies, expression_uri))
+        
+        manifestation_title_uri = URIRef(f"{SAPPHO_BASE_URI}title/manifestation/{qid}")
+        manifestation_title_string_uri = URIRef(f"{SAPPHO_BASE_URI}title_string/manifestation/{qid}")
+        
+        manifestation_label, manifestation_lang = manifestation_label_for(r)
+        if manifestation_label is None:
+            manifestation_label = label
+            manifestation_lang = lang
+        
+        if "publishedIn" in r:
+            parent_qid = r["publishedIn"]["value"].split("/")[-1]
+            manifestation_label, manifestation_lang = fetch_label(parent_qid)
+        elif "partOf" in r:
+            parent_qid = r["partOf"]["value"].split("/")[-1]
+            manifestation_label, manifestation_lang = fetch_label(parent_qid)
+
+        g.add((manifestation_uri, ECRM.P102_has_title, manifestation_title_uri))
+        g.add((manifestation_title_uri, RDF.type, ECRM.E35_Title))
+        g.add((manifestation_title_uri, ECRM.P190_has_symbolic_content, manifestation_title_string_uri))
+        g.add((manifestation_title_string_uri, RDF.type, ECRM.E62_String))
+        g.add((manifestation_title_string_uri, RDFS.label, Literal(manifestation_label, lang=manifestation_lang)))
 
         # Manifestation Creation
         manifestation_creation_uri = URIRef(f"{SAPPHO_BASE_URI}manifestation_creation/{qid}")
