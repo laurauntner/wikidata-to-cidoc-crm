@@ -38,8 +38,8 @@ The [authors.py](https://github.com/laurauntner/wikidata-to-cidoc-crm/blob/main/
   - `E67_Birth` and `E69_Death` events, linked to:
     - `E53_Place` (birth places, derived from `wdt:P19`, and death places, derived from `wdt:P20`)
     - `E52_Time-Span` (birth dates, derived from `wdt:P569`, and death dates, derived from `wdt:P570`)
-  - `E55_Type` (gender, derived from `wdt:P21`)
-  - `E36_Visual_Item` (visual representation) and `E38_Image` (image reference with Wikimedia `seeAlso`, derived from `wdt:P18`)
+  - `E55_Type` (genders, derived from `wdt:P21`)
+  - `E36_Visual_Item` (visual representations) and `E38_Image` (image reference with Wikimedia `seeAlso`, derived from `wdt:P18`)
 
 📎 A [visual documentation](https://github.com/laurauntner/wikidata-to-cidoc-crm/blob/main/authors/authors.png) of the authors data model is included in the `authors` folder.
 
