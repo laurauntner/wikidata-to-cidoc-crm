@@ -33,14 +33,13 @@ pip install rdflib requests tqdm
 The [authors.py](https://github.com/laurauntner/wikidata-to-cidoc-crm/blob/main/authors/authors.py) script reads a list of Wikidata QIDs from a CSV file and creates RDF triples using CIDOC CRM (eCRM, mapped to CRM). It models:
 
 - `E21_Person` with:
-  - `E82_Actor_Appellation` (names)
-  - `E42_Identifier` (Wikidata QIDs)
+  - `E82_Actor_Appellation` (names, derived from labels)
+  - `E42_Identifier` (Wikidata QIDs, derived from URIs)
   - `E67_Birth` and `E69_Death` events, linked to:
-    - `E53_Place` (birth/death places)
-    - `E52_Time-Span` (birth/death dates)
-  - `E55_Type` (gender)
-  - `E36_Visual_Item` (visual representation)
-  - `E38_Image` (image reference with Wikimedia `seeAlso`)
+    - `E53_Place` (birth places, derived from `wdt:P19`, and death places, derived from `wdt:P20`)
+    - `E52_Time-Span` (birth dates, derived from `wdt:P569`, and death dates, derived from `wdt:P570`)
+  - `E55_Type` (gender, derived from `wdt:P21`)
+  - `E36_Visual_Item` (visual representation) and `E38_Image` (image reference with Wikimedia `seeAlso`, derived from `wdt:P18`)
 
 📎 A [visual documentation](https://github.com/laurauntner/wikidata-to-cidoc-crm/blob/main/authors/authors.png) of the authors data model is included in the `authors` folder.
 
