@@ -34,7 +34,7 @@ The [authors.py](https://github.com/laurauntner/wikidata-to-cidoc-crm/blob/main/
 
 - `E21_Person` with:
   - `E82_Actor_Appellation` (names, derived from labels)
-  - `E42_Identifier` (Wikidata QIDs, derived from URIs)
+  - `E42_Identifier` (Wikidata QIDs, derived from given QIDs)
   - `E67_Birth` and `E69_Death` events, linked to:
     - `E53_Place` (birth places, derived from `wdt:P19`, and death places, derived from `wdt:P20`)
     - `E52_Time-Span` (birth dates, derived from `wdt:P569`, and death dates, derived from `wdt:P570`)
@@ -128,19 +128,19 @@ Q469571
 The [works.py](https://github.com/laurauntner/wikidata-to-cidoc-crm/blob/main/works/works.py) script reads a list of Wikidata QIDs from a CSV file and creates RDF triples using CIDOC CRM (eCRM, mapped to CRM) and LRMoo (mapped to FRBRoo). It models:
 
 - `F1_Work` (abstract works) and `F27_Work_Creation` with:
-  - `E21_Person` (authors)
+  - `E21_Person` (authors, derived from `wdt:P50`)
 - `F2_Expression` (realizations of abstract works) and `F28_Expression_Creation` with:
-  - `E52_Time-Span` (creation years)
-  - `E35_Title` and `E62_String` (titles)
-  - `E42_Identifier` (Wikidata QIDs)
-  - `E55_Type` (genres)
-  - `E73_Information_Object` (digital surrogates)
+  - `E52_Time-Span` (creation years, derived from `wdt:P571` or `wdt:P2754`)
+  - `E35_Title` and `E62_String` (titles, derived from `wdt:P1476` or labels)
+  - `E42_Identifier` (Wikidata QIDs, derived from given QIDs)
+  - `E55_Type` (genres, derived from `wdt:P136`)
+  - `E73_Information_Object` (digital surrogates, derived from `wdt:P953`)
 - `F3_Manifestation` (publications of expressions) and `F30_Manifestation_Creation` with:
-  - `E21_Person` (editors) with `E82_Actor_Appellation` (names)
-  - `E35_Title` and `E62_String` (titles)
-  - `E40_Legal_Body` (publishers)
-  - `E52_Time-Span` (publication years)
-  - `E53_Place` (publication places)
+  - `E21_Person` (editors, derived from `wdt:P98`) with `E82_Actor_Appellation` (names, derived from labels)
+  - `E35_Title` and `E62_String` (titles, only different if the text is part of another text (`wdt:P1433` or `wdt:P361`))
+  - `E40_Legal_Body` (publishers, derived from `wdt:P123`)
+  - `E52_Time-Span` (publication years, derived from `wdt:P577`)
+  - `E53_Place` (publication places, derived from `wdt:P291`)
 - `F5_Item` (specific copies of manifestations) and `F32_Item_Production_Event`
 
 Translators are not modeled per default, but the data model can, of course, be extended or adapted accordingly.
