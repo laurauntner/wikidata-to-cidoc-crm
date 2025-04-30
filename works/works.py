@@ -192,7 +192,7 @@ def fetch_label(qid):
     """
     headers = {
         "Accept": "application/sparql-results+json",
-        "User-Agent": "SapphoWorkIntegrationBot/1.0 (contact@example.com)"
+        "User-Agent": "SapphoWorkIntegrationBot/1.0 (laura.untner@fu-berlin.de)"
     }
     try:
         r = requests.get("https://query.wikidata.org/sparql", params={"query": query}, headers=headers, timeout=30)
