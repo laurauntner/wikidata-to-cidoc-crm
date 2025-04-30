@@ -78,7 +78,7 @@ def get_wikidata_batch(qids, max_retries=5):
     """
     headers = {
         "Accept": "application/sparql-results+json",
-        "User-Agent": "SapphoDataIntegrationBot/1.0 (laurauntner@example.com)"
+        "User-Agent": "SapphoDataIntegrationBot/1.0 (laura.untner@fu-berlin.de)"
     }
     for attempt in range(1, max_retries + 1):
         try:
