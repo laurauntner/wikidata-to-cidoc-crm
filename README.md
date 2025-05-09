@@ -38,7 +38,7 @@ pip install rdflib requests tqdm
 <details>
 <summary><h2>✍️ Authors Module (e/CRM)</h2></summary>
   
-The [authors.py](https://github.com/laurauntner/wikidata-to-cidoc-crm/blob/main/authors/authors.py) script reads a list of Wikidata QIDs from a CSV file and creates RDF triples using CIDOC CRM (eCRM, mapped to CRM). It models:
+The [authors.py](https://github.com/laurauntner/wikidata-to-cidoc-crm/blob/main/authors/authors.py) script reads a list of Wikidata QIDs for authors from a CSV file and creates RDF triples using CIDOC CRM (eCRM, mapped to CRM). It models:
 
 - `E21_Person` with:
   - `E82_Actor_Appellation` (names, derived from labels)
@@ -135,7 +135,7 @@ Namespace declarations and mappings to CRM are applied but not shown in this exe
 <details>
 <summary><h2>📚 Works Module (LRMoo/FRBRoo)</h2></summary>
 
-The [works.py](https://github.com/laurauntner/wikidata-to-cidoc-crm/blob/main/works/works.py) script reads a list of Wikidata QIDs from a CSV file and creates RDF triples using CIDOC CRM (eCRM, mapped to CRM) and LRMoo (mapped to FRBRoo). It models:
+The [works.py](https://github.com/laurauntner/wikidata-to-cidoc-crm/blob/main/works/works.py) script reads a list of Wikidata QIDs for works from a CSV file and creates RDF triples using CIDOC CRM (eCRM, mapped to CRM) and LRMoo (mapped to FRBRoo). It models:
 
 - `F1_Work` (abstract works) and `F27_Work_Creation` with:
   - `E21_Person` (authors, derived from `wdt:P50`, see authors module)
@@ -280,7 +280,7 @@ Namespace declarations and mappings to CRM and FRBRoo are applied but not shown 
 
 <summary><h2>🌐 Relations Module (INTRO)</h2></summary>
 
-The [relations.py](https://github.com/laurauntner/wikidata-to-cidoc-crm/blob/main/relations/relations.py) script reads a list of Wikidata QIDs from a CSV file and creates RDF triples using INTRO, CIDOC CRM (eCRM, mapped to CRM) and LRMoo (mapped to FRBRoo). It models:
+The [relations.py](https://github.com/laurauntner/wikidata-to-cidoc-crm/blob/main/relations/relations.py) script reads a list of Wikidata QIDs for works from a CSV file and creates RDF triples using INTRO, CIDOC CRM (eCRM, mapped to CRM) and LRMoo (mapped to FRBRoo). It models:
 
 - Literary works (`F2_Expression`, see works module)
   - linked to the Wikidata item via `owl:sameAs`
