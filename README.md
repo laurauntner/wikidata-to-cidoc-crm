@@ -1,24 +1,23 @@
 # Wikidata to CIDOC CRM
 
-This repository contains Python scripts that transform structured data from [Wikidata](https://www.wikidata.org/) into RDF using [CIDOC CRM](https://cidoc-crm.org/) (OWL version, [eCRM](https://erlangen-crm.org/docs/ecrm/current/)) and models based on CIDOC CRM: [LRMoo](https://repository.ifla.org/handle/20.500.14598/3677) and [INTRO](https://github.com/BOberreither/INTRO). To improve inference capabilities, all ECRM classes and properties have been mapped to CIDOC CRM using `owl:sameAs`. Also, all LRMoo classes and properties have been mapped to [FRBRoo](https://www.iflastandards.info/fr/frbr/frbroo).
+This repository contains Python scripts that transform structured data from [Wikidata](https://www.wikidata.org/) into RDF using [CIDOC CRM](https://cidoc-crm.org/) (OWL version, [eCRM](https://erlangen-crm.org/docs/ecrm/current/)) and models based on CIDOC CRM: [LRMoo](https://repository.ifla.org/handle/20.500.14598/3677) and [INTRO](https://github.com/BOberreither/INTRO). 
 
-The scripts are developed in the context of the project [Sappho Digital](https://sappho-digital.com/) by [Laura Untner](https://orcid.org/0000-0002-9649-0870).
+The goal is to enable CIDOC CRM-based semantic enrichment from Wikidata and other linked data sources. The scripts also use [PROV-O](https://www.w3.org/TR/prov-o/) (`prov:wasDerivedFrom`) to link data back to Wikidata.
 
-The repository is under active development. Currently, the `authors`, `works` and `relations` modules are available. They model basic biographical, bibliographical and intertextual information based on data from Wikidata and can be dynamically extended. The modules can be used independently of each other, but a unification is planned.
+To improve inference capabilities, all ECRM classes and properties have been mapped to CIDOC CRM using `owl:sameAs`. Also, all LRMoo classes and properties have been mapped to [FRBRoo](https://www.iflastandards.info/fr/frbr/frbroo).
 
-Still to do:
+The repository is under active development. Currently, the `authors`, `works` and `relations` modules are available. They model basic biographical, bibliographical, and intertextual information based on data from Wikidata and can be dynamically extended. The modules can be used independently of each other, but a unification is planned.
+
+📌 Still to do:
 - Implementation of `owl:imports`
 - Extended ontology alignments
 - Module that combines all modules
 - SHACL Shapes
 - Python package for better reuse
 
-The goal is to enable CIDOC CRM-based semantic enrichment from Wikidata and other linked data sources. The scripts also use [PROV-O](https://www.w3.org/TR/prov-o/) (`prov:wasDerivedFrom`) to link data back to Wikidata.
-
-Please note that these scripts are not magical. Data that is not available in Wikidata cannot appear in the triples.
-
-> ⚠️ **Note:** All URIs currently use the `https://sappho.com/` base. Please adapt this to your own environment as needed.  
-> 💡 **Reuse is encouraged**. The scripts are open for reuse. A reference to the Sappho Digital project would be appreciated if you use or build on them.
+> 🪄 **Reality check**: These scripts are not magical. Data that is not available in Wikidata cannot appear in the triples.
+> ⚠️ **Base URI:** All URIs currently use the `https://sappho.com/` base. Please adapt this to your own environment as needed.  
+> 💡 **Reuse is encouraged**. The scripts are open for reuse. They are developed in the context of the project [Sappho Digital](https://sappho-digital.com/) by [Laura Untner](https://orcid.org/0000-0002-9649-0870). A reference to the project would be appreciated if you use or build on the scripts.
 
 ## Requirements
 
