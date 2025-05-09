@@ -282,11 +282,34 @@ Namespace declarations and mappings to CRM and FRBRoo are applied but not shown 
 
 The [relations.py](https://github.com/laurauntner/wikidata-to-cidoc-crm/blob/main/relations/relations.py) script reads a list of Wikidata QIDs from a CSV file and creates RDF triples using INTRO, CIDOC CRM (eCRM, mapped to CRM) and LRMoo (mapped to FRBRoo). It models:
 
-- `F2_Expression` linked to the Wikidata item via `owl:sameAs`
-- `INT31_IntertextualRelation` between expressions with `INT_Interpretation` linked to the Wikidata items of the expressions via `prov:wasDerivedFrom`
-- `INT18_Reference` for persons (`E21_Person` with `E42_Identifier`), places (`E53_Place` with `E42_Identifier`) and expressions and actualizations (`INT2_ActualizationOfFeature`) of these references in specific expressions with `INT_Interpretation` linked to the Wikidata items of the expressions via `prov:wasDerivedFrom`
-- `INT_Character` linked to the Wikidata item via `owl:sameAs` and identified by `E42_Identifier`, optionally linked to a real Person (`E21_Person`), but always with actualizations (`INT2_ActualizationOfFeature`) of these characters in specific expressions with `INT_Interpretation` linked to the Wikidata items of the expressions via `prov:wasDerivedFrom`
-- `INT_Motif`, `INT_Plot` and `INT_Topic`, with `E42_Identifier`, `INT2_ActualizationOfFeature` instances for specific expressions and interpretations (`INT_Interpretation`) linked to the Wikidata items of the expressions via `prov:wasDerivedFrom`
+- `F2_Expression` (see works module)
+  - linked to the Wikidata item via `owl:sameAs`
+- Intertextual Relations (`INT31_IntertextualRelation`) between expressions with `INT_Interpretation` instances
+  - linked to the Wikidata items of the expressions via `prov:wasDerivedFrom`
+  - derived from actualizations and optionally `wdt:P4969`, `wdt:P2512` and `wdt:P921`
+- References (`INT18_Reference`) for …
+  - persons: `E21_Person` with `E42_Identifier`, derived from `wdt:P180`, `wdt:P921` and `wdt:P9527` for `Q5`
+  - places: `E53_Place` with `E42_Identifier`, derived from the same properties for `wdt:Q2221906`
+  - expressions: derived from `wdt:P361` and `wdt:P1299` for given QIDs
+  - with actualizations (`INT2_ActualizationOfFeature`) of these references in specific expressions
+    - with `INT_Interpretation` linked to the Wikidata items of the expressions via `prov:wasDerivedFrom`
+- Citations via `INT21_TextPassage` instances
+  - linked to the expressions
+  - derived from `wdt:P2860` and `wdt:P6166` for given QIDs
+  - linked to the citing Wikidata item via `prov:wasDerivedFrom`
+- Characters (`INT_Character`)
+  - linked to the Wikidata item via `owl:sameAs` and identified by `E42_Identifier`
+  - derived from `wdt:P674` or `wdt:P180`, `wdt:P921` and `wdt:P527` if the item is `wdt:Q95074`, `wdt:Q3658341`, `wdt:Q15632617`, `wdt:Q97498056`, `wdt:Q122192387` or `wdt:Q115537581`
+  - optionally linked to a real Person (`E21_Person`)
+  - always with actualizations (`INT2_ActualizationOfFeature`) of these characters in specific expressions
+    - with `INT_Interpretation` linked to the Wikidata items of the expressions via `prov:wasDerivedFrom`
+- Motifs, Plots and Topics
+  - `INT_Motif`: derived from `wdt:P180` and `wdt:P9527` if the items are `wdt:Q1229071`, `wd:Q68614425` or `wd:Q1697305`, otherwise it has to be linked via `wdt:P6962`
+  - `INT_Plot`: derived from `wdt:P180`, `wdt:P527` and `wdt:P921` where the target is `Q42109240`
+  - `INT_Topic`: derived from `wdt:P921`, `wdt:P180` and `wdt:P527` where the target is `Q26256810`
+  - with `E42_Identifier`
+  - with `INT2_ActualizationOfFeature` instances for specific expressions and interpretations (`INT_Interpretation`)
+    - linked to the Wikidata items of the expressions via `prov:wasDerivedFrom`
 
 The current data model focuses exclusively on textual works, but—based on INTRO—it could be extended to cover intermedial and interpictorial aspects as well. It also only models intertextual relationships among the texts listed in the CSV file, i.e. it assumes you’re seeking intertexts of known works rather than exploring every possible intertext. 
 Please also note that all searches are strictly one-way: Work → Phenomenon. 
@@ -332,7 +355,8 @@ Further, it’s highly recommended to manually refine the generated triples afte
         <https://sappho-digital.com/actualization/person_ref/Q17892_Q119292643>,
         <https://sappho-digital.com/actualization/plot/Q134285870_Q119292643>,
         <https://sappho-digital.com/actualization/topic/Q10737_Q119292643>,
-        <https://sappho-digital.com/actualization/work_ref/Q1242002_Q119292643>.
+        <https://sappho-digital.com/actualization/work_ref/Q1242002_Q119292643> ;
+    intro:R30_hasTextPassage <https://sappho-digital.com/textpassage/Q119292643_Q1242002> .
 
 <https://sappho-digital.com/expression/Q19179765> a lrmoo:F2_Expression ;
     rdfs:label "Expression of Die Schwestern von Lesbos"@en ;
@@ -392,7 +416,9 @@ Further, it’s highly recommended to manually refine the generated triples afte
         <https://sappho-digital.com/actualization/plot/Q134285870_Q1242002>,
         <https://sappho-digital.com/actualization/topic/Q10737_Q119292643>,
         <https://sappho-digital.com/actualization/topic/Q10737_Q1242002>,
-        <https://sappho-digital.com/actualization/work_ref/Q1242002_Q119292643> ;
+        <https://sappho-digital.com/actualization/work_ref/Q1242002_Q119292643>,
+        <https://sappho-digital.com/textpassage/Q119292643_Q1242002>,
+        <https://sappho-digital.com/textpassage/Q1242002_Q119292643> ;
     intro:R24_hasRelatedEntity <https://sappho-digital.com/actualization/motif/Q165_Q119292643>,
         <https://sappho-digital.com/actualization/motif/Q165_Q1242002>,
         <https://sappho-digital.com/actualization/person_ref/Q17892_Q119292643>,
@@ -401,7 +427,9 @@ Further, it’s highly recommended to manually refine the generated triples afte
         <https://sappho-digital.com/actualization/plot/Q134285870_Q1242002>,
         <https://sappho-digital.com/actualization/topic/Q10737_Q119292643>,
         <https://sappho-digital.com/actualization/topic/Q10737_Q1242002>,
-        <https://sappho-digital.com/actualization/work_ref/Q1242002_Q119292643> .
+        <https://sappho-digital.com/actualization/work_ref/Q1242002_Q119292643>,
+        <https://sappho-digital.com/textpassage/Q119292643_Q1242002>,
+        <https://sappho-digital.com/textpassage/Q1242002_Q119292643> .
 
 <https://sappho-digital.com/interpretation/Q119292643_Q1242002> a intro:INT_Interpretation ;
     rdfs:label "Interpretation of intertextual relation between Sappho and Sappho. Eine Novelle"@en ;
@@ -532,6 +560,22 @@ Further, it’s highly recommended to manually refine the generated triples afte
     rdfs:label "Interpretation of Sappho in Sappho. Eine Novelle"@en ;
     prov:wasDerivedFrom <https://www.wikidata.org/entity/Q119292643> ;
     intro:R21_identifies <https://sappho-digital.com/actualization/work_ref/Q1242002_Q119292643> .
+
+# Citations
+
+<https://sappho-digital.com/textpassage/Q119292643_Q1242002> a intro:INT21_TextPassage ;
+    rdfs:label "Text passage in Sappho. Eine Novelle"@en ;
+    prov:wasDerivedFrom <https://www.wikidata.org/entity/Q1242002> ;
+    intro:R23_providesSupportFor <https://sappho-digital.com/relation/Q119292643_Q1242002> ;
+    intro:R24i_isRelatedEntity <https://sappho-digital.com/relation/Q119292643_Q1242002> ;
+    intro:R30i_isTextPassageOf <https://sappho-digital.com/expression/Q119292643> .
+
+<https://sappho-digital.com/textpassage/Q1242002_Q119292643> a intro:INT21_TextPassage ;
+    rdfs:label "Text passage in Sappho"@en ;
+    prov:wasDerivedFrom <https://www.wikidata.org/entity/Q1242002> ;
+    intro:R23_providesSupportFor <https://sappho-digital.com/relation/Q119292643_Q1242002> ;
+    intro:R24i_isRelatedEntity <https://sappho-digital.com/relation/Q119292643_Q1242002> ;
+    intro:R30i_isTextPassageOf <https://sappho-digital.com/expression/Q1242002> .
 
 # Characters
 
