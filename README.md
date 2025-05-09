@@ -48,10 +48,12 @@ The [authors.py](https://github.com/laurauntner/wikidata-to-cidoc-crm/blob/main/
 📎 A [visual documentation](https://github.com/laurauntner/wikidata-to-cidoc-crm/blob/main/authors/authors.png) of the authors data model is included in the `authors` folder.
     
 <h3>Example Input</h3>
+
+```turtle
+qid
+Q469571
 ```
-  qid
-  Q469571
-```
+
 This is [Anna Louisa Karsch](https://www.wikidata.org/wiki/Q469571).
 
 <h3>Example Output</h3>
