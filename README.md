@@ -36,7 +36,7 @@ pip install rdflib requests tqdm
 ---
 
 <details>
-<summary><h2>✍️ Authors Module</h2></summary>
+<summary><h2>✍️ Authors Module (E/CRM)</h2></summary>
   
 The [authors.py](https://github.com/laurauntner/wikidata-to-cidoc-crm/blob/main/authors/authors.py) script reads a list of Wikidata QIDs from a CSV file and creates RDF triples using CIDOC CRM (eCRM, mapped to CRM). It models:
 
@@ -133,7 +133,7 @@ Namespace declarations and mappings to CRM are applied but not shown in this exe
 ---
 
 <details>
-<summary><h2>📚 Works Module</h2></summary>
+<summary><h2>📚 Works Module (LRMoo/FRBRoo)</h2></summary>
 
 The [works.py](https://github.com/laurauntner/wikidata-to-cidoc-crm/blob/main/works/works.py) script reads a list of Wikidata QIDs from a CSV file and creates RDF triples using CIDOC CRM (eCRM, mapped to CRM) and LRMoo (mapped to FRBRoo). It models:
 
@@ -278,7 +278,7 @@ Namespace declarations and mappings to CRM and FRBRoo are applied but not shown 
 
 <details>
 
-<summary><h2>🌐 Relations Module</h2></summary>
+<summary><h2>🌐 Relations Module (INTRO)</h2></summary>
 
 The [relations.py](https://github.com/laurauntner/wikidata-to-cidoc-crm/blob/main/relations/relations.py) script reads a list of Wikidata QIDs from a CSV file and creates RDF triples using INTRO, CIDOC CRM (eCRM, mapped to CRM) and LRMoo (mapped to FRBRoo). It models:
 
