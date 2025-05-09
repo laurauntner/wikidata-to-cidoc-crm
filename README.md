@@ -282,7 +282,7 @@ Namespace declarations and mappings to CRM and FRBRoo are applied but not shown 
 
 The [relations.py](https://github.com/laurauntner/wikidata-to-cidoc-crm/blob/main/relations/relations.py) script reads a list of Wikidata QIDs from a CSV file and creates RDF triples using INTRO, CIDOC CRM (eCRM, mapped to CRM) and LRMoo (mapped to FRBRoo). It models:
 
-- `F2_Expression` (see works module)
+- Literary works (`F2_Expression`, see works module)
   - linked to the Wikidata item via `owl:sameAs`
 - Intertextual Relations (`INT31_IntertextualRelation`) between expressions with `INT_Interpretation` instances
   - linked to the Wikidata items of the expressions via `prov:wasDerivedFrom`
