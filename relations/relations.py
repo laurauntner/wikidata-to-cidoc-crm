@@ -677,7 +677,16 @@ SELECT DISTINCT ?wrk ?char WHERE {{
                 for act in (act1, act2):
                     g.add((act, ecrm.P67_refers_to, p_node))
                     g.add((p_node, ecrm.P67i_is_referred_to_by, act))
-
+            
+            for act, expr, work in ((act1, expr1, w1), (act2, expr2, w2)):
+                tid = act.split('/')[-1]
+                interp_uri = URIRef(f"{sappho}interpretation/{tid}")
+                if not any(g.triples((interp_uri, None, None))):
+                    g.add((interp_uri, RDF.type, intro.INT_Interpretation))
+                    g.add((interp_uri, RDFS.label, Literal(f"Interpretation of {lbl} in {get_label(work)}", lang="en")))
+                    g.add((interp_uri, prov.wasDerivedFrom, URIRef(WD_ENTITY + expr.split('/')[-1])))
+                g.add((act, intro.R21i_isIdentifiedBy, interp_uri))
+                g.add((interp_uri, intro.R21_identifies, act))
 
 # Citations & Passages
 def process_citations(qids):
