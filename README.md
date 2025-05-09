@@ -282,7 +282,11 @@ Namespace declarations and mappings to CRM and FRBRoo are applied but not shown 
 
 The [relations.py](https://github.com/laurauntner/wikidata-to-cidoc-crm/blob/main/relations/relations.py) script reads a list of Wikidata QIDs from a CSV file and creates RDF triples using INTRO, CIDOC CRM (eCRM, mapped to CRM) and LRMoo (mapped to FRBRoo). It models:
 
-XXXX
+- `F2_Expression` linked to the Wikidata item via `owl:sameAs`
+- `INT31_IntertextualRelation` between expressions with `INT_Interpretation` linked to the Wikidata items of the expressions via `prov:wasDerivedFrom`
+- `INT18_Reference` for persons (`E21_Person` with `E42_Identifier`), places (`E53_Place` with `E42_Identifier`) and expressions and actualizations (`INT2_ActualizationOfFeature`) of these references in specific expressions with `INT_Interpretation` linked to the Wikidata items of the expressions via `prov:wasDerivedFrom`
+- `INT_Character` linked to the Wikidata item via `owl:sameAs` and identified by `E42_Identifier`, optionally linked to a real Person (`E21_Person`), but always with actualizations (`INT2_ActualizationOfFeature`) of these characters in specific expressions with `INT_Interpretation` linked to the Wikidata items of the expressions via `prov:wasDerivedFrom`
+- `INT_Motif`, `INT_Plot` and `INT_Topic`, with `E42_Identifier`, `INT2_ActualizationOfFeature` instances for specific expressions and interpretations (`INT_Interpretation`) linked to the Wikidata items of the expressions via `prov:wasDerivedFrom`
 
 The current data model focuses exclusively on textual works, but—based on INTRO—it could be extended to cover intermedial and interpictorial aspects as well. It also only models intertextual relationships among the texts listed in the CSV file, i.e. it assumes you’re seeking intertexts of known works rather than exploring every possible intertext. 
 Please also note that all searches are strictly one-way: Work → Phenomenon. 
