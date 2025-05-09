@@ -8,16 +8,16 @@ To improve inference capabilities, all ECRM classes and properties have been map
 
 The repository is under active development. Currently, the `authors`, `works` and `relations` modules are available. They model basic biographical, bibliographical, and intertextual information based on data from Wikidata and can be dynamically extended. The modules can be used independently of each other, but a unification is planned.
 
-📌 Still to do:
+📌 **Still to do:**
 - Implementation of `owl:imports`
 - Extended ontology alignments
 - Module that combines all modules
 - SHACL Shapes
 - Python package for better reuse
 
-> 🪄 **Reality check**: These scripts are not magical. Data that is not available in Wikidata cannot appear in the triples.
-> ⚠️ **Base URI:** All URIs currently use the `https://sappho.com/` base. Please adapt this to your own environment as needed.
-> 💡 **Reuse is encouraged**. The scripts are open for reuse. They are developed in the context of the project [Sappho Digital](https://sappho-digital.com/) by [Laura Untner](https://orcid.org/0000-0002-9649-0870). A reference to the project would be appreciated if you use or build on the scripts.
+🪄 **Reality check**: These scripts are not magical. Data that is not available in Wikidata cannot appear in the triples.
+⚠️ **Base URI:** All URIs currently use the `https://sappho.com/` base. Please adapt this to your own environment as needed.
+💡 **Reuse is encouraged**. The scripts are open for reuse. They are developed in the context of the project [Sappho Digital](https://sappho-digital.com/) by [Laura Untner](https://orcid.org/0000-0002-9649-0870). A reference to the project would be appreciated if you use or build on the scripts.
 
 ## Requirements
 
