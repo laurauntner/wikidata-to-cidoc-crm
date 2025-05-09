@@ -36,7 +36,6 @@ pip install rdflib requests tqdm
 ---
 
 <details>
-
 <summary><h2>✍️ Authors Module</h2></summary>
   
 The [authors.py](https://github.com/laurauntner/wikidata-to-cidoc-crm/blob/main/authors/authors.py) script reads a list of Wikidata QIDs from a CSV file and creates RDF triples using CIDOC CRM (eCRM, mapped to CRM). It models:
@@ -134,7 +133,6 @@ Namespace declarations and mappings to CRM are applied but not shown in this exe
 ---
 
 <details>
-
 <summary><h2>📚 Works Module</h2></summary>
 
 The [works.py](https://github.com/laurauntner/wikidata-to-cidoc-crm/blob/main/works/works.py) script reads a list of Wikidata QIDs from a CSV file and creates RDF triples using CIDOC CRM (eCRM, mapped to CRM) and LRMoo (mapped to FRBRoo). It models:
@@ -275,3 +273,37 @@ Namespace declarations and mappings to CRM and FRBRoo are applied but not shown 
     lrmoo:R7_exemplifies <https://sappho-digital.com/manifestation/Q1242002> .
 ```
 </details>
+
+---
+
+<details>
+
+<summary><h2>🌐 Relations Module</h2></summary>
+
+The [relations.py](https://github.com/laurauntner/wikidata-to-cidoc-crm/blob/main/relations/relations.py) script reads a list of Wikidata QIDs from a CSV file and creates RDF triples using INTRO, CIDOC CRM (eCRM, mapped to CRM) and LRMoo (mapped to FRBRoo). It models:
+
+XXXX
+
+The current data model focuses exclusively on textual works, but—based on INTRO—it could be extended to cover intermedial and interpictorial aspects as well. It also only models intertextual relationships among the texts listed in the CSV file, i.e. it assumes you’re seeking intertexts of known works rather than exploring every possible intertext. All searches are strictly one-way: Work → Phenomenon. Output is currently sparse because the relevant data in Wikidata is simply too limited. The script remains fairly slow and should be tested (and possibly optimized) on larger data sets. It’s highly recommended to manually refine the generated triples afterward: INTRO provides very detailed means for recording literary-scholarly analyses as Linked Data, whereas this module captures only the basics.
+
+📎 A [visual documentation](https://github.com/laurauntner/wikidata-to-cidoc-crm/blob/main/relations/relations.png) of the relations data model is included in the `relations` folder.
+
+<h3>Example Input</h3>
+
+```turtle
+qids
+Q1242002 # Franz Grillparzer’s "Sappho"
+Q119292643 # Therese Rak’s "Sappho"
+Q19179765 # Amalie von Imhoff’s "Die Schwestern von Lesbos"
+Q120199245 # Adolph von Schaden’s "Die moderne Sappho"
+```
+
+<h3>Example Output</h3>
+
+Namespace declarations and mappings to CRM and FRBRoo are applied but not shown in this exemplary output.
+
+```turtle
+
+XXXX
+
+```
