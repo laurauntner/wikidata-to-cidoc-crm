@@ -128,7 +128,9 @@ Namespace declarations and mappings to CRM are applied but not shown in this exe
 
 ---
 
-## Works Module
+<details>
+
+<summary><h2>📚 Works Module</h2></summary>
 
 The [works.py](https://github.com/laurauntner/wikidata-to-cidoc-crm/blob/main/works/works.py) script reads a list of Wikidata QIDs from a CSV file and creates RDF triples using CIDOC CRM (eCRM, mapped to CRM) and LRMoo (mapped to FRBRoo). It models:
 
@@ -152,17 +154,18 @@ Translators are not modeled per default, but the data model can, of course, be e
 
 📎 A [visual documentation](https://github.com/laurauntner/wikidata-to-cidoc-crm/blob/main/works/works.png) of the works data model is included in the `works` folder.
 
-### Example Input
+<h3>Example Input</h3>
 
-```
+```csv
 qid
 Q1242002
 ```
+
 (This is the tragedy [Sappho](https://www.wikidata.org/wiki/Q469571) written by Franz Grillparzer.)
 
-### Example Output
+<h3>Example Output</h3>
 
-```
+```turtle
 # Namespace declarations and mappings to CRM are applied but not shown in this exemplary output.
 
 <https://sappho-digital.com/work_creation/Q1242002> a lrmoo:F27_Work_Creation ;
@@ -266,3 +269,4 @@ Q1242002
     rdfs:label "Item of Sappho"@en ;
     lrmoo:R7_exemplifies <https://sappho-digital.com/manifestation/Q1242002> .
 ```
+</details>
