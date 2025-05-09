@@ -23,6 +23,8 @@ The repository is under active development. Currently, the `authors`, `works` an
 - ⚠️ **Base URI:** All URIs currently use the `https://sappho.com/` base. Please adapt this to your own environment as needed.
 - 💡 **Reuse is encouraged**. The scripts are open for reuse. They are developed in the context of the project [Sappho Digital](https://sappho-digital.com/) by [Laura Untner](https://orcid.org/0000-0002-9649-0870). A reference to the project would be appreciated if you use or build on the scripts.
 
+---
+
 ## Requirements
 
 Install dependencies with:
