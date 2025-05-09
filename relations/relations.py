@@ -693,18 +693,13 @@ def process_citations(qids):
     vals = " ".join(f"wd:{q}" for q in qids)
 
     q1 = f"""
+PREFIX wdt: <http://www.wikidata.org/prop/direct/>
 SELECT DISTINCT ?src ?tgt WHERE {{
   VALUES ?src {{ {vals} }}
-  ?src ?p ?tgt FILTER(?p IN (wdt:P2860,wdt:P6166))
+  ?tgt ?p ?src FILTER(?p IN (wdt:P2860,wdt:P6166))
 }}
 """
-    q2 = f"""
-SELECT DISTINCT ?src ?tgt WHERE {{
-  VALUES ?tgt {{ {vals} }}
-  ?src ?p ?tgt FILTER(?p IN (wdt:P2860,wdt:P6166))
-}}
-"""
-    binds = run_sparql(q1)["results"]["bindings"] + run_sparql(q2)["results"]["bindings"]
+    binds = run_sparql(q1)["results"]["bindings"]
 
     pair_set = set()
     for row in binds:
@@ -721,13 +716,17 @@ SELECT DISTINCT ?src ?tgt WHERE {{
             continue
 
         for X, expr in ((w1, expr1), (w2, expr2)):
-            tp_qid  = f"tp_{X}_{(w2 if X==w1 else w1)}"
+            tp_qid  = f"{X}_{(w2 if X==w1 else w1)}"
             tp_uri  = URIRef(f"{sappho}textpassage/{tp_qid}")
             tp_label = f"Text passage in {get_label(X)}"
 
             if (tp_uri, None, None) not in g:
                 g.add((tp_uri, RDF.type, intro.INT21_TextPassage))
                 g.add((tp_uri, RDFS.label, Literal(tp_label, lang="en")))
+                
+                other_qid = w2
+                wd_uri    = URIRef(WD_ENTITY + other_qid)
+                g.add((tp_uri, prov.wasDerivedFrom, wd_uri))
 
             g.add((expr, intro.R30_hasTextPassage, tp_uri))
             g.add((tp_uri, intro.R30i_isTextPassageOf, expr))
