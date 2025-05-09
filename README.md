@@ -284,7 +284,8 @@ The [relations.py](https://github.com/laurauntner/wikidata-to-cidoc-crm/blob/mai
 
 XXXX
 
-The current data model focuses exclusively on textual works, but—based on INTRO—it could be extended to cover intermedial and interpictorial aspects as well. It also only models intertextual relationships among the texts listed in the CSV file, i.e. it assumes you’re seeking intertexts of known works rather than exploring every possible intertext. All searches are strictly one-way: Work → Phenomenon. Output is currently sparse because the relevant data in Wikidata is simply too limited. The script remains fairly slow and should be tested (and possibly optimized) on larger data sets. It’s highly recommended to manually refine the generated triples afterward: INTRO provides very detailed means for recording literary-scholarly analyses as Linked Data, whereas this module captures only the basics.
+The current data model focuses exclusively on textual works, but—based on INTRO—it could be extended to cover intermedial and interpictorial aspects as well. It also only models intertextual relationships among the texts listed in the CSV file, i.e. it assumes you’re seeking intertexts of known works rather than exploring every possible intertext. 
+Please also note that all searches are strictly one-way: Work → Phenomenon. 
 
 📎 A [visual documentation](https://github.com/laurauntner/wikidata-to-cidoc-crm/blob/main/relations/relations.png) of the relations data model is included in the `relations` folder.
 
@@ -301,6 +302,10 @@ Q120199245 # Adolph von Schaden’s "Die moderne Sappho"
 <h3>Example Output</h3>
 
 Namespace declarations and mappings to CRM and FRBRoo are applied but not shown in this exemplary output.
+
+Please also note that the output is currently sparse because the relevant data in Wikidata is simply too limited. The script also remains fairly slow and should be tested (and possibly optimized) on larger data sets.
+
+Further, it’s highly recommended to manually refine the generated triples afterward: INTRO provides very detailed means for recording literary-scholarly analyses as Linked Data, whereas this module captures only the basics.
 
 ```turtle
 
