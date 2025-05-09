@@ -138,7 +138,7 @@ Namespace declarations and mappings to CRM are applied but not shown in this exe
 The [works.py](https://github.com/laurauntner/wikidata-to-cidoc-crm/blob/main/works/works.py) script reads a list of Wikidata QIDs from a CSV file and creates RDF triples using CIDOC CRM (eCRM, mapped to CRM) and LRMoo (mapped to FRBRoo). It models:
 
 - `F1_Work` (abstract works) and `F27_Work_Creation` with:
-  - `E21_Person` (authors, derived from `wdt:P50`)
+  - `E21_Person` (authors, derived from `wdt:P50`, see authors module)
 - `F2_Expression` (realizations of abstract works) and `F28_Expression_Creation` with:
   - `E52_Time-Span` (creation years, derived from `wdt:P571` or `wdt:P2754`)
   - `E35_Title` and `E62_String` (titles, derived from `wdt:P1476` or labels)
