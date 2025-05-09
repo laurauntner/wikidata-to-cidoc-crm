@@ -284,11 +284,11 @@ The [relations.py](https://github.com/laurauntner/wikidata-to-cidoc-crm/blob/mai
 
 - Literary works (`F2_Expression`, see works module)
   - linked to the Wikidata item via `owl:sameAs`
-- Intertextual Relations (`INT31_IntertextualRelation`) between expressions with `INT_Interpretation` instances
-  - linked to the Wikidata items of the expressions via `prov:wasDerivedFrom`
-  - derived from actualizations and optionally `wdt:P4969`, `wdt:P2512` and `wdt:P921`
+- Intertextual relations (`INT31_IntertextualRelation`) between expressions
+  - with `INT_Interpretation` instances linked to the Wikidata items of the expressions via `prov:wasDerivedFrom`
+  - derived from actualizations, citations and optionally `wdt:P4969`, `wdt:P2512` and `wdt:P921`
 - References (`INT18_Reference`) for …
-  - persons: `E21_Person` with `E42_Identifier`, derived from `wdt:P180`, `wdt:P921` and `wdt:P9527` for `Q5`
+  - persons: `E21_Person` with `E42_Identifier`, derived from `wdt:P180`, `wdt:P921` and `wdt:P9527` for `wdt:Q5`
   - places: `E53_Place` with `E42_Identifier`, derived from the same properties for `wdt:Q2221906`
   - expressions: derived from `wdt:P361` and `wdt:P1299` for given QIDs
   - with actualizations (`INT2_ActualizationOfFeature`) of these references in specific expressions
@@ -304,12 +304,12 @@ The [relations.py](https://github.com/laurauntner/wikidata-to-cidoc-crm/blob/mai
   - always with actualizations (`INT2_ActualizationOfFeature`) of these characters in specific expressions
     - with `INT_Interpretation` linked to the Wikidata items of the expressions via `prov:wasDerivedFrom`
 - Motifs, Plots and Topics
-  - `INT_Motif`: derived from `wdt:P180` and `wdt:P9527` if the items are `wdt:Q1229071`, `wd:Q68614425` or `wd:Q1697305`, otherwise it has to be linked via `wdt:P6962`
-  - `INT_Plot`: derived from `wdt:P180`, `wdt:P527` and `wdt:P921` where the target is `Q42109240`
-  - `INT_Topic`: derived from `wdt:P921`, `wdt:P180` and `wdt:P527` where the target is `Q26256810`
-  - with `E42_Identifier`
-  - with `INT2_ActualizationOfFeature` instances for specific expressions and interpretations (`INT_Interpretation`)
-    - linked to the Wikidata items of the expressions via `prov:wasDerivedFrom`
+  - all linked to Wikidata items via `owl:sameAs` and identified by `E42_Identifier`
+  - `INT_Motif`: derived from `wdt:P180` and `wdt:P9527` for `wdt:Q1229071`, `wdt:Q68614425` or `wdt:Q1697305`, otherwise the item has to be linked via `wdt:P6962`
+  - `INT_Plot`: derived from `wdt:P180`, `wdt:P527` and `wdt:P921` for `wdt:Q42109240`
+  - `INT_Topic`: derived from `wdt:P921`, `wdt:P180` and `wdt:P527` for `wdt:Q26256810`
+  - with `INT2_ActualizationOfFeature` instances for specific expressions
+    - with interpretations (`INT_Interpretation`) linked to the Wikidata items of the expressions via `prov:wasDerivedFrom`
 
 The current data model focuses exclusively on textual works, but—based on INTRO—it could be extended to cover intermedial and interpictorial aspects as well. It also only models intertextual relationships among the texts listed in the CSV file, i.e. it assumes you’re seeking intertexts of known works rather than exploring every possible intertext. 
 Please also note that all searches are strictly one-way: Work → Phenomenon. 
