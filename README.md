@@ -36,7 +36,7 @@ pip install rdflib requests tqdm
 ---
 
 <details>
-<summary><h2>✍️ Authors Module (E/CRM)</h2></summary>
+<summary><h2>✍️ Authors Module (e/CRM)</h2></summary>
   
 The [authors.py](https://github.com/laurauntner/wikidata-to-cidoc-crm/blob/main/authors/authors.py) script reads a list of Wikidata QIDs from a CSV file and creates RDF triples using CIDOC CRM (eCRM, mapped to CRM). It models:
 
