@@ -63,6 +63,7 @@ Namespace declarations and mappings to CRM are applied but not shown in this exe
 
 <pre>
   <code class="language-turtle">  
+    
     <https://sappho.com/person/Q469571> a ecrm:E21_Person ;
         rdfs:label "Anna Louisa Karsch"@en ;
         ecrm:P131_is_identified_by <https://sappho.com/appellation/Q469571> ;
@@ -125,6 +126,7 @@ Namespace declarations and mappings to CRM are applied but not shown in this exe
     <https://sappho.com/visual_item/Q469571> a ecrm:E36_Visual_Item ;
         rdfs:label "Visual representation of Anna Louisa Karsch"@en ;
         ecrm:P138_represents <https://sappho.com/person/Q469571> .
+          
     </code>
   </pre>
 </details>
