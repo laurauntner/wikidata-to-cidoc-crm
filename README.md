@@ -54,7 +54,7 @@ The [authors.py](https://github.com/laurauntner/wikidata-to-cidoc-crm/blob/main/
     Q469571
   </code>
 </pre>
-(This is [Anna Louisa Karsch](https://www.wikidata.org/wiki/Q469571).)
+This is [Anna Louisa Karsch](https://www.wikidata.org/wiki/Q469571).
 
 <h3>Example Output</h3>
 <pre>
