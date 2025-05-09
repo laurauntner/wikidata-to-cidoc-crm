@@ -165,9 +165,9 @@ Q1242002
 
 <h3>Example Output</h3>
 
-```turtle
-# Namespace declarations and mappings to CRM are applied but not shown in this exemplary output.
+Namespace declarations and mappings to CRM are applied but not shown in this exemplary output.
 
+```turtle
 <https://sappho-digital.com/work_creation/Q1242002> a lrmoo:F27_Work_Creation ;
     rdfs:label "Work creation of Sappho"@en ;
     ecrm:P14_carried_out_by <https://sappho-digital.com/person/Q154438> ;
