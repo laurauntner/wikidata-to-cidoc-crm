@@ -48,16 +48,21 @@ The [authors.py](https://github.com/laurauntner/wikidata-to-cidoc-crm/blob/main/
 📎 A [visual documentation](https://github.com/laurauntner/wikidata-to-cidoc-crm/blob/main/authors/authors.png) of the authors data model is included in the `authors` folder.
     
 <h3>Example Input</h3>
-<pre><code class="language-turtle">
+<pre>
+  <code class="language-turtle">
         qid
-        Q469571</code></pre>
+        Q469571
+  </code>
+</pre>
 
 This is [Anna Louisa Karsch](https://www.wikidata.org/wiki/Q469571).
 
 <h3>Example Output</h3>
-<pre><code class="language-turtle">
-    # Namespace declarations and mappings to CRM are applied but not shown in this exemplary output.
-  
+
+Namespace declarations and mappings to CRM are applied but not shown in this exemplary output.
+
+<pre>
+  <code class="language-turtle">  
     <https://sappho.com/person/Q469571> a ecrm:E21_Person ;
         rdfs:label "Anna Louisa Karsch"@en ;
         ecrm:P131_is_identified_by <https://sappho.com/appellation/Q469571> ;
@@ -120,7 +125,9 @@ This is [Anna Louisa Karsch](https://www.wikidata.org/wiki/Q469571).
     <https://sappho.com/visual_item/Q469571> a ecrm:E36_Visual_Item ;
         rdfs:label "Visual representation of Anna Louisa Karsch"@en ;
         ecrm:P138_represents <https://sappho.com/person/Q469571> .
-  </code></pre></details>
+    </code>
+  </pre>
+</details>
 
 ---
 
