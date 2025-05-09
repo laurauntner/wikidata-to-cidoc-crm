@@ -49,7 +49,7 @@ The [authors.py](https://github.com/laurauntner/wikidata-to-cidoc-crm/blob/main/
     
 <h3>Example Input</h3>
 
-```turtle
+```csv
 qid
 Q469571
 ```
