@@ -575,12 +575,12 @@ SELECT DISTINCT ?src ?tgt WHERE {{
 
             if (feat, intro.R22_providesSimilarityForRelation, rel) not in g:
                 g.add((feat, intro.R22_providesSimilarityForRelation, rel))
-                g.add((expr_tgt, intro.R22i_relationIsBasedOnSimilarity, feat))
+                g.add((rel, intro.R22i_relationIsBasedOnSimilarity, feat))
 
             add_actualization(
                 feat,
                 expr_tgt,
-                f"Reference to {src_lbl} in {tgt_lbl}",
+                f"{src_lbl} in {tgt_lbl}",
                 rel
             )
             
