@@ -1,19 +1,18 @@
 # Wikidata to CIDOC CRM
 
-This repository contains Python scripts that transform structured data from [Wikidata](https://www.wikidata.org/) into RDF using [CIDOC CRM](https://cidoc-crm.org/) (OWL version, [eCRM](https://erlangen-crm.org/docs/ecrm/current/)) and models based on CIDOC CRM: [LRMoo](https://repository.ifla.org/handle/20.500.14598/3677) and [INTRO](https://github.com/BOberreither/INTRO). 
+This repository contains Python scripts that transform structured data from [Wikidata](https://www.wikidata.org/) into RDF using [CIDOC CRM](https://cidoc-crm.org/) (OWL version, [eCRM](https://erlangen-crm.org/docs/ecrm/current/)) and models based on CIDOC CRM: [LRMoo](https://repository.ifla.org/handle/20.500.14598/3677) and [INTRO](https://github.com/BOberreither/INTRO). The scripts generate—depending on the module—an ontology (`owl:Ontology`) for authors, works, or intertexts.
 
 The goal is to enable CIDOC CRM-based semantic enrichment from Wikidata and other linked data sources. The scripts also use [PROV-O](https://www.w3.org/TR/prov-o/) (`prov:wasDerivedFrom`) to link data back to Wikidata.
 
 To improve inference capabilities, all ECRM classes and properties have been mapped to CIDOC CRM using `owl:sameAs`. Also, all LRMoo classes and properties have been mapped to [FRBRoo](https://www.iflastandards.info/fr/frbr/frbroo).
 
-The repository is under active development. Currently, the `authors`, `works` and `relations` modules are available. They model basic biographical, bibliographical, and intertextual information based on data from Wikidata and can be dynamically extended. The modules can be used independently of each other, but a unification is planned.
-
 ---
 
+🚧 The repository is under active development. Currently, the `authors`, `works` and `relations` modules are available. They model basic biographical, bibliographical, and intertextual information based on data from Wikidata and can be dynamically extended. The modules can be used independently of each other, but a unification is planned.
+
 📌 **Still to do:**
-- Implementation of `owl:imports`
-- Extended ontology alignments
 - Module that combines all modules
+- Extended ontology alignments
 - SHACL Shapes
 - Python package for better reuse
 
