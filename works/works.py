@@ -10,15 +10,20 @@ import csv
 import time
 import requests
 from rdflib import Graph, Literal, RDF, RDFS, Namespace, URIRef
-from rdflib.namespace import OWL, XSD
+from rdflib.namespace import RDF, RDFS, OWL, XSD
 from tqdm import tqdm
 
 # Namespaces
 CRM = Namespace("http://www.cidoc-crm.org/cidoc-crm/") # CIDOC CRM
+CRM_URI = URIRef("http://www.cidoc-crm.org/cidoc-crm/")
 ECRM = Namespace("http://erlangen-crm.org/current/") #eCRM – CIDOC CRM (OWL version)
+ECRM_URI = URIRef("http://erlangen-crm.org/current/")
 LRMOO = Namespace("http://iflastandards.info/ns/lrm/lrmoo/") # LRMoo
+LRMOO_URI = URIRef("http://iflastandards.info/ns/lrm/lrmoo/")
 FRBROO = Namespace("http://iflastandards.info/ns/fr/frbr/frbroo/") # FRBRoo
+FRBROO_URI = URIRef("http://iflastandards.info/ns/fr/frbr/frbroo/")
 PROV = Namespace("http://www.w3.org/ns/prov#") # PROV-O - Provenance Ontology
+PROV_URI = URIRef("http://www.w3.org/ns/prov#")
 WD = "http://www.wikidata.org/entity/" # Base URI for Wikidata entities
 SAPPHO_BASE_URI = Namespace("https://sappho-digital.com/")
 
@@ -31,6 +36,19 @@ g.bind("frbroo", FRBROO)
 g.bind("prov", PROV)
 g.bind("owl", OWL)
 g.bind("rdfs", RDFS)
+g.bind("sappho", SAPPHO_BASE_URI)
+
+# Ontology
+
+ontology_uri = URIRef("https://sappho-digital.com/ontology/works")
+
+g.add((ontology_uri, RDF.type, OWL.Ontology))
+
+g.add((ontology_uri, OWL.imports, CRM_URI))
+g.add((ontology_uri, OWL.imports, ECRM_URI))
+g.add((ontology_uri, OWL.imports, LRMOO_URI))
+g.add((ontology_uri, OWL.imports, FRBROO_URI))
+g.add((ontology_uri, OWL.imports, PROV_URI))
 
 # Ontology Alignments (ECRM - CRM, LRMoo - FRBRoo) and property inverses
 
@@ -139,7 +157,7 @@ def query_wikidata(qids, max_retries=5):
     """
     headers = {
         "Accept": "application/sparql-results+json",
-        "User-Agent": "SapphoWorkIntegrationBot/1.0 (contact@example.com)"
+        "User-Agent": "SapphoWorkIntegrationBot/1.0 (laura.untner@fu-berlin.de)"
     }
 
     for attempt in range(1, max_retries + 1):
@@ -192,7 +210,7 @@ def fetch_label(qid):
     """
     headers = {
         "Accept": "application/sparql-results+json",
-        "User-Agent": "SapphoWorkIntegrationBot/1.0 (laura.untner@fu-berlin.de)"
+        "User-Agent": "SapphoWorkIntegrationBot/1.0 (contact@example.com)"
     }
     try:
         r = requests.get("https://query.wikidata.org/sparql", params={"query": query}, headers=headers, timeout=30)
@@ -254,9 +272,9 @@ for i in tqdm(range(0, len(qids), 20)):
         g.add((expression_uri, ECRM.P1_is_identified_by, identifier_uri))
         g.add((identifier_uri, RDF.type, ECRM.E42_Identifier))
         g.add((identifier_uri, RDFS.label, Literal(qid)))
-        g.add((identifier_uri, ECRM.P2_has_type, URIRef("https://sappho.com/id_type/wikidata")))
+        g.add((identifier_uri, ECRM.P2_has_type, URIRef("https://sappho-digital.com/id_type/wikidata")))
         
-        wikidata_id_type_uri = URIRef("https://sappho.com/id_type/wikidata")
+        wikidata_id_type_uri = URIRef("https://sappho-digital.com/id_type/wikidata")
         g.add((wikidata_id_type_uri, RDF.type, ECRM.E55_Type))
         g.add((wikidata_id_type_uri, RDFS.label, Literal("Wikidata ID", lang="en")))
         g.add((wikidata_id_type_uri, OWL.sameAs, URIRef("https://www.wikidata.org/wiki/Q43649390")))
@@ -386,7 +404,7 @@ for i in tqdm(range(0, len(qids), 20)):
             g.add((editor_uri, ECRM.P1_is_identified_by, id_uri))
             g.add((id_uri, RDF.type, ECRM.E42_Identifier))
             g.add((id_uri, RDFS.label, Literal(editor_qid)))
-            g.add((id_uri, ECRM.P2_has_type, URIRef("https://sappho.com/id_type/wikidata")))
+            g.add((id_uri, ECRM.P2_has_type, URIRef("https://sappho-digital.com/id_type/wikidata")))
             g.add((manifestation_creation_uri, ECRM.P14_carried_out_by, editor_uri))
 
         item_production_uri = URIRef(f"{SAPPHO_BASE_URI}item_production/{qid}")
