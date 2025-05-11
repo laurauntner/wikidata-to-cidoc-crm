@@ -20,7 +20,7 @@ The repository is under active development. Currently, the `authors`, `works` an
 ---
 
 - 🪄 **Reality check**: These scripts are not magical. Data that is not available in Wikidata cannot appear in the triples.
-- ⚠️ **Base URI:** All URIs currently use the `https://sappho.com/` base. Please adapt this to your own environment as needed.
+- ⚠️ **Base URI:** All URIs currently use the `https://sappho-digital.com/` base. Please adapt this to your own environment as needed.
 - 💡 **Reuse is encouraged**. The scripts are open for reuse. They are developed in the context of the project [Sappho Digital](https://sappho-digital.com/) by [Laura Untner](https://orcid.org/0000-0002-9649-0870). A reference to the project would be appreciated if you use or build on the scripts.
 
 ---
@@ -65,68 +65,68 @@ This is [Anna Louisa Karsch](https://www.wikidata.org/wiki/Q469571).
 Namespace declarations and mappings to CRM are applied but not shown in this exemplary output.
 
 ```turtle
-<https://sappho.com/person/Q469571> a ecrm:E21_Person ;
+<https://sappho-digital.com/person/Q469571> a ecrm:E21_Person ;
     rdfs:label "Anna Louisa Karsch"@en ;
-    ecrm:P131_is_identified_by <https://sappho.com/appellation/Q469571> ;
-    ecrm:P1_is_identified_by <https://sappho.com/identifier/Q469571> ;
-    ecrm:P98i_was_born <https://sappho.com/birth/Q469571> ;
-    ecrm:P100i_died_in <https://sappho.com/death/Q469571> ;
-    ecrm:P2_has_type <https://sappho.com/gender/Q6581072> ;
+    ecrm:P131_is_identified_by <https://sappho-digital.com/appellation/Q469571> ;
+    ecrm:P1_is_identified_by <https://sappho-digital.com/identifier/Q469571> ;
+    ecrm:P98i_was_born <https://sappho-digital.com/birth/Q469571> ;
+    ecrm:P100i_died_in <https://sappho-digital.com/death/Q469571> ;
+    ecrm:P2_has_type <https://sappho-digital.com/gender/Q6581072> ;
     owl:sameAs <http://www.wikidata.org/entity/Q469571> .
 
-<https://sappho.com/appellation/Q469571> a ecrm:E82_Actor_Appellation ;
+<https://sappho-digital.com/appellation/Q469571> a ecrm:E82_Actor_Appellation ;
     rdfs:label "Anna Louisa Karsch"@en ;
     prov:wasDerivedFrom <http://www.wikidata.org/entity/Q469571> .
 
-<https://sappho.com/identifier/Q469571> a ecrm:E42_Identifier ;
+<https://sappho-digital.com/identifier/Q469571> a ecrm:E42_Identifier ;
     rdfs:label "Q469571" ;
-    ecrm:P2_has_type <https://sappho.com/id_type/wikidata> .
+    ecrm:P2_has_type <https://sappho-digital.com/id_type/wikidata> .
 
-<https://sappho.com/id_type/wikidata> a ecrm:E55_Type ;
+<https://sappho-digital.com/id_type/wikidata> a ecrm:E55_Type ;
     rdfs:label "Wikidata ID"@en .
 
-<https://sappho.com/birth/Q469571> a ecrm:E67_Birth ;
+<https://sappho-digital.com/birth/Q469571> a ecrm:E67_Birth ;
     rdfs:label "Birth of Anna Louisa Karsch"@en ;
-    ecrm:P4_has_time-span <https://sappho.com/timespan/17221201> ;
-    ecrm:P7_took_place_at <https://sappho.com/place/Q659063> ;
+    ecrm:P4_has_time-span <https://sappho-digital.com/timespan/17221201> ;
+    ecrm:P7_took_place_at <https://sappho-digital.com/place/Q659063> ;
     prov:wasDerivedFrom <http://www.wikidata.org/entity/Q469571> .
 
-<https://sappho.com/death/Q469571> a ecrm:E69_Death ;
+<https://sappho-digital.com/death/Q469571> a ecrm:E69_Death ;
     rdfs:label "Death of Anna Louisa Karsch"@en ;
-    ecrm:P4_has_time-span <https://sappho.com/timespan/17911012> ;
-    ecrm:P7_took_place_at <https://sappho.com/place/Q64> ;
+    ecrm:P4_has_time-span <https://sappho-digital.com/timespan/17911012> ;
+    ecrm:P7_took_place_at <https://sappho-digital.com/place/Q64> ;
     prov:wasDerivedFrom <http://www.wikidata.org/entity/Q469571> .
 
-<https://sappho.com/place/Q64> a ecrm:E53_Place ;
+<https://sappho-digital.com/place/Q64> a ecrm:E53_Place ;
     rdfs:label "Berlin"@en ;
     owl:sameAs <http://www.wikidata.org/entity/Q64> .
 
-<https://sappho.com/place/Q659063> a ecrm:E53_Place ;
+<https://sappho-digital.com/place/Q659063> a ecrm:E53_Place ;
     rdfs:label "Skąpe"@en ;
     owl:sameAs <http://www.wikidata.org/entity/Q659063> .
 
-<https://sappho.com/timespan/17221201> a ecrm:E52_Time-Span ;
+<https://sappho-digital.com/timespan/17221201> a ecrm:E52_Time-Span ;
     rdfs:label "1722-12-01"^^xsd:date .
 
-<https://sappho.com/timespan/17911012> a ecrm:E52_Time-Span ;
+<https://sappho-digital.com/timespan/17911012> a ecrm:E52_Time-Span ;
     rdfs:label "1791-10-12"^^xsd:date .
 
-<https://sappho.com/gender/Q6581072> a ecrm:E55_Type ;
+<https://sappho-digital.com/gender/Q6581072> a ecrm:E55_Type ;
     rdfs:label "female"@en ;
-    ecrm:P2_has_type <https://sappho.com/gender_type/wikidata> ;
+    ecrm:P2_has_type <https://sappho-digital.com/gender_type/wikidata> ;
     owl:sameAs <http://www.wikidata.org/entity/Q6581072> .
 
-<https://sappho.com/gender_type/wikidata> a ecrm:E55_Type ;
+<https://sappho-digital.com/gender_type/wikidata> a ecrm:E55_Type ;
     rdfs:label "Wikidata Gender"@en .
 
-<https://sappho.com/image/Q469571> a ecrm:E38_Image ;
-    ecrm:P65_shows_visual_item <https://sappho.com/visual_item/Q469571> ;
+<https://sappho-digital.com/image/Q469571> a ecrm:E38_Image ;
+    ecrm:P65_shows_visual_item <https://sappho-digital.com/visual_item/Q469571> ;
     rdfs:seeAlso <http://commons.wikimedia.org/wiki/Special:FilePath/Karschin%20bild.JPG> ;
     prov:wasDerivedFrom <http://www.wikidata.org/entity/Q469571> .
 
-<https://sappho.com/visual_item/Q469571> a ecrm:E36_Visual_Item ;
+<https://sappho-digital.com/visual_item/Q469571> a ecrm:E36_Visual_Item ;
     rdfs:label "Visual representation of Anna Louisa Karsch"@en ;
-    ecrm:P138_represents <https://sappho.com/person/Q469571> .
+    ecrm:P138_represents <https://sappho-digital.com/person/Q469571> .
 ```
 </details>
 
@@ -213,9 +213,9 @@ Namespace declarations and mappings to CRM and FRBRoo are applied but not shown 
 
 <https://sappho-digital.com/identifier/Q1242002> a ecrm:E42_Identifier ;
     rdfs:label "Q1242002" ;
-    ecrm:P2_has_type <https://sappho.com/id_type/wikidata> .
+    ecrm:P2_has_type <https://sappho-digital.com/id_type/wikidata> .
 
-<https://sappho.com/id_type/wikidata> a ecrm:E55_Type ;
+<https://sappho-digital.com/id_type/wikidata> a ecrm:E55_Type ;
     rdfs:label "Wikidata ID"@en ;
     owl:sameAs <https://www.wikidata.org/wiki/Q43649390> .
 
