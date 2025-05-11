@@ -19,11 +19,17 @@ from typing import Union, Iterable
 WD_ENTITY = "https://www.wikidata.org/entity/"
 sappho   = Namespace("https://sappho-digital.com/")
 ecrm     = Namespace("http://erlangen-crm.org/current/")
+ecrm_uri = URIRef("http://erlangen-crm.org/current/")
 crm = Namespace("http://www.cidoc-crm.org/cidoc-crm/")
+crm_uri = URIRef("http://www.cidoc-crm.org/cidoc-crm/")
 lrmoo    = Namespace("http://iflastandards.info/ns/lrm/lrmoo/")
-frbroo = Namespace("http://iflastandards.info/ns/fr/frbroo/")
+lrmoo_uri = URIRef("http://iflastandards.info/ns/lrm/lrmoo/")
+frbroo = Namespace("http://iflastandards.info/ns/fr/frbr/frbroo/")
+frbroo_uri = URIRef("http://iflastandards.info/ns/fr/frbr/frbroo/")
 intro    = Namespace("https://w3id.org/lso/intro/currentbeta#")
+intro_uri = URIRef("https://w3id.org/lso/intro/currentbeta#")
 prov     = Namespace("http://www.w3.org/ns/prov#")
+prov_uri = URIRef("http://www.w3.org/ns/prov#")
 
 # SPARQL Setup
 SPARQL_URL = "https://query.wikidata.org/sparql"
@@ -65,6 +71,8 @@ g = Graph()
 for prefix, ns in [
     ("sappho", sappho),
     ("ecrm", ecrm),
+    ("crm", crm),
+    ("frbroo", frbroo),
     ("lrmoo", lrmoo),
     ("intro", intro),
     ("prov", prov),
@@ -72,8 +80,19 @@ for prefix, ns in [
     g.bind(prefix, ns)
     g.bind("rdfs", RDFS)
     g.bind("owl", OWL)
-    g.bind("crm", crm)
-    g.bind("frbroo", frbroo)
+
+# Ontology
+
+ontology_uri = URIRef("https://sappho-digital.com/ontology/relations")
+
+g.add((ontology_uri, RDF.type, OWL.Ontology))
+
+g.add((ontology_uri, OWL.imports, crm_uri))
+g.add((ontology_uri, OWL.imports, ecrm_uri))
+g.add((ontology_uri, OWL.imports, frbroo_uri))
+g.add((ontology_uri, OWL.imports, lrmoo_uri))
+g.add((ontology_uri, OWL.imports, intro_uri))
+g.add((ontology_uri, OWL.imports, prov_uri))
 
 # ID-Type
 ID_TYPE = URIRef(sappho + "id_type/wikidata")
@@ -750,7 +769,7 @@ if __name__ == "__main__":
         process_work_references
     ]
 
-    for fn in tqdm(processors, desc="Running relations module", unit="task"):
+    for fn in tqdm(processors, unit="task"):
         fn(qids)
     
     # Mapping
