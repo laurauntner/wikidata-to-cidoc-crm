@@ -9,16 +9,20 @@ import csv
 import time
 import rdflib
 from rdflib import Graph, Literal, RDF, RDFS, Namespace, URIRef
-from rdflib.namespace import OWL, XSD
+from rdflib.namespace import RDF, RDFS, OWL, XSD
 import requests
 from tqdm import tqdm
 
 # Namespaces
 CRM = Namespace("http://www.cidoc-crm.org/cidoc-crm/") # CIDOC CRM
+CRM_URI = URIRef("http://www.cidoc-crm.org/cidoc-crm/")
 ECRM = Namespace("http://erlangen-crm.org/current/")  # eCRM - CIDOC CRM (OWL version)
+ECRM_URI = URIRef("http://erlangen-crm.org/current/")
 PROV = Namespace("http://www.w3.org/ns/prov#")  # PROV-O - Provenance Ontology
+PROV_URI = URIRef("http://www.w3.org/ns/prov#")
 WD = "http://www.wikidata.org/entity/"  # Base URI for Wikidata entities
-SAPPHO_BASE_URI = "https://sappho.com/"  # Base URI for Sappho
+SAPPHO_BASE_URI = "https://sappho-digital.com/"  # Base URI for Sappho
+SAPPHO = Namespace("https://sappho-digital.com/")
 
 # Create the RDF graph
 g = Graph()
@@ -27,6 +31,17 @@ g.bind("ecrm", ECRM)
 g.bind("prov", PROV)
 g.bind("owl", OWL)
 g.bind("rdfs", RDFS)
+g.bind("sappho", SAPPHO)
+
+# Ontology
+
+ontology_uri = URIRef("https://sappho-digital.com/ontology/authors")
+
+g.add((ontology_uri, RDF.type, OWL.Ontology))
+
+g.add((ontology_uri, OWL.imports, CRM_URI))
+g.add((ontology_uri, OWL.imports, ECRM_URI))
+g.add((ontology_uri, OWL.imports, PROV_URI))
 
 # CIDOC CRM alignment and property inverses
 
