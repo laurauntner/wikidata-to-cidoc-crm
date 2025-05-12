@@ -179,8 +179,6 @@ def add_actualization(feature: URIRef, expression: URIRef, label: str, relation:
     g.add((act, intro.R17_actualizesFeature, feature))
     g.add((act, intro.R18i_actualizationFoundOn, expression))
     g.add((expression, intro.R18_showsActualization, act))
-    g.add((relation, intro.R23i_supportProvidedBy, act))
-    g.add((act, intro.R23_providesSupportFor, relation))
     g.add((act, intro.R24i_isRelatedEntity, relation))
     g.add((relation, intro.R24_hasRelatedEntity, act))
     add_interpretation(
@@ -750,8 +748,6 @@ SELECT DISTINCT ?src ?tgt WHERE {{
             g.add((expr, intro.R30_hasTextPassage, tp_uri))
             g.add((tp_uri, intro.R30i_isTextPassageOf, expr))
 
-            g.add((rel, intro.R23i_supportProvidedBy, tp_uri))
-            g.add((tp_uri, intro.R23_providesSupportFor, rel))
             g.add((rel, intro.R24_hasRelatedEntity, tp_uri))
             g.add((tp_uri, intro.R24i_isRelatedEntity, rel))
 
