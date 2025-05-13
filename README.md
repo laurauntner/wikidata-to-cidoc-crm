@@ -371,38 +371,63 @@ Further, it’s highly recommended to manually refine the generated triples afte
 
 <https://sappho-digital.com/relation/Q120199245_Q1242002> a intro:INT31_IntertextualRelation ;
     rdfs:label "Intertextual relation between Die moderne Sappho and Sappho"@en ;
-    intro:R21i_isIdentifiedBy <https://sappho-digital.com/interpretation/Q120199245_Q1242002> ;
+    intro:R21i_isIdentifiedBy <https://sappho-digital.com/actualization/interpretation/Q120199245_Q1242002> ;
     intro:R22i_relationIsBasedOnSimilarity <https://sappho-digital.com/feature/character/Q17892> ;
+    intro:R23i_supportProvidedBy <https://sappho-digital.com/actualization/character/Q17892_Q120199245>,
+        <https://sappho-digital.com/actualization/character/Q17892_Q1242002> ;
     intro:R24_hasRelatedEntity <https://sappho-digital.com/actualization/character/Q17892_Q120199245>,
         <https://sappho-digital.com/actualization/character/Q17892_Q1242002> .
 
-<https://sappho-digital.com/interpretation/Q120199245_Q1242002> a intro:INT_Interpretation ;
+<https://sappho-digital.com/feature/interpretation/Q120199245_Q1242002> a intro:INT_Interpretation ;
+    rdfs:label "Interpretation of intertextual relation between Die moderne Sappho and Sappho"@en ;
+    intro:R17i_featureIsActualizedIn <https://sappho-digital.com/actualization/interpretation/Q120199245_Q1242002> .
+
+<https://sappho-digital.com/actualization/interpretation/Q120199245_Q1242002> a intro:INT2_ActualizationOfFeature ;
     rdfs:label "Interpretation of intertextual relation between Die moderne Sappho and Sappho"@en ;
     prov:wasDerivedFrom <https://www.wikidata.org/entity/Q120199245>,
         <https://www.wikidata.org/entity/Q1242002> ;
+    intro:R17_actualizesFeature <https://sappho-digital.com/feature/interpretation/Q120199245_Q1242002> ;
     intro:R21_identifies <https://sappho-digital.com/relation/Q120199245_Q1242002> .
 
 <https://sappho-digital.com/relation/Q1242002_Q19179765> a intro:INT31_IntertextualRelation ;
     rdfs:label "Intertextual relation between Sappho and Die Schwestern von Lesbos"@en ;
-    intro:R21i_isIdentifiedBy <https://sappho-digital.com/interpretation/Q1242002_Q19179765> ;
+    intro:R21i_isIdentifiedBy <https://sappho-digital.com/actualization/interpretation/Q1242002_Q19179765> ;
     intro:R22i_relationIsBasedOnSimilarity <https://sappho-digital.com/feature/place_ref/Q128087> ;
+    intro:R23i_supportProvidedBy <https://sappho-digital.com/actualization/place_ref/Q128087_Q1242002>,
+        <https://sappho-digital.com/actualization/place_ref/Q128087_Q19179765> ;
     intro:R24_hasRelatedEntity <https://sappho-digital.com/actualization/place_ref/Q128087_Q1242002>,
         <https://sappho-digital.com/actualization/place_ref/Q128087_Q19179765> .
 
-<https://sappho-digital.com/interpretation/Q1242002_Q19179765> a intro:INT_Interpretation ;
+<https://sappho-digital.com/feature/interpretation/Q1242002_Q19179765> a intro:INT_Interpretation ;
+    rdfs:label "Interpretation of intertextual relation between Sappho and Die Schwestern von Lesbos"@en ;
+    intro:R17i_featureIsActualizedIn <https://sappho-digital.com/actualization/interpretation/Q1242002_Q19179765> .
+
+<https://sappho-digital.com/actualization/interpretation/Q1242002_Q19179765> a intro:INT2_ActualizationOfFeature ;
     rdfs:label "Interpretation of intertextual relation between Sappho and Die Schwestern von Lesbos"@en ;
     prov:wasDerivedFrom <https://www.wikidata.org/entity/Q1242002>,
         <https://www.wikidata.org/entity/Q19179765> ;
+    intro:R17_actualizesFeature <https://sappho-digital.com/feature/interpretation/Q1242002_Q19179765> ;
     intro:R21_identifies <https://sappho-digital.com/relation/Q1242002_Q19179765> .
 
 <https://sappho-digital.com/relation/Q119292643_Q1242002> a intro:INT31_IntertextualRelation ;
     rdfs:label "Intertextual relation between Sappho and Sappho. Eine Novelle"@en ;
-    intro:R21i_isIdentifiedBy <https://sappho-digital.com/interpretation/Q119292643_Q1242002> ;
+    intro:R21i_isIdentifiedBy <https://sappho-digital.com/actualization/interpretation/Q119292643_Q1242002> ;
     intro:R22i_relationIsBasedOnSimilarity <https://sappho-digital.com/feature/motif/Q165>,
         <https://sappho-digital.com/feature/person_ref/Q17892>,
         <https://sappho-digital.com/feature/plot/Q134285870>,
         <https://sappho-digital.com/feature/topic/Q10737>,
         <https://sappho-digital.com/feature/work_ref/Q1242002> ;
+    intro:R23i_supportProvidedBy <https://sappho-digital.com/actualization/motif/Q165_Q119292643>,
+        <https://sappho-digital.com/actualization/motif/Q165_Q1242002>,
+        <https://sappho-digital.com/actualization/person_ref/Q17892_Q119292643>,
+        <https://sappho-digital.com/actualization/person_ref/Q17892_Q1242002>,
+        <https://sappho-digital.com/actualization/plot/Q134285870_Q119292643>,
+        <https://sappho-digital.com/actualization/plot/Q134285870_Q1242002>,
+        <https://sappho-digital.com/actualization/topic/Q10737_Q119292643>,
+        <https://sappho-digital.com/actualization/topic/Q10737_Q1242002>,
+        <https://sappho-digital.com/actualization/work_ref/Q1242002_Q119292643>,
+        <https://sappho-digital.com/textpassage/Q119292643_Q1242002>,
+        <https://sappho-digital.com/textpassage/Q1242002_Q119292643> ;
     intro:R24_hasRelatedEntity <https://sappho-digital.com/actualization/motif/Q165_Q119292643>,
         <https://sappho-digital.com/actualization/motif/Q165_Q1242002>,
         <https://sappho-digital.com/actualization/person_ref/Q17892_Q119292643>,
@@ -415,10 +440,15 @@ Further, it’s highly recommended to manually refine the generated triples afte
         <https://sappho-digital.com/textpassage/Q119292643_Q1242002>,
         <https://sappho-digital.com/textpassage/Q1242002_Q119292643> .
 
-<https://sappho-digital.com/interpretation/Q119292643_Q1242002> a intro:INT_Interpretation ;
+<https://sappho-digital.com/feature/interpretation/Q119292643_Q1242002> a intro:INT_Interpretation ;
+    rdfs:label "Interpretation of intertextual relation between Sappho and Sappho. Eine Novelle"@en ;
+    intro:R17i_featureIsActualizedIn <https://sappho-digital.com/actualization/interpretation/Q119292643_Q1242002> .
+
+<https://sappho-digital.com/actualization/interpretation/Q119292643_Q1242002> a intro:INT2_ActualizationOfFeature ;
     rdfs:label "Interpretation of intertextual relation between Sappho and Sappho. Eine Novelle"@en ;
     prov:wasDerivedFrom <https://www.wikidata.org/entity/Q119292643>,
         <https://www.wikidata.org/entity/Q1242002> ;
+    intro:R17_actualizesFeature <https://sappho-digital.com/feature/interpretation/Q119292643_Q1242002> ;
     intro:R21_identifies <https://sappho-digital.com/relation/Q119292643_Q1242002> .
 
 # Features & Actualizations
@@ -452,12 +482,18 @@ Further, it’s highly recommended to manually refine the generated triples afte
     ecrm:P67_refers_to <https://sappho-digital.com/person/Q17892> ;
     intro:R17_actualizesFeature <https://sappho-digital.com/feature/person_ref/Q17892> ;
     intro:R18i_actualizationFoundOn <https://sappho-digital.com/expression/Q119292643> ;
-    intro:R21i_isIdentifiedBy <https://sappho-digital.com/interpretation/Q17892_Q119292643> ;
+    intro:R21i_isIdentifiedBy <https://sappho-digital.com/actualization/interpretation/Q17892_Q119292643> ;
+    intro:R23_providesSupportFor <https://sappho-digital.com/relation/Q119292643_Q1242002> ;
     intro:R24i_isRelatedEntity <https://sappho-digital.com/relation/Q119292643_Q1242002> .
 
-<https://sappho-digital.com/interpretation/Q17892_Q119292643> a intro:INT_Interpretation ;
+<https://sappho-digital.com/feature/interpretation/Q17892_Q119292643> a intro:INT_Interpretation ;
+    rdfs:label "Interpretation of Sappho in Sappho. Eine Novelle"@en ;
+    intro:R17i_featureIsActualizedIn <https://sappho-digital.com/actualization/interpretation/Q17892_Q119292643> .
+
+<https://sappho-digital.com/actualization/interpretation/Q17892_Q119292643> a intro:INT2_ActualizationOfFeature ;
     rdfs:label "Interpretation of Sappho in Sappho. Eine Novelle"@en ;
     prov:wasDerivedFrom <https://www.wikidata.org/entity/Q119292643> ;
+    intro:R17_actualizesFeature <https://sappho-digital.com/feature/interpretation/Q17892_Q119292643> ;
     intro:R21_identifies <https://sappho-digital.com/actualization/person_ref/Q17892_Q119292643> .
 
 <https://sappho-digital.com/actualization/person_ref/Q17892_Q1242002> a intro:INT2_ActualizationOfFeature ;
@@ -465,13 +501,20 @@ Further, it’s highly recommended to manually refine the generated triples afte
     ecrm:P67_refers_to <https://sappho-digital.com/person/Q17892> ;
     intro:R17_actualizesFeature <https://sappho-digital.com/feature/person_ref/Q17892> ;
     intro:R18i_actualizationFoundOn <https://sappho-digital.com/expression/Q1242002> ;
-    intro:R21i_isIdentifiedBy <https://sappho-digital.com/interpretation/Q17892_Q1242002> ;
+    intro:R21i_isIdentifiedBy <https://sappho-digital.com/actualization/interpretation/Q17892_Q1242002> ;
+    intro:R23_providesSupportFor <https://sappho-digital.com/relation/Q119292643_Q1242002> ;
     intro:R24i_isRelatedEntity <https://sappho-digital.com/relation/Q119292643_Q1242002> .
 
-<https://sappho-digital.com/interpretation/Q17892_Q1242002> a intro:INT_Interpretation ;
+<https://sappho-digital.com/feature/interpretation/Q17892_Q1242002> a intro:INT_Interpretation ;
+    rdfs:label "Interpretation of Sappho in Sappho"@en ;
+    intro:R17i_featureIsActualizedIn <https://sappho-digital.com/actualization/interpretation/Q17892_Q1242002> .
+
+<https://sappho-digital.com/actualization/interpretation/Q17892_Q1242002> a intro:INT2_ActualizationOfFeature ;
     rdfs:label "Interpretation of Sappho in Sappho"@en ;
     prov:wasDerivedFrom <https://www.wikidata.org/entity/Q1242002> ;
-    intro:R21_identifies <https://sappho-digital.com/actualization/person_ref/Q17892_Q1242002> .
+    intro:R17_actualizesFeature <https://sappho-digital.com/feature/interpretation/Q17892_Q1242002> ;
+    intro:R21_identifies <https://sappho-digital.com/actualization/character/Q17892_Q1242002>,
+        <https://sappho-digital.com/actualization/person_ref/Q17892_Q1242002> .
 
 # Place References
 
@@ -499,12 +542,18 @@ Further, it’s highly recommended to manually refine the generated triples afte
     ecrm:P67_refers_to <https://sappho-digital.com/place/Q128087> ;
     intro:R17_actualizesFeature <https://sappho-digital.com/feature/place_ref/Q128087> ;
     intro:R18i_actualizationFoundOn <https://sappho-digital.com/expression/Q1242002> ;
-    intro:R21i_isIdentifiedBy <https://sappho-digital.com/interpretation/Q128087_Q1242002> ;
+    intro:R21i_isIdentifiedBy <https://sappho-digital.com/actualization/interpretation/Q128087_Q1242002> ;
+    intro:R23_providesSupportFor <https://sappho-digital.com/relation/Q1242002_Q19179765> ;
     intro:R24i_isRelatedEntity <https://sappho-digital.com/relation/Q1242002_Q19179765> .
 
-<https://sappho-digital.com/interpretation/Q128087_Q1242002> a intro:INT_Interpretation ;
+<https://sappho-digital.com/feature/interpretation/Q128087_Q1242002> a intro:INT_Interpretation ;
+    rdfs:label "Interpretation of Lesbos in Sappho"@en ;
+    intro:R17i_featureIsActualizedIn <https://sappho-digital.com/actualization/interpretation/Q128087_Q1242002> .
+
+<https://sappho-digital.com/actualization/interpretation/Q128087_Q1242002> a intro:INT2_ActualizationOfFeature ;
     rdfs:label "Interpretation of Lesbos in Sappho"@en ;
     prov:wasDerivedFrom <https://www.wikidata.org/entity/Q1242002> ;
+    intro:R17_actualizesFeature <https://sappho-digital.com/feature/interpretation/Q128087_Q1242002> ;
     intro:R21_identifies <https://sappho-digital.com/actualization/place_ref/Q128087_Q1242002> .
 
 <https://sappho-digital.com/actualization/place_ref/Q128087_Q19179765> a intro:INT2_ActualizationOfFeature ;
@@ -512,12 +561,18 @@ Further, it’s highly recommended to manually refine the generated triples afte
     ecrm:P67_refers_to <https://sappho-digital.com/place/Q128087> ;
     intro:R17_actualizesFeature <https://sappho-digital.com/feature/place_ref/Q128087> ;
     intro:R18i_actualizationFoundOn <https://sappho-digital.com/expression/Q19179765> ;
-    intro:R21i_isIdentifiedBy <https://sappho-digital.com/interpretation/Q128087_Q19179765> ;
+    intro:R21i_isIdentifiedBy <https://sappho-digital.com/actualization/interpretation/Q128087_Q19179765> ;
+    intro:R23_providesSupportFor <https://sappho-digital.com/relation/Q1242002_Q19179765> ;
     intro:R24i_isRelatedEntity <https://sappho-digital.com/relation/Q1242002_Q19179765> .
 
-<https://sappho-digital.com/interpretation/Q128087_Q19179765> a intro:INT_Interpretation ;
+<https://sappho-digital.com/feature/interpretation/Q128087_Q19179765> a intro:INT_Interpretation ;
+    rdfs:label "Interpretation of Lesbos in Die Schwestern von Lesbos"@en ;
+    intro:R17i_featureIsActualizedIn <https://sappho-digital.com/actualization/interpretation/Q128087_Q19179765> .
+
+<https://sappho-digital.com/actualization/interpretation/Q128087_Q19179765> a intro:INT2_ActualizationOfFeature ;
     rdfs:label "Interpretation of Lesbos in Die Schwestern von Lesbos"@en ;
     prov:wasDerivedFrom <https://www.wikidata.org/entity/Q19179765> ;
+    intro:R17_actualizesFeature <https://sappho-digital.com/feature/interpretation/Q128087_Q19179765> ;
     intro:R21_identifies <https://sappho-digital.com/actualization/place_ref/Q128087_Q19179765> .
 
 # Expression References
@@ -532,12 +587,18 @@ Further, it’s highly recommended to manually refine the generated triples afte
     ecrm:P67_refers_to <https://sappho-digital.com/expression/Q1242002> ;
     intro:R17_actualizesFeature <https://sappho-digital.com/feature/work_ref/Q1242002> ;
     intro:R18i_actualizationFoundOn <https://sappho-digital.com/expression/Q119292643> ;
-    intro:R21i_isIdentifiedBy <https://sappho-digital.com/interpretation/Q1242002_Q119292643> ;
+    intro:R21i_isIdentifiedBy <https://sappho-digital.com/actualization/interpretation/Q1242002_Q119292643> ;
+    intro:R23_providesSupportFor <https://sappho-digital.com/relation/Q119292643_Q1242002> ;
     intro:R24i_isRelatedEntity <https://sappho-digital.com/relation/Q119292643_Q1242002> .
 
-<https://sappho-digital.com/interpretation/Q1242002_Q119292643> a intro:INT_Interpretation ;
+<https://sappho-digital.com/feature/interpretation/Q1242002_Q119292643> a intro:INT_Interpretation ;
+    rdfs:label "Interpretation of Sappho in Sappho. Eine Novelle"@en ;
+    intro:R17i_featureIsActualizedIn <https://sappho-digital.com/actualization/interpretation/Q1242002_Q119292643> .
+
+<https://sappho-digital.com/actualization/interpretation/Q1242002_Q119292643> a intro:INT2_ActualizationOfFeature ;
     rdfs:label "Interpretation of Sappho in Sappho. Eine Novelle"@en ;
     prov:wasDerivedFrom <https://www.wikidata.org/entity/Q119292643> ;
+    intro:R17_actualizesFeature <https://sappho-digital.com/feature/interpretation/Q1242002_Q119292643> ;
     intro:R21_identifies <https://sappho-digital.com/actualization/work_ref/Q1242002_Q119292643> .
 
 # Citations
@@ -545,12 +606,14 @@ Further, it’s highly recommended to manually refine the generated triples afte
 <https://sappho-digital.com/textpassage/Q119292643_Q1242002> a intro:INT21_TextPassage ;
     rdfs:label "Text passage in Sappho. Eine Novelle"@en ;
     prov:wasDerivedFrom <https://www.wikidata.org/entity/Q1242002> ;
+    intro:R23_providesSupportFor <https://sappho-digital.com/relation/Q119292643_Q1242002> ;
     intro:R24i_isRelatedEntity <https://sappho-digital.com/relation/Q119292643_Q1242002> ;
     intro:R30i_isTextPassageOf <https://sappho-digital.com/expression/Q119292643> .
 
 <https://sappho-digital.com/textpassage/Q1242002_Q119292643> a intro:INT21_TextPassage ;
     rdfs:label "Text passage in Sappho"@en ;
     prov:wasDerivedFrom <https://www.wikidata.org/entity/Q1242002> ;
+    intro:R23_providesSupportFor <https://sappho-digital.com/relation/Q119292643_Q1242002> ;
     intro:R24i_isRelatedEntity <https://sappho-digital.com/relation/Q119292643_Q1242002> ;
     intro:R30i_isTextPassageOf <https://sappho-digital.com/expression/Q1242002> .
 
@@ -569,12 +632,18 @@ Further, it’s highly recommended to manually refine the generated triples afte
     ecrm:P67_refers_to <https://sappho-digital.com/person/Q17892> ;
     intro:R17_actualizesFeature <https://sappho-digital.com/feature/character/Q17892> ;
     intro:R18i_actualizationFoundOn <https://sappho-digital.com/expression/Q120199245> ;
-    intro:R21i_isIdentifiedBy <https://sappho-digital.com/interpretation/Q17892_Q120199245> ;
+    intro:R21i_isIdentifiedBy <https://sappho-digital.com/actualization/interpretation/Q17892_Q120199245> ;
+    intro:R23_providesSupportFor <https://sappho-digital.com/relation/Q120199245_Q1242002> ;
     intro:R24i_isRelatedEntity <https://sappho-digital.com/relation/Q120199245_Q1242002> .
 
-<https://sappho-digital.com/interpretation/Q17892_Q120199245> a intro:INT_Interpretation ;
+<https://sappho-digital.com/feature/interpretation/Q17892_Q120199245> a intro:INT_Interpretation ;
+    rdfs:label "Interpretation of Sappho in Die moderne Sappho"@en ;
+    intro:R17i_featureIsActualizedIn <https://sappho-digital.com/actualization/interpretation/Q17892_Q120199245> .
+
+<https://sappho-digital.com/actualization/interpretation/Q17892_Q120199245> a intro:INT2_ActualizationOfFeature ;
     rdfs:label "Interpretation of Sappho in Die moderne Sappho"@en ;
     prov:wasDerivedFrom <https://www.wikidata.org/entity/Q120199245> ;
+    intro:R17_actualizesFeature <https://sappho-digital.com/feature/interpretation/Q17892_Q120199245> ;
     intro:R21_identifies <https://sappho-digital.com/actualization/character/Q17892_Q120199245> .
 
 <https://sappho-digital.com/actualization/character/Q17892_Q1242002> a intro:INT2_ActualizationOfFeature ;
@@ -582,7 +651,8 @@ Further, it’s highly recommended to manually refine the generated triples afte
     ecrm:P67_refers_to <https://sappho-digital.com/person/Q17892> ;
     intro:R17_actualizesFeature <https://sappho-digital.com/feature/character/Q17892> ;
     intro:R18i_actualizationFoundOn <https://sappho-digital.com/expression/Q1242002> ;
-    intro:R21i_isIdentifiedBy <https://sappho-digital.com/interpretation/Q17892_Q1242002> ;
+    intro:R21i_isIdentifiedBy <https://sappho-digital.com/actualization/interpretation/Q17892_Q1242002> ;
+    intro:R23_providesSupportFor <https://sappho-digital.com/relation/Q120199245_Q1242002> ;
     intro:R24i_isRelatedEntity <https://sappho-digital.com/relation/Q120199245_Q1242002> .
 
 # Motifs
@@ -605,24 +675,36 @@ Further, it’s highly recommended to manually refine the generated triples afte
     rdfs:label "sea in Sappho. Eine Novelle"@en ;
     intro:R17_actualizesFeature <https://sappho-digital.com/feature/motif/Q165> ;
     intro:R18i_actualizationFoundOn <https://sappho-digital.com/expression/Q119292643> ;
-    intro:R21i_isIdentifiedBy <https://sappho-digital.com/interpretation/Q165_Q119292643> ;
+    intro:R21i_isIdentifiedBy <https://sappho-digital.com/actualization/interpretation/Q165_Q119292643> ;
+    intro:R23_providesSupportFor <https://sappho-digital.com/relation/Q119292643_Q1242002> ;
     intro:R24i_isRelatedEntity <https://sappho-digital.com/relation/Q119292643_Q1242002> .
 
-<https://sappho-digital.com/interpretation/Q165_Q119292643> a intro:INT_Interpretation ;
+<https://sappho-digital.com/feature/interpretation/Q165_Q119292643> a intro:INT_Interpretation ;
+    rdfs:label "Interpretation of sea in Sappho. Eine Novelle"@en ;
+    intro:R17i_featureIsActualizedIn <https://sappho-digital.com/actualization/interpretation/Q165_Q119292643> .
+
+<https://sappho-digital.com/actualization/interpretation/Q165_Q119292643> a intro:INT2_ActualizationOfFeature ;
     rdfs:label "Interpretation of sea in Sappho. Eine Novelle"@en ;
     prov:wasDerivedFrom <https://www.wikidata.org/entity/Q119292643> ;
+    intro:R17_actualizesFeature <https://sappho-digital.com/feature/interpretation/Q165_Q119292643> ;
     intro:R21_identifies <https://sappho-digital.com/actualization/motif/Q165_Q119292643> .
 
 <https://sappho-digital.com/actualization/motif/Q165_Q1242002> a intro:INT2_ActualizationOfFeature ;
     rdfs:label "sea in Sappho"@en ;
     intro:R17_actualizesFeature <https://sappho-digital.com/feature/motif/Q165> ;
     intro:R18i_actualizationFoundOn <https://sappho-digital.com/expression/Q1242002> ;
-    intro:R21i_isIdentifiedBy <https://sappho-digital.com/interpretation/Q165_Q1242002> ;
+    intro:R21i_isIdentifiedBy <https://sappho-digital.com/actualization/interpretation/Q165_Q1242002> ;
+    intro:R23_providesSupportFor <https://sappho-digital.com/relation/Q119292643_Q1242002> ;
     intro:R24i_isRelatedEntity <https://sappho-digital.com/relation/Q119292643_Q1242002> .
 
-<https://sappho-digital.com/interpretation/Q165_Q1242002> a intro:INT_Interpretation ;
+<https://sappho-digital.com/feature/interpretation/Q165_Q1242002> a intro:INT_Interpretation ;
+    rdfs:label "Interpretation of sea in Sappho"@en ;
+    intro:R17i_featureIsActualizedIn <https://sappho-digital.com/actualization/interpretation/Q165_Q1242002> .
+
+<https://sappho-digital.com/actualization/interpretation/Q165_Q1242002> a intro:INT2_ActualizationOfFeature ;
     rdfs:label "Interpretation of sea in Sappho"@en ;
     prov:wasDerivedFrom <https://www.wikidata.org/entity/Q1242002> ;
+    intro:R17_actualizesFeature <https://sappho-digital.com/feature/interpretation/Q165_Q1242002> ;
     intro:R21_identifies <https://sappho-digital.com/actualization/motif/Q165_Q1242002> .
 
 # Plots
@@ -645,24 +727,36 @@ Further, it’s highly recommended to manually refine the generated triples afte
     rdfs:label "Sappho’s Leap in Sappho. Eine Novelle"@en ;
     intro:R17_actualizesFeature <https://sappho-digital.com/feature/plot/Q134285870> ;
     intro:R18i_actualizationFoundOn <https://sappho-digital.com/expression/Q119292643> ;
-    intro:R21i_isIdentifiedBy <https://sappho-digital.com/interpretation/Q134285870_Q119292643> ;
+    intro:R21i_isIdentifiedBy <https://sappho-digital.com/actualization/interpretation/Q134285870_Q119292643> ;
+    intro:R23_providesSupportFor <https://sappho-digital.com/relation/Q119292643_Q1242002> ;
     intro:R24i_isRelatedEntity <https://sappho-digital.com/relation/Q119292643_Q1242002> .
 
-<https://sappho-digital.com/interpretation/Q134285870_Q119292643> a intro:INT_Interpretation ;
+<https://sappho-digital.com/feature/interpretation/Q134285870_Q119292643> a intro:INT_Interpretation ;
+    rdfs:label "Interpretation of Sappho’s Leap in Sappho. Eine Novelle"@en ;
+    intro:R17i_featureIsActualizedIn <https://sappho-digital.com/actualization/interpretation/Q134285870_Q119292643> .
+
+<https://sappho-digital.com/actualization/interpretation/Q134285870_Q119292643> a intro:INT2_ActualizationOfFeature ;
     rdfs:label "Interpretation of Sappho’s Leap in Sappho. Eine Novelle"@en ;
     prov:wasDerivedFrom <https://www.wikidata.org/entity/Q119292643> ;
+    intro:R17_actualizesFeature <https://sappho-digital.com/feature/interpretation/Q134285870_Q119292643> ;
     intro:R21_identifies <https://sappho-digital.com/actualization/plot/Q134285870_Q119292643> .
 
 <https://sappho-digital.com/actualization/plot/Q134285870_Q1242002> a intro:INT2_ActualizationOfFeature ;
     rdfs:label "Sappho’s Leap in Sappho"@en ;
     intro:R17_actualizesFeature <https://sappho-digital.com/feature/plot/Q134285870> ;
     intro:R18i_actualizationFoundOn <https://sappho-digital.com/expression/Q1242002> ;
-    intro:R21i_isIdentifiedBy <https://sappho-digital.com/interpretation/Q134285870_Q1242002> ;
+    intro:R21i_isIdentifiedBy <https://sappho-digital.com/actualization/interpretation/Q134285870_Q1242002> ;
+    intro:R23_providesSupportFor <https://sappho-digital.com/relation/Q119292643_Q1242002> ;
     intro:R24i_isRelatedEntity <https://sappho-digital.com/relation/Q119292643_Q1242002> .
 
-<https://sappho-digital.com/interpretation/Q134285870_Q1242002> a intro:INT_Interpretation ;
+<https://sappho-digital.com/feature/interpretation/Q134285870_Q1242002> a intro:INT_Interpretation ;
+    rdfs:label "Interpretation of Sappho’s Leap in Sappho"@en ;
+    intro:R17i_featureIsActualizedIn <https://sappho-digital.com/actualization/interpretation/Q134285870_Q1242002> .
+
+<https://sappho-digital.com/actualization/interpretation/Q134285870_Q1242002> a intro:INT2_ActualizationOfFeature ;
     rdfs:label "Interpretation of Sappho’s Leap in Sappho"@en ;
     prov:wasDerivedFrom <https://www.wikidata.org/entity/Q1242002> ;
+    intro:R17_actualizesFeature <https://sappho-digital.com/feature/interpretation/Q134285870_Q1242002> ;
     intro:R21_identifies <https://sappho-digital.com/actualization/plot/Q134285870_Q1242002> .
 
 # Topics
@@ -685,24 +779,36 @@ Further, it’s highly recommended to manually refine the generated triples afte
     rdfs:label "suicide in Sappho. Eine Novelle"@en ;
     intro:R17_actualizesFeature <https://sappho-digital.com/feature/topic/Q10737> ;
     intro:R18i_actualizationFoundOn <https://sappho-digital.com/expression/Q119292643> ;
-    intro:R21i_isIdentifiedBy <https://sappho-digital.com/interpretation/Q10737_Q119292643> ;
+    intro:R21i_isIdentifiedBy <https://sappho-digital.com/actualization/interpretation/Q10737_Q119292643> ;
+    intro:R23_providesSupportFor <https://sappho-digital.com/relation/Q119292643_Q1242002> ;
     intro:R24i_isRelatedEntity <https://sappho-digital.com/relation/Q119292643_Q1242002> .
 
-<https://sappho-digital.com/interpretation/Q10737_Q119292643> a intro:INT_Interpretation ;
+<https://sappho-digital.com/feature/interpretation/Q10737_Q119292643> a intro:INT_Interpretation ;
+    rdfs:label "Interpretation of suicide in Sappho. Eine Novelle"@en ;
+    intro:R17i_featureIsActualizedIn <https://sappho-digital.com/actualization/interpretation/Q10737_Q119292643> .
+
+<https://sappho-digital.com/actualization/interpretation/Q10737_Q119292643> a intro:INT2_ActualizationOfFeature ;
     rdfs:label "Interpretation of suicide in Sappho. Eine Novelle"@en ;
     prov:wasDerivedFrom <https://www.wikidata.org/entity/Q119292643> ;
+    intro:R17_actualizesFeature <https://sappho-digital.com/feature/interpretation/Q10737_Q119292643> ;
     intro:R21_identifies <https://sappho-digital.com/actualization/topic/Q10737_Q119292643> .
 
 <https://sappho-digital.com/actualization/topic/Q10737_Q1242002> a intro:INT2_ActualizationOfFeature ;
     rdfs:label "suicide in Sappho"@en ;
     intro:R17_actualizesFeature <https://sappho-digital.com/feature/topic/Q10737> ;
     intro:R18i_actualizationFoundOn <https://sappho-digital.com/expression/Q1242002> ;
-    intro:R21i_isIdentifiedBy <https://sappho-digital.com/interpretation/Q10737_Q1242002> ;
+    intro:R21i_isIdentifiedBy <https://sappho-digital.com/actualization/interpretation/Q10737_Q1242002> ;
+    intro:R23_providesSupportFor <https://sappho-digital.com/relation/Q119292643_Q1242002> ;
     intro:R24i_isRelatedEntity <https://sappho-digital.com/relation/Q119292643_Q1242002> .
 
-<https://sappho-digital.com/interpretation/Q10737_Q1242002> a intro:INT_Interpretation ;
+<https://sappho-digital.com/feature/interpretation/Q10737_Q1242002> a intro:INT_Interpretation ;
+    rdfs:label "Interpretation of suicide in Sappho"@en ;
+    intro:R17i_featureIsActualizedIn <https://sappho-digital.com/actualization/interpretation/Q10737_Q1242002> .
+
+<https://sappho-digital.com/actualization/interpretation/Q10737_Q1242002> a intro:INT2_ActualizationOfFeature ;
     rdfs:label "Interpretation of suicide in Sappho"@en ;
     prov:wasDerivedFrom <https://www.wikidata.org/entity/Q1242002> ;
+    intro:R17_actualizesFeature <https://sappho-digital.com/feature/interpretation/Q10737_Q1242002> ;
     intro:R21_identifies <https://sappho-digital.com/actualization/topic/Q10737_Q1242002> .
 
 # Wikidata ID
