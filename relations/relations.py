@@ -13,7 +13,7 @@ from functools import lru_cache
 from rdflib import Graph, Namespace, URIRef, Literal
 from rdflib.namespace import RDF, RDFS, OWL
 from tqdm import tqdm
-from typing import Union, Iterable
+from typing import Union, Iterable, Tuple
 
 # Namespaces
 WD_ENTITY = "https://www.wikidata.org/entity/"
@@ -142,25 +142,31 @@ def add_interpretation(
     target: URIRef,
     label: str,
     derived_from: Union[URIRef, Iterable[URIRef]]
-):
+) -> Tuple[URIRef, URIRef]:
 
-    tid = target.split("/")[-1]
-    uri = URIRef(f"{sappho}interpretation/{tid}")
-    if (uri, None, None) in g:
-        return
+    tid      = target.split("/")[-1]
+    feat_uri = URIRef(f"{sappho}feature/interpretation/{tid}")
+    if (feat_uri, None, None) not in g:
+        g.add((feat_uri, RDF.type, intro.INT_Interpretation))
+        g.add((feat_uri, RDFS.label, Literal(label, lang="en")))
 
-    g.add((uri, RDF.type, intro.INT_Interpretation))
-    g.add((uri, RDFS.label, Literal(label, lang="en")))
+    act_uri  = URIRef(f"{sappho}actualization/interpretation/{tid}")
+    if (act_uri, None, None) not in g:
+        g.add((act_uri, RDF.type, intro.INT2_ActualizationOfFeature))
+        g.add((act_uri, RDFS.label, Literal(label, lang="en")))
 
-    df_list = [derived_from] if isinstance(derived_from, URIRef) else list(derived_from)
+        sources = [derived_from] if isinstance(derived_from, URIRef) else list(derived_from)
+        for src in sources:
+            qid = src.split("/")[-1]
+            g.add((act_uri, prov.wasDerivedFrom, URIRef(WD_ENTITY + qid)))
 
-    for expr in df_list:
-            qid = expr.split("/")[-1]         
-            wikidata_uri = URIRef(WD_ENTITY + qid)
-            g.add((uri, prov.wasDerivedFrom, wikidata_uri))
+        g.add((feat_uri, intro.R17i_featureIsActualizedIn, act_uri))
+        g.add((act_uri, intro.R17_actualizesFeature, feat_uri))
 
-    g.add((target, intro.R21i_isIdentifiedBy, uri))
-    g.add((uri, intro.R21_identifies, target))
+    g.add((act_uri, intro.R21_identifies, target))
+    g.add((target, intro.R21i_isIdentifiedBy, act_uri))
+
+    return feat_uri, act_uri
 
 # Actualizations
 def add_actualization(feature: URIRef, expression: URIRef, label: str, relation: URIRef):
@@ -181,7 +187,7 @@ def add_actualization(feature: URIRef, expression: URIRef, label: str, relation:
     g.add((expression, intro.R18_showsActualization, act))
     g.add((act, intro.R24i_isRelatedEntity, relation))
     g.add((relation, intro.R24_hasRelatedEntity, act))
-    add_interpretation(
+    feat_intp, act_intp = add_interpretation(
         act,
         f"Interpretation of {label}",
         URIRef(WD_ENTITY + eid)
@@ -192,22 +198,25 @@ def add_actualization(feature: URIRef, expression: URIRef, label: str, relation:
 def get_or_create_int31_relation(expr1: URIRef, expr2: URIRef) -> URIRef:
     if expr1 == expr2:
         return None
-    w1 = expr1.split("/")[-1]
-    w2 = expr2.split("/")[-1]
+    w1, w2 = expr1.split("/")[-1], expr2.split("/")[-1]
+
     if w1 < w2:
-        uri = URIRef(f"{sappho}relation/{w1}_{w2}")
+        rel_uri = URIRef(f"{sappho}relation/{w1}_{w2}")
     else:
-        uri = URIRef(f"{sappho}relation/{w2}_{w1}")
-    if (uri, RDF.type, intro.INT31_IntertextualRelation) not in g:
-        g.add((uri, RDF.type, intro.INT31_IntertextualRelation))
-        g.add((uri, RDFS.label,
+        rel_uri = URIRef(f"{sappho}relation/{w2}_{w1}")
+
+    if (rel_uri, RDF.type, intro.INT31_IntertextualRelation) not in g:
+        g.add((rel_uri, RDF.type, intro.INT31_IntertextualRelation))
+        g.add((rel_uri, RDFS.label,
                Literal(f"Intertextual relation between {get_label(w1)} and {get_label(w2)}", lang="en")))
-        add_interpretation(
-            uri,
+
+        feat_intp, act_intp = add_interpretation(
+            rel_uri,
             f"Interpretation of intertextual relation between {get_label(w1)} and {get_label(w2)}",
             [expr1, expr2]
         )
-    return uri
+        
+    return rel_uri
 
 # Other Relations
 def process_int31(qids):
@@ -696,14 +705,11 @@ SELECT DISTINCT ?wrk ?char WHERE {{
                     g.add((p_node, ecrm.P67i_is_referred_to_by, act))
             
             for act, expr, work in ((act1, expr1, w1), (act2, expr2, w2)):
-                tid = act.split('/')[-1]
-                interp_uri = URIRef(f"{sappho}interpretation/{tid}")
-                if not any(g.triples((interp_uri, None, None))):
-                    g.add((interp_uri, RDF.type, intro.INT_Interpretation))
-                    g.add((interp_uri, RDFS.label, Literal(f"Interpretation of {lbl} in {get_label(work)}", lang="en")))
-                    g.add((interp_uri, prov.wasDerivedFrom, URIRef(WD_ENTITY + expr.split('/')[-1])))
-                g.add((act, intro.R21i_isIdentifiedBy, interp_uri))
-                g.add((interp_uri, intro.R21_identifies, act))
+                feat_intp, act_intp = add_interpretation(
+                    act,
+                    f"Interpretation of {lbl} in {get_label(work)}",
+                    URIRef(WD_ENTITY + expr.split('/')[-1])
+                )
 
 # Citations & Passages
 def process_citations(qids):
