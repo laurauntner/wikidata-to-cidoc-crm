@@ -192,10 +192,15 @@ Namespace declarations and mappings to CRM and FRBRoo are applied but not shown 
 <https://sappho-digital.com/work/Q1242002> a lrmoo:F1_Work ;
     rdfs:label "Work of Sappho"@en ;
     ecrm:P14_carried_out_by <https://sappho-digital.com/person/Q154438> ;
+    lrmoo:R16i_was_created_by <https://sappho-digital.com/work_creation/Q1242002> ;
+    lrmoo:R19i_was_realised_through <https://sappho-digital.com/expression_creation/Q1242002> ;
     lrmoo:R3_is_realised_in <https://sappho-digital.com/expression/Q1242002> .
 
 <https://sappho-digital.com/person/Q154438> a ecrm:E21_Person ;
     rdfs:label "Franz Grillparzer" ;
+    ecrm:P14i_performed <https://sappho-digital.com/manifestation_creation/Q1242002>,
+        <https://sappho-digital.com/work/Q1242002>,
+        <https://sappho-digital.com/work_creation/Q1242002> ;
     owl:sameAs <http://www.wikidata.org/entity/Q154438> .
 
 <https://sappho-digital.com/expression_creation/Q1242002> a lrmoo:F28_Expression_Creation ;
@@ -207,37 +212,48 @@ Namespace declarations and mappings to CRM and FRBRoo are applied but not shown 
     prov:wasDerivedFrom <http://www.wikidata.org/entity/Q1242002> .
 
 <https://sappho-digital.com/timespan/1817> a ecrm:E52_Time-Span ;
-    rdfs:label "1817"^^xsd:gYear .
+    rdfs:label "1817"^^xsd:gYear ;
+    ecrm:P4i_is_time-span_of <https://sappho-digital.com/expression_creation/Q1242002> .
 
 <https://sappho-digital.com/expression/Q1242002> a lrmoo:F2_Expression ;
     rdfs:label "Expression of Sappho"@en ;
     ecrm:P102_has_title <https://sappho-digital.com/title/expression/Q1242002> ;
+    ecrm:P138i_has_representation <https://sappho-digital.com/digital/Q1242002> ;
     ecrm:P1_is_identified_by <https://sappho-digital.com/identifier/Q1242002> ;
     ecrm:P2_has_type <https://sappho-digital.com/genre/Q80930> ;
+    lrmoo:R17i_was_created_by <https://sappho-digital.com/expression_creation/Q1242002> ;
+    lrmoo:R3i_realises <https://sappho-digital.com/work/Q1242002> ;
+    lrmoo:R4i_is_embodied_in <https://sappho-digital.com/manifestation/Q1242002> ;
     owl:sameAs <http://www.wikidata.org/entity/Q1242002> ;
     prov:wasDerivedFrom <http://www.wikidata.org/entity/Q1242002> .
 
 <https://sappho-digital.com/title/expression/Q1242002> a ecrm:E35_Title ;
-    ecrm:P190_has_symbolic_content <https://sappho-digital.com/title_string/Q1242002> .
+    ecrm:P102i_is_title_of <https://sappho-digital.com/expression/Q1242002> ;
+    ecrm:P190_has_symbolic_content <https://sappho-digital.com/title_string/expression/Q1242002> .
 
 <https://sappho-digital.com/title_string/expression/Q1242002> a ecrm:E62_String ;
-    rdfs:label "Sappho"@de .
+    rdfs:label "Sappho"@de ;
+    ecrm:P190i_is_content_of <https://sappho-digital.com/title/expression/Q1242002> .
 
 <https://sappho-digital.com/identifier/Q1242002> a ecrm:E42_Identifier ;
     rdfs:label "Q1242002" ;
+    ecrm:P1i_identifies <https://sappho-digital.com/expression/Q1242002> ;
     ecrm:P2_has_type <https://sappho-digital.com/id_type/wikidata> .
 
 <https://sappho-digital.com/id_type/wikidata> a ecrm:E55_Type ;
     rdfs:label "Wikidata ID"@en ;
+    ecrm:P2_is_type_of <https://sappho-digital.com/identifier/Q1242002> ;
     owl:sameAs <http://www.wikidata.org/wiki/Q43649390> .
 
 <https://sappho-digital.com/genre/Q80930> a ecrm:E55_Type ;
     rdfs:label "tragedy"@en ;
     ecrm:P2_has_type <https://sappho-digital.com/genre_type/wikidata> ;
+    ecrm:P2_is_type_of <https://sappho-digital.com/expression/Q1242002> ;
     owl:sameAs <http://www.wikidata.org/entity/Q80930> .
 
 <https://sappho-digital.com/genre_type/wikidata> a ecrm:E55_Type ;
-    rdfs:label "Wikidata Genre"@en .
+    rdfs:label "Wikidata Genre"@en ;
+    ecrm:P2_is_type_of <https://sappho-digital.com/genre/Q80930> .
 
 <https://sappho-digital.com/digital/Q1242002> a ecrm:E73_Information_Object ;
     rdfs:label "Digital copy of Sappho"@en ;
@@ -255,25 +271,33 @@ Namespace declarations and mappings to CRM and FRBRoo are applied but not shown 
 
 <https://sappho-digital.com/publisher/Q133849481> a ecrm:E40_Legal_Body ;
     rdfs:label "Wallishausser’sche Buchhandlung"@en ;
+    ecrm:P14i_performed <https://sappho-digital.com/manifestation_creation/Q1242002> ;
     owl:sameAs <http://www.wikidata.org/entity/Q133849481> .
 
 <https://sappho-digital.com/timespan/1819> a ecrm:E52_Time-Span ;
-    rdfs:label "1819"^^xsd:gYear .
+    rdfs:label "1819"^^xsd:gYear ;
+    ecrm:P4_is_time-span_of <https://sappho-digital.com/manifestation_creation/Q1242002> .
 
 <https://sappho-digital.com/place/Q1741> a ecrm:E53_Place ;
     rdfs:label "Vienna"@en ;
+    ecrm:P7i_witnessed <https://sappho-digital.com/manifestation_creation/Q1242002> ;
     owl:sameAs <http://www.wikidata.org/entity/Q1741> .
 
 <https://sappho-digital.com/manifestation/Q1242002> a lrmoo:F3_Manifestation ;
     rdfs:label "Manifestation of Sappho"@en ;
     ecrm:P102_has_title <https://sappho-digital.com/title/manifestation/Q1242002> ;
-    lrmoo:R4_embodies <https://sappho-digital.com/expression/Q1242002> .
+    lrmoo:R24i_was_created_through <https://sappho-digital.com/manifestation_creation/Q1242002> ;
+    lrmoo:R27i_was_materialized_by <https://sappho-digital.com/item_production/Q1242002> ;
+    lrmoo:R4_embodies <https://sappho-digital.com/expression/Q1242002> ;
+    lrmoo:R7i_is_exemplified_by <https://sappho-digital.com/item/Q1242002> .
 
 <https://sappho-digital.com/title/manifestation/Q1242002> a ecrm:E35_Title ;
+    ecrm:P102i_is_title_of <https://sappho-digital.com/manifestation/Q1242002> ;
     ecrm:P190_has_symbolic_content <https://sappho-digital.com/title_string/manifestation/Q1242002> .
 
 <https://sappho-digital.com/title_string/manifestation/Q1242002> a ecrm:E62_String ;
-    rdfs:label "Sappho"@de .
+    rdfs:label "Sappho"@de ;
+    ecrm:P190i_is_content_of <https://sappho-digital.com/title/manifestation/Q1242002> .
 
 <https://sappho-digital.com/item_production/Q1242002> a lrmoo:F32_Item_Production_Event ;
     rdfs:label "Item production event of Sappho"@en ;
@@ -282,6 +306,7 @@ Namespace declarations and mappings to CRM and FRBRoo are applied but not shown 
 
 <https://sappho-digital.com/item/Q1242002> a lrmoo:F5_Item ;
     rdfs:label "Item of Sappho"@en ;
+    lrmoo:R28i_was_produced_by <https://sappho-digital.com/item_production/Q1242002> ;
     lrmoo:R7_exemplifies <https://sappho-digital.com/manifestation/Q1242002> .
 ```
 </details>
