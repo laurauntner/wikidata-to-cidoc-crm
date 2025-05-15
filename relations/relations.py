@@ -783,7 +783,7 @@ if __name__ == "__main__":
         "E55_Type",
     ]
     for cls in ecrm_classes:
-        g.add((ecrm[cls], OWL.sameAs, crm[cls]))
+        g.add((ecrm[cls], OWL.equivalentClass, crm[cls]))
 
     ecrm_props = [
         ("P1_is_identified_by",  "P1i_identifies"),
@@ -791,12 +791,12 @@ if __name__ == "__main__":
         ("P67_refers_to",         "P67i_is_referred_to_by"),
     ]
     for direct, inverse in ecrm_props:
-        g.add((ecrm[direct],  OWL.sameAs, crm[direct]))
-        g.add((ecrm[inverse], OWL.sameAs, crm[inverse]))
+        g.add((ecrm[direct],  OWL.equivalentProperty, crm[direct]))
+        g.add((ecrm[inverse], OWL.equivalentProperty, crm[inverse]))
         g.add((ecrm[direct],  OWL.inverseOf, ecrm[inverse]))
         g.add((ecrm[inverse], OWL.inverseOf, ecrm[direct]))
     
-    g.add((lrmoo.F2_Expression, OWL.sameAs, frbroo.F2_Expression))
+    g.add((lrmoo.F2_Expression, OWL.equivalentClass, frbroo.F2_Expression))
 
     # Serialize
     g.serialize(destination="relations.ttl", format="turtle")
