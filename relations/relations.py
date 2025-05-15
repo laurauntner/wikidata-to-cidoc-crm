@@ -26,6 +26,8 @@ lrmoo    = Namespace("http://iflastandards.info/ns/lrm/lrmoo/")
 lrmoo_uri = URIRef("http://iflastandards.info/ns/lrm/lrmoo/")
 frbroo = Namespace("http://iflastandards.info/ns/fr/frbr/frbroo/")
 frbroo_uri = URIRef("http://iflastandards.info/ns/fr/frbr/frbroo/")
+efrbroo = Namespace("http://erlangen-crm.org/efrbroo/")
+efrbroo_uri = URIRef("http://erlangen-crm.org/efrbroo/")
 intro    = Namespace("https://w3id.org/lso/intro/currentbeta#")
 intro_uri = URIRef("https://w3id.org/lso/intro/currentbeta#")
 prov     = Namespace("http://www.w3.org/ns/prov#")
@@ -73,6 +75,7 @@ for prefix, ns in [
     ("ecrm", ecrm),
     ("crm", crm),
     ("frbroo", frbroo),
+    ("efrbroo", efrbroo),
     ("lrmoo", lrmoo),
     ("intro", intro),
     ("prov", prov),
@@ -90,6 +93,7 @@ g.add((ontology_uri, RDF.type, OWL.Ontology))
 g.add((ontology_uri, OWL.imports, crm_uri))
 g.add((ontology_uri, OWL.imports, ecrm_uri))
 g.add((ontology_uri, OWL.imports, frbroo_uri))
+g.add((ontology_uri, OWL.imports, efrbroo_uri))
 g.add((ontology_uri, OWL.imports, lrmoo_uri))
 g.add((ontology_uri, OWL.imports, intro_uri))
 g.add((ontology_uri, OWL.imports, prov_uri))
@@ -797,6 +801,7 @@ if __name__ == "__main__":
         g.add((ecrm[inverse], OWL.inverseOf, ecrm[direct]))
     
     g.add((lrmoo.F2_Expression, OWL.equivalentClass, frbroo.F2_Expression))
+    g.add((lrmoo.F2_Expression, OWL.equivalentClass, efrbroo.F2_Expression))
 
     # Serialize
     g.serialize(destination="relations.ttl", format="turtle")
