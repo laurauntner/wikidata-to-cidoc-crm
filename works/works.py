@@ -67,7 +67,7 @@ ecrm_to_crm = [
 ]
 
 for cls in ecrm_to_crm:
-    g.add((ECRM.term(cls[0]), OWL.sameAs, CRM.term(cls[0])))
+    g.add((ECRM.term(cls[0]), OWL.equivalentClass, CRM.term(cls[0])))
 
 # Properties
 ecrm_properties = [
@@ -84,9 +84,9 @@ ecrm_properties = [
 
 for direct, inverse in ecrm_properties:
     g.add((ECRM.term(direct), OWL.inverseOf, ECRM.term(inverse)))
-    g.add((ECRM.term(direct), OWL.sameAs, CRM.term(direct)))
+    g.add((ECRM.term(direct), OWL.equivalentProperty, CRM.term(direct)))
     g.add((ECRM.term(inverse), OWL.inverseOf, ECRM.term(direct)))
-    g.add((ECRM.term(inverse), OWL.sameAs, CRM.term(inverse)))
+    g.add((ECRM.term(inverse), OWL.equivalentProperty, CRM.term(inverse)))
 
 lrmoo_to_frbroo = {
     "F1_Work": "F1_Work",
@@ -99,7 +99,7 @@ lrmoo_to_frbroo = {
     "F32_Item_Production_Event": "F32_Carrier_Production_Event"
 }
 for lr, fr in lrmoo_to_frbroo.items():
-    g.add((LRMOO.term(lr), OWL.sameAs, FRBROO.term(fr)))
+    g.add((LRMOO.term(lr), OWL.equivalentClass, FRBROO.term(fr)))
 
 lrmoo_properties = [
     ("R3_is_realised_in", "R3i_realises", "R3_is_realised_in", "R3i_realises"),
@@ -116,8 +116,8 @@ lrmoo_properties = [
 for lr_direct, lr_inverse, fr_direct, fr_inverse in lrmoo_properties:
     g.add((LRMOO.term(lr_direct), OWL.inverseOf, LRMOO.term(lr_inverse)))
     g.add((LRMOO.term(lr_inverse), OWL.inverseOf, LRMOO.term(lr_direct)))
-    g.add((LRMOO.term(lr_direct), OWL.sameAs, FRBROO.term(fr_direct)))
-    g.add((LRMOO.term(lr_inverse), OWL.sameAs, FRBROO.term(fr_inverse)))
+    g.add((LRMOO.term(lr_direct), OWL.equivalentProperty, FRBROO.term(fr_direct)))
+    g.add((LRMOO.term(lr_inverse), OWL.equivalentProperty, FRBROO.term(fr_inverse)))
 
 # Caches for deduplication
 genre_cache = {}
