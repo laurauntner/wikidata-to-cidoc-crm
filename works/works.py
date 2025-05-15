@@ -284,7 +284,7 @@ for i in tqdm(range(0, len(qids), 20)):
         wikidata_id_type_uri = URIRef("https://sappho-digital.com/id_type/wikidata")
         g.add((wikidata_id_type_uri, RDF.type, ECRM.E55_Type))
         g.add((wikidata_id_type_uri, RDFS.label, Literal("Wikidata ID", lang="en")))
-        g.add((wikidata_id_type_uri, OWL.sameAs, URIRef("https://www.wikidata.org/wiki/Q43649390")))
+        g.add((wikidata_id_type_uri, OWL.sameAs, URIRef("http://www.wikidata.org/wiki/Q43649390")))
         g.add((expression_uri, ECRM.P102_has_title, title_uri))
         g.add((title_uri, RDF.type, ECRM.E35_Title))
         g.add((title_uri, ECRM.P190_has_symbolic_content, title_string_uri))
