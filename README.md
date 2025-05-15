@@ -66,57 +66,69 @@ Namespace declarations and mappings to CRM are applied but not shown in this exe
 ```turtle
 <https://sappho-digital.com/person/Q469571> a ecrm:E21_Person ;
     rdfs:label "Anna Louisa Karsch"@en ;
-    ecrm:P131_is_identified_by <https://sappho-digital.com/appellation/Q469571> ;
-    ecrm:P1_is_identified_by <https://sappho-digital.com/identifier/Q469571> ;
-    ecrm:P98i_was_born <https://sappho-digital.com/birth/Q469571> ;
     ecrm:P100i_died_in <https://sappho-digital.com/death/Q469571> ;
+    ecrm:P131_is_identified_by <https://sappho-digital.com/appellation/Q469571> ;
+    ecrm:P138i_has_representation <https://sappho-digital.com/visual_item/Q469571> ;
+    ecrm:P1_is_identified_by <https://sappho-digital.com/identifier/Q469571> ;
     ecrm:P2_has_type <https://sappho-digital.com/gender/Q6581072> ;
+    ecrm:P98i_was_born <https://sappho-digital.com/birth/Q469571> ;
     owl:sameAs <http://www.wikidata.org/entity/Q469571> .
 
 <https://sappho-digital.com/appellation/Q469571> a ecrm:E82_Actor_Appellation ;
     rdfs:label "Anna Louisa Karsch"@en ;
+    ecrm:P131i_identifies <https://sappho-digital.com/person/Q469571> ;
     prov:wasDerivedFrom <http://www.wikidata.org/entity/Q469571> .
 
 <https://sappho-digital.com/identifier/Q469571> a ecrm:E42_Identifier ;
     rdfs:label "Q469571" ;
+    ecrm:P1i_identifies <https://sappho-digital.com/person/Q469571> ;
     ecrm:P2_has_type <https://sappho-digital.com/id_type/wikidata> .
 
 <https://sappho-digital.com/id_type/wikidata> a ecrm:E55_Type ;
-    rdfs:label "Wikidata ID"@en .
+    rdfs:label "Wikidata ID"@en ;
+    ecrm:P2i_is_type_of <https://sappho-digital.com/identifier/Q469571> .
 
 <https://sappho-digital.com/birth/Q469571> a ecrm:E67_Birth ;
     rdfs:label "Birth of Anna Louisa Karsch"@en ;
     ecrm:P4_has_time-span <https://sappho-digital.com/timespan/17221201> ;
     ecrm:P7_took_place_at <https://sappho-digital.com/place/Q659063> ;
+    ecrm:P98_brought_into_life <https://sappho-digital.com/person/Q469571> ;
     prov:wasDerivedFrom <http://www.wikidata.org/entity/Q469571> .
 
 <https://sappho-digital.com/death/Q469571> a ecrm:E69_Death ;
     rdfs:label "Death of Anna Louisa Karsch"@en ;
+    ecrm:P100_was_death_of <https://sappho-digital.com/person/Q469571> ;
     ecrm:P4_has_time-span <https://sappho-digital.com/timespan/17911012> ;
     ecrm:P7_took_place_at <https://sappho-digital.com/place/Q64> ;
     prov:wasDerivedFrom <http://www.wikidata.org/entity/Q469571> .
 
 <https://sappho-digital.com/place/Q64> a ecrm:E53_Place ;
     rdfs:label "Berlin"@en ;
+    ecrm:P7i_witnessed <https://sappho-digital.com/birth/Q469571> ;
     owl:sameAs <http://www.wikidata.org/entity/Q64> .
 
 <https://sappho-digital.com/place/Q659063> a ecrm:E53_Place ;
-    rdfs:label "Skąpe"@en ;
+    rdfs:label "Gmina Skąpe"@en ;
+    ecrm:P7i_witnessed <https://sappho-digital.com/death/Q469571> ;
     owl:sameAs <http://www.wikidata.org/entity/Q659063> .
 
 <https://sappho-digital.com/timespan/17221201> a ecrm:E52_Time-Span ;
-    rdfs:label "1722-12-01"^^xsd:date .
+    rdfs:label "1722-12-01"^^xsd:date ;
+    ecrm:P4i_is_time-span_of <https://sappho-digital.com/birth/Q469571> .
 
 <https://sappho-digital.com/timespan/17911012> a ecrm:E52_Time-Span ;
-    rdfs:label "1791-10-12"^^xsd:date .
+    rdfs:label "1791-10-12"^^xsd:date ;
+    ecrm:P4i_is_time-span_of <https://sappho-digital.com/death/Q469571> .
 
 <https://sappho-digital.com/gender/Q6581072> a ecrm:E55_Type ;
     rdfs:label "female"@en ;
     ecrm:P2_has_type <https://sappho-digital.com/gender_type/wikidata> ;
+    ecrm:P2i_is_type_of <https://sappho-digital.com/person/Q469571> ;
     owl:sameAs <http://www.wikidata.org/entity/Q6581072> .
 
 <https://sappho-digital.com/gender_type/wikidata> a ecrm:E55_Type ;
-    rdfs:label "Wikidata Gender"@en .
+    rdfs:label "Wikidata Gender"@en ;
+    ecrm:P2i_is_type_of <https://sappho-digital.com/gender/Q6581072> .
 
 <https://sappho-digital.com/image/Q469571> a ecrm:E38_Image ;
     ecrm:P65_shows_visual_item <https://sappho-digital.com/visual_item/Q469571> ;
@@ -125,7 +137,8 @@ Namespace declarations and mappings to CRM are applied but not shown in this exe
 
 <https://sappho-digital.com/visual_item/Q469571> a ecrm:E36_Visual_Item ;
     rdfs:label "Visual representation of Anna Louisa Karsch"@en ;
-    ecrm:P138_represents <https://sappho-digital.com/person/Q469571> .
+    ecrm:P138_represents <https://sappho-digital.com/person/Q469571> ;
+    ecrm:P65i_is_shown_by <https://sappho-digital.com/image/Q469571> .
 ```
 </details>
 
