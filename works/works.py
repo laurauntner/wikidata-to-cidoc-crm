@@ -254,19 +254,23 @@ for i in tqdm(range(0, len(qids), 20)):
         g.add((work_uri, RDF.type, LRMOO.F1_Work))
         g.add((work_uri, RDFS.label, Literal(f"Work of {label}", lang="en")))
         g.add((work_uri, LRMOO.R3_is_realised_in, expression_uri))
+        g.add((expression_uri, LRMOO.R3i_realises, work_uri))
 
         # Work Creation
         work_creation_uri = URIRef(f"{SAPPHO_BASE_URI}work_creation/{qid}")
         g.add((work_creation_uri, RDF.type, LRMOO.F27_Work_Creation))
         g.add((work_creation_uri, RDFS.label, Literal(f"Work creation of {label}", lang="en")))
         g.add((work_creation_uri, LRMOO.R16_created, work_uri))
+        g.add((work_uri, LRMOO.R16i_was_created_by, work_creation_uri))
         g.add((work_creation_uri, PROV.wasDerivedFrom, URIRef(f"{WD}{qid}")))
 
         if "author" in r:
             author_qid = r["author"]["value"].split("/")[-1]
             author_uri = URIRef(f"{SAPPHO_BASE_URI}person/{author_qid}")
             g.add((work_creation_uri, ECRM.P14_carried_out_by, author_uri))
+            g.add((author_uri, ECRM.P14i_performed, work_creation_uri))
             g.add((work_uri, ECRM.P14_carried_out_by, author_uri))
+            g.add((author_uri, ECRM.P14i_performed, work_uri))
             
             g.add((author_uri, RDF.type, ECRM.E21_Person))
             g.add((author_uri, RDFS.label, Literal(r.get("authorLabel", {}).get("value", "Unknown"))))
@@ -277,17 +281,21 @@ for i in tqdm(range(0, len(qids), 20)):
         g.add((expression_uri, RDFS.label, Literal(f"Expression of {label}", lang="en")))                
         identifier_uri = URIRef(f"{SAPPHO_BASE_URI}identifier/{qid}")
         g.add((expression_uri, ECRM.P1_is_identified_by, identifier_uri))
+        g.add((identifier_uri, ECRM.P1i_identifies, expression_uri))
         g.add((identifier_uri, RDF.type, ECRM.E42_Identifier))
         g.add((identifier_uri, RDFS.label, Literal(qid)))
         g.add((identifier_uri, ECRM.P2_has_type, URIRef("https://sappho-digital.com/id_type/wikidata")))
+        g.add((URIRef("https://sappho-digital.com/id_type/wikidata"), ECRM.P2_is_type_of, identifier_uri))
         
         wikidata_id_type_uri = URIRef("https://sappho-digital.com/id_type/wikidata")
         g.add((wikidata_id_type_uri, RDF.type, ECRM.E55_Type))
         g.add((wikidata_id_type_uri, RDFS.label, Literal("Wikidata ID", lang="en")))
         g.add((wikidata_id_type_uri, OWL.sameAs, URIRef("http://www.wikidata.org/wiki/Q43649390")))
         g.add((expression_uri, ECRM.P102_has_title, title_uri))
+        g.add((title_uri, ECRM.P102i_is_title_of, expression_uri))
         g.add((title_uri, RDF.type, ECRM.E35_Title))
         g.add((title_uri, ECRM.P190_has_symbolic_content, title_string_uri))
+        g.add((title_string_uri, ECRM.P190i_is_content_of, title_uri))
         g.add((title_string_uri, RDF.type, ECRM.E62_String))
         g.add((title_string_uri, RDFS.label, Literal(label, lang=lang)))
 
@@ -300,9 +308,11 @@ for i in tqdm(range(0, len(qids), 20)):
                 g.add((genre_uri, RDFS.label, Literal(r.get("genreLabel", {}).get("value", "Unknown"), lang="en")))
                 g.add((genre_uri, OWL.sameAs, URIRef(r["genre"]["value"])))
                 g.add((genre_uri, ECRM.P2_has_type, URIRef(f"{SAPPHO_BASE_URI}genre_type/wikidata")))
+                g.add((URIRef(f"{SAPPHO_BASE_URI}genre_type/wikidata"), ECRM.P2_is_type_of, genre_uri))
                 g.add((URIRef(f"{SAPPHO_BASE_URI}genre_type/wikidata"), RDF.type, ECRM.E55_Type))
                 g.add((URIRef(f"{SAPPHO_BASE_URI}genre_type/wikidata"), RDFS.label, Literal("Wikidata Genre", lang="en")))
             g.add((expression_uri, ECRM.P2_has_type, genre_cache[genre_qid]))
+            g.add((genre_cache[genre_qid], ECRM.P2_is_type_of, expression_uri))
 
         g.add((expression_uri, OWL.sameAs, URIRef(f"{WD}{qid}")))
         g.add((expression_uri, PROV.wasDerivedFrom, URIRef(f"{WD}{qid}")))
@@ -312,7 +322,9 @@ for i in tqdm(range(0, len(qids), 20)):
         g.add((expression_creation_uri, RDF.type, LRMOO.F28_Expression_Creation))
         g.add((expression_creation_uri, RDFS.label, Literal(f"Expression creation of {label}", lang="en")))
         g.add((expression_creation_uri, LRMOO.R17_created, expression_uri))
+        g.add((expression_uri, LRMOO.R17i_was_created_by, expression_creation_uri))
         g.add((expression_creation_uri, LRMOO.R19_created_a_realisation_of, work_uri))
+        g.add((work_uri, LRMOO.R19i_was_realised_through, expression_creation_uri))
         g.add((expression_creation_uri, PROV.wasDerivedFrom, URIRef(f"{WD}{qid}")))
 
         if "author" in r:
@@ -327,12 +339,14 @@ for i in tqdm(range(0, len(qids), 20)):
                     g.add((date_uri, RDF.type, ECRM["E52_Time-Span"]))
                     g.add((date_uri, RDFS.label, Literal(year, datatype=XSD.gYear)))
                 g.add((expression_creation_uri, ECRM["P4_has_time-span"], date_cache[year]))
+                g.add((date_cache[year], ECRM["P4i_is_time-span_of"], expression_creation_uri))
 
         # Manifestation
         manifestation_uri = URIRef(f"{SAPPHO_BASE_URI}manifestation/{qid}")
         g.add((manifestation_uri, RDF.type, LRMOO.F3_Manifestation))
         g.add((manifestation_uri, RDFS.label, Literal(f"Manifestation of {label}", lang="en")))
         g.add((manifestation_uri, LRMOO.R4_embodies, expression_uri))
+        g.add((expression_uri, LRMOO.R4i_is_embodied_in, manifestation_uri))
         
         manifestation_title_uri = URIRef(f"{SAPPHO_BASE_URI}title/manifestation/{qid}")
         manifestation_title_string_uri = URIRef(f"{SAPPHO_BASE_URI}title_string/manifestation/{qid}")
@@ -350,8 +364,10 @@ for i in tqdm(range(0, len(qids), 20)):
             manifestation_label, manifestation_lang = fetch_label(parent_qid)
 
         g.add((manifestation_uri, ECRM.P102_has_title, manifestation_title_uri))
+        g.add((manifestation_title_uri, ECRM.P102i_is_title_of, manifestation_uri))
         g.add((manifestation_title_uri, RDF.type, ECRM.E35_Title))
         g.add((manifestation_title_uri, ECRM.P190_has_symbolic_content, manifestation_title_string_uri))
+        g.add((manifestation_title_string_uri, ECRM.P190i_is_content_of, manifestation_title_uri))
         g.add((manifestation_title_string_uri, RDF.type, ECRM.E62_String))
         g.add((manifestation_title_string_uri, RDFS.label, Literal(manifestation_label, lang=manifestation_lang)))
 
@@ -360,9 +376,11 @@ for i in tqdm(range(0, len(qids), 20)):
         g.add((manifestation_creation_uri, RDF.type, LRMOO.F30_Manifestation_Creation))
         g.add((manifestation_creation_uri, RDFS.label, Literal(f"Manifestation creation of {label}", lang="en")))
         g.add((manifestation_creation_uri, LRMOO.R24_created, manifestation_uri))
+        g.add((manifestation_uri, LRMOO.R24i_was_created_through, manifestation_creation_uri))
         g.add((manifestation_creation_uri, PROV.wasDerivedFrom, URIRef(f"{WD}{qid}")))
         if "author" in r:
             g.add((manifestation_creation_uri, ECRM.P14_carried_out_by, author_uri))
+            g.add((author_uri, ECRM.P14i_performed, manifestation_creation_uri))
 
         if "publisher" in r:
             publisher_qid = r["publisher"]["value"].split("/")[-1]
@@ -373,6 +391,7 @@ for i in tqdm(range(0, len(qids), 20)):
                 g.add((publisher_uri, RDFS.label, Literal(r.get("publisherLabel", {}).get("value", "Unknown"), lang="en")))
                 g.add((publisher_uri, OWL.sameAs, URIRef(r["publisher"]["value"])))
             g.add((manifestation_creation_uri, ECRM.P14_carried_out_by, publisher_cache[publisher_qid]))
+            g.add((publisher_cache[publisher_qid], ECRM.P14i_performed, manifestation_creation_uri))
 
         if "pub_date" in r:
             pub_year = extract_year(r["pub_date"]["value"])
@@ -383,6 +402,7 @@ for i in tqdm(range(0, len(qids), 20)):
                     g.add((pub_date_uri, RDF.type, ECRM["E52_Time-Span"]))
                     g.add((pub_date_uri, RDFS.label, Literal(pub_year, datatype=XSD.gYear)))
                 g.add((manifestation_creation_uri, ECRM["P4_has_time-span"], date_cache[pub_year]))
+                g.add((date_cache[pub_year], ECRM["P4_is_time-span_of"], manifestation_creation_uri))
 
         if "pub_place" in r:
             place_qid = r["pub_place"]["value"].split("/")[-1]
@@ -393,6 +413,7 @@ for i in tqdm(range(0, len(qids), 20)):
                 g.add((place_uri, RDFS.label, Literal(r.get("pub_placeLabel", {}).get("value", "Unknown"), lang="en")))
                 g.add((place_uri, OWL.sameAs, URIRef(r["pub_place"]["value"])))
             g.add((manifestation_creation_uri, ECRM.P7_took_place_at, place_cache[place_qid]))
+            g.add((place_cache[place_qid], ECRM.P7i_witnessed, manifestation_creation_uri))
 
         if "editor" in r:
             editor_qid = r["editor"]["value"].split("/")[-1]
@@ -403,16 +424,20 @@ for i in tqdm(range(0, len(qids), 20)):
 
             app_uri = URIRef(f"{SAPPHO_BASE_URI}appellation/{editor_qid}")
             g.add((editor_uri, ECRM.P131_is_identified_by, app_uri))
+            g.add((app_uri, ECRM.P131i_identifies, editor_uri))
             g.add((app_uri, RDF.type, ECRM.E82_Actor_Appellation))
             g.add((app_uri, RDFS.label, Literal(r.get("editorLabel", {}).get("value", "Unknown"))))
             g.add((app_uri, PROV.wasDerivedFrom, URIRef(r["editor"]["value"])))
 
             id_uri = URIRef(f"{SAPPHO_BASE_URI}identifier/{editor_qid}")
             g.add((editor_uri, ECRM.P1_is_identified_by, id_uri))
+            g.add((id_uri, ECRM.P1i_identifies, editor_uri))
             g.add((id_uri, RDF.type, ECRM.E42_Identifier))
             g.add((id_uri, RDFS.label, Literal(editor_qid)))
             g.add((id_uri, ECRM.P2_has_type, URIRef("https://sappho-digital.com/id_type/wikidata")))
+            g.add((URIRef("https://sappho-digital.com/id_type/wikidata"), ECRM.P2i_is_type_of, id_uri))
             g.add((manifestation_creation_uri, ECRM.P14_carried_out_by, editor_uri))
+            g.add((editor_uri, ECRM.P14i_performed, manifestation_creation_uri))
 
         item_production_uri = URIRef(f"{SAPPHO_BASE_URI}item_production/{qid}")
         item_uri = URIRef(f"{SAPPHO_BASE_URI}item/{qid}")
@@ -420,17 +445,21 @@ for i in tqdm(range(0, len(qids), 20)):
         g.add((item_production_uri, RDF.type, LRMOO.F32_Item_Production_Event))
         g.add((item_production_uri, RDFS.label, Literal(f"Item production event of {label}", lang="en")))
         g.add((item_production_uri, LRMOO.R27_materialized, manifestation_uri))
+        g.add((manifestation_uri, LRMOO.R27i_was_materialized_by, item_production_uri))
         g.add((item_production_uri, LRMOO.R28_produced, item_uri))
+        g.add((item_uri, LRMOO.R28i_was_produced_by, item_production_uri))
 
         g.add((item_uri, RDF.type, LRMOO.F5_Item))
         g.add((item_uri, RDFS.label, Literal(f"Item of {label}", lang="en")))
         g.add((item_uri, LRMOO.R7_exemplifies, manifestation_uri))
+        g.add((manifestation_uri, LRMOO.R7i_is_exemplified_by, item_uri))
 
         if "digitalCopy" in r:
             digital_uri = URIRef(f"{SAPPHO_BASE_URI}digital/{qid}")
             g.add((digital_uri, RDF.type, ECRM.E73_Information_Object))
             g.add((digital_uri, RDFS.label, Literal(f"Digital copy of {label}", lang="en")))
             g.add((digital_uri, ECRM.P138_represents, expression_uri))
+            g.add((expression_uri, ECRM.P138i_has_representation, digital_uri))
             g.add((digital_uri, RDFS.seeAlso, URIRef(r["digitalCopy"]["value"])))
 
 # Serialize
