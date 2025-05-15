@@ -22,6 +22,8 @@ LRMOO = Namespace("http://iflastandards.info/ns/lrm/lrmoo/") # LRMoo
 LRMOO_URI = URIRef("http://iflastandards.info/ns/lrm/lrmoo/")
 FRBROO = Namespace("http://iflastandards.info/ns/fr/frbr/frbroo/") # FRBRoo
 FRBROO_URI = URIRef("http://iflastandards.info/ns/fr/frbr/frbroo/")
+EFRBROO = Namespace("http://erlangen-crm.org/efrbroo/") # eFRBRoo
+EFRBROO_URI = URIRef("http://erlangen-crm.org/efrbroo/")
 PROV = Namespace("http://www.w3.org/ns/prov#") # PROV-O - Provenance Ontology
 PROV_URI = URIRef("http://www.w3.org/ns/prov#")
 WD = "http://www.wikidata.org/entity/" # Base URI for Wikidata entities
@@ -33,6 +35,7 @@ g.bind("crm", CRM)
 g.bind("ecrm", ECRM)
 g.bind("lrmoo", LRMOO)
 g.bind("frbroo", FRBROO)
+g.bind("efrbroo", EFRBROO)
 g.bind("prov", PROV)
 g.bind("owl", OWL)
 g.bind("rdfs", RDFS)
@@ -48,9 +51,10 @@ g.add((ontology_uri, OWL.imports, CRM_URI))
 g.add((ontology_uri, OWL.imports, ECRM_URI))
 g.add((ontology_uri, OWL.imports, LRMOO_URI))
 g.add((ontology_uri, OWL.imports, FRBROO_URI))
+g.add((ontology_uri, OWL.imports, EFRBROO_URI))
 g.add((ontology_uri, OWL.imports, PROV_URI))
 
-# Ontology Alignments (ECRM - CRM, LRMoo - FRBRoo) and property inverses
+# Ontology Alignments (ECRM - CRM, LRMoo - FRBRoo/eFRBRoo) and property inverses
 
 ecrm_to_crm = [
     # Classes
@@ -100,6 +104,7 @@ lrmoo_to_frbroo = {
 }
 for lr, fr in lrmoo_to_frbroo.items():
     g.add((LRMOO.term(lr), OWL.equivalentClass, FRBROO.term(fr)))
+    g.add((LRMOO.term(lr), OWL.equivalentClass, EFRBROO.term(fr)))
 
 lrmoo_properties = [
     ("R3_is_realised_in", "R3i_realises", "R3_is_realised_in", "R3i_realises"),
@@ -117,7 +122,9 @@ for lr_direct, lr_inverse, fr_direct, fr_inverse in lrmoo_properties:
     g.add((LRMOO.term(lr_direct), OWL.inverseOf, LRMOO.term(lr_inverse)))
     g.add((LRMOO.term(lr_inverse), OWL.inverseOf, LRMOO.term(lr_direct)))
     g.add((LRMOO.term(lr_direct), OWL.equivalentProperty, FRBROO.term(fr_direct)))
+    g.add((LRMOO.term(lr_direct), OWL.equivalentProperty, EFRBROO.term(fr_direct)))
     g.add((LRMOO.term(lr_inverse), OWL.equivalentProperty, FRBROO.term(fr_inverse)))
+    g.add((LRMOO.term(lr_inverse), OWL.equivalentProperty, EFRBROO.term(fr_inverse)))
 
 # Caches for deduplication
 genre_cache = {}
