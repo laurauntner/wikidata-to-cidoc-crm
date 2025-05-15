@@ -52,7 +52,7 @@ ecrm_to_crm = [
 ]
 
 for cls in ecrm_to_crm:
-    g.add((ECRM.term(cls), OWL.sameAs, CRM.term(cls)))
+    g.add((ECRM.term(cls), OWL.equivalentClass, CRM.term(cls)))
 
 # Properties
 ecrm_properties = [
@@ -69,9 +69,9 @@ ecrm_properties = [
 
 for direct, inverse in ecrm_properties:
     g.add((ECRM.term(direct), OWL.inverseOf, ECRM.term(inverse)))
-    g.add((ECRM.term(direct), OWL.sameAs, CRM.term(direct)))
+    g.add((ECRM.term(direct), OWL.equivalentProperty, CRM.term(direct)))
     g.add((ECRM.term(inverse), OWL.inverseOf, ECRM.term(direct)))
-    g.add((ECRM.term(inverse), OWL.sameAs, CRM.term(inverse)))
+    g.add((ECRM.term(inverse), OWL.equivalentProperty, CRM.term(inverse)))
 
 # Function to get Wikidata data in batches
 def get_wikidata_batch(qids, max_retries=5):
