@@ -16,7 +16,7 @@ from tqdm import tqdm
 from typing import Union, Iterable, Tuple
 
 # Namespaces
-WD_ENTITY = "https://www.wikidata.org/entity/"
+WD_ENTITY = "http://www.wikidata.org/entity/"
 sappho   = Namespace("https://sappho-digital.com/")
 ecrm     = Namespace("http://erlangen-crm.org/current/")
 ecrm_uri = URIRef("http://erlangen-crm.org/current/")
