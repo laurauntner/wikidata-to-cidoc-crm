@@ -218,7 +218,11 @@ for i in tqdm(range(0, len(all_qids), batch_size)):
                 g.add((sappho_gender_uri, RDFS.label, Literal(gender_label, lang="en")))
                 g.add((sappho_gender_uri, OWL.sameAs, URIRef(gender_uri_raw)))
                 g.add((sappho_gender_uri, ECRM.P2_has_type, URIRef(f"{SAPPHO_BASE_URI}gender_type/wikidata")))
-                g.add((URIRef(f"{SAPPHO_BASE_URI}gender_type/wikidata")), ECRM.P2i_is_type_of, sappho_gender_uri)
+                g.add((
+                    URIRef(f"{SAPPHO_BASE_URI}gender_type/wikidata"),
+                    ECRM.P2i_is_type_of,
+                    sappho_gender_uri
+                ))                
                 g.add((URIRef(f"{SAPPHO_BASE_URI}gender_type/wikidata"), RDF.type, ECRM.E55_Type))
                 g.add((URIRef(f"{SAPPHO_BASE_URI}gender_type/wikidata"), RDFS.label, Literal("Wikidata Gender", lang="en")))
                 gender_cache[gender_uri_raw] = sappho_gender_uri
