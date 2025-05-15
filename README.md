@@ -4,7 +4,7 @@ This repository contains Python scripts that transform structured data from [Wik
 
 The goal is to enable CIDOC CRM-based semantic enrichment from Wikidata and other linked data sources. The scripts also use [PROV-O](https://www.w3.org/TR/prov-o/) (`prov:wasDerivedFrom`) to link data back to Wikidata.
 
-To improve inference capabilities, all ECRM classes and properties have been mapped to CIDOC CRM using `owl:equivalentClass` and `owl:equivalentProperty`. Also, all LRMoo classes and properties have been mapped to [FRBRoo](https://www.iflastandards.info/fr/frbr/frbroo).
+To improve inference capabilities, all ECRM classes and properties have been mapped to CIDOC CRM using `owl:equivalentClass` and `owl:equivalentProperty`. Also, all LRMoo classes and properties have been mapped to [FRBRoo](https://www.iflastandards.info/fr/frbr/frbroo) and [eFRBRoo](https://erlangen-crm.org/efrbroo).
 
 ---
 
