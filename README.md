@@ -383,7 +383,8 @@ Further, it’s highly recommended to manually refine the generated triples afte
         <https://sappho-digital.com/actualization/person_ref/Q17892_Q1242002>,
         <https://sappho-digital.com/actualization/place_ref/Q128087_Q1242002>,
         <https://sappho-digital.com/actualization/plot/Q134285870_Q1242002>,
-        <https://sappho-digital.com/actualization/topic/Q10737_Q1242002> .
+        <https://sappho-digital.com/actualization/topic/Q10737_Q1242002> ;
+    intro:R30_hasTextPassage <https://sappho-digital.com/textpassage/Q1242002_Q119292643> .
 
 <https://sappho-digital.com/expression/Q119292643> a lrmoo:F2_Expression ;
     rdfs:label "Expression of Sappho. Eine Novelle"@en ;
