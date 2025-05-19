@@ -834,4 +834,12 @@ Further, it’s highly recommended to manually refine the generated triples afte
 
 ---
 
-<h4>🔩 Merge Module: Use this module to merge `authors.ttl`, `works.ttl` and `relations.ttl`.</h4>
+<details>
+
+<summary><h2>🔩 Merge Module </h2></summary>
+
+Use this module to merge the outputted Turtle files and get one ontology that includes all information for authors, works and relations.
+
+The Python script assumes that the Turtle files to be merged already exist, so you first have to run the other scripts.
+
+</details>
