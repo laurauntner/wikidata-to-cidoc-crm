@@ -15,7 +15,6 @@ from tqdm import tqdm
 
 # Namespaces
 CRM = Namespace("http://www.cidoc-crm.org/cidoc-crm/") # CIDOC CRM
-CRM_URI = URIRef("http://www.cidoc-crm.org/cidoc-crm/")
 ECRM = Namespace("http://erlangen-crm.org/current/")  # eCRM - CIDOC CRM (OWL version)
 ECRM_URI = URIRef("http://erlangen-crm.org/current/")
 PROV = Namespace("http://www.w3.org/ns/prov#")  # PROV-O - Provenance Ontology
@@ -39,7 +38,6 @@ ontology_uri = URIRef("https://sappho-digital.com/ontology/authors")
 
 g.add((ontology_uri, RDF.type, OWL.Ontology))
 
-g.add((ontology_uri, OWL.imports, CRM_URI))
 g.add((ontology_uri, OWL.imports, ECRM_URI))
 g.add((ontology_uri, OWL.imports, PROV_URI))
 
