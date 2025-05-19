@@ -15,15 +15,12 @@ from tqdm import tqdm
 
 # Namespaces
 CRM = Namespace("http://www.cidoc-crm.org/cidoc-crm/") # CIDOC CRM
-CRM_URI = URIRef("http://www.cidoc-crm.org/cidoc-crm/")
 ECRM = Namespace("http://erlangen-crm.org/current/") #eCRM – CIDOC CRM (OWL version)
 ECRM_URI = URIRef("http://erlangen-crm.org/current/")
 LRMOO = Namespace("http://iflastandards.info/ns/lrm/lrmoo/") # LRMoo
 LRMOO_URI = URIRef("http://iflastandards.info/ns/lrm/lrmoo/")
 FRBROO = Namespace("http://iflastandards.info/ns/fr/frbr/frbroo/") # FRBRoo
-FRBROO_URI = URIRef("http://iflastandards.info/ns/fr/frbr/frbroo/")
 EFRBROO = Namespace("http://erlangen-crm.org/efrbroo/") # eFRBRoo
-EFRBROO_URI = URIRef("http://erlangen-crm.org/efrbroo/")
 PROV = Namespace("http://www.w3.org/ns/prov#") # PROV-O - Provenance Ontology
 PROV_URI = URIRef("http://www.w3.org/ns/prov#")
 WD = "http://www.wikidata.org/entity/" # Base URI for Wikidata entities
@@ -47,11 +44,8 @@ ontology_uri = URIRef("https://sappho-digital.com/ontology/works")
 
 g.add((ontology_uri, RDF.type, OWL.Ontology))
 
-g.add((ontology_uri, OWL.imports, CRM_URI))
 g.add((ontology_uri, OWL.imports, ECRM_URI))
 g.add((ontology_uri, OWL.imports, LRMOO_URI))
-g.add((ontology_uri, OWL.imports, FRBROO_URI))
-g.add((ontology_uri, OWL.imports, EFRBROO_URI))
 g.add((ontology_uri, OWL.imports, PROV_URI))
 
 # Ontology Alignments (ECRM - CRM, LRMoo - FRBRoo/eFRBRoo) and property inverses
@@ -270,7 +264,6 @@ for i in tqdm(range(0, len(qids), 20)):
             g.add((work_creation_uri, ECRM.P14_carried_out_by, author_uri))
             g.add((author_uri, ECRM.P14i_performed, work_creation_uri))
             g.add((work_uri, ECRM.P14_carried_out_by, author_uri))
-            g.add((author_uri, ECRM.P14i_performed, work_uri))
             
             g.add((author_uri, RDF.type, ECRM.E21_Person))
             g.add((author_uri, RDFS.label, Literal(r.get("authorLabel", {}).get("value", "Unknown"))))
