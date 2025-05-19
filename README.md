@@ -8,10 +8,9 @@ To improve inference capabilities, all ECRM classes and properties have been map
 
 ---
 
-🚧 The repository is under active development. Currently, the `authors`, `works` and `relations` modules are available. They model basic biographical, bibliographical, and intertextual information based on data from Wikidata and can be dynamically extended. The modules can be used independently of each other, but a unification is planned.
+🚧 The repository is under active development. Currently, the `authors`, `works`, `relations` and `merge` modules are available. The first three modules model basic biographical, bibliographical, and intertextual information based on data from Wikidata and can be dynamically extended. The module `merge` can be used to merge the outputted Turtle files.
 
 📌 **Still to do:**
-- Module that combines all modules
 - Extended ontology alignments
 - SHACL Shapes
 - Python package for better reuse
@@ -831,3 +830,7 @@ Further, it’s highly recommended to manually refine the generated triples afte
         <https://sappho-digital.com/identifier/Q17892> ;
     owl:sameAs <http://www.wikidata.org/entity/Q43649390> .
 ```
+
+---
+
+<h2>🔩 Merge Module: Use this module to merge `authors.ttl`, `works.ttl` and `relations.ttl`.</h2>
