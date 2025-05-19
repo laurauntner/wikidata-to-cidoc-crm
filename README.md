@@ -834,4 +834,4 @@ Further, it’s highly recommended to manually refine the generated triples afte
 
 ---
 
-<h2>🔩 Merge Module: Use this module to merge `authors.ttl`, `works.ttl` and `relations.ttl`.</h2>
+<h4>🔩 Merge Module: Use this module to merge `authors.ttl`, `works.ttl` and `relations.ttl`.</h4>
