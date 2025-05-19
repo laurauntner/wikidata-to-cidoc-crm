@@ -8,7 +8,7 @@ To improve inference capabilities, all ECRM classes and properties have been map
 
 ---
 
-🚧 The repository is under active development. Currently, the `authors`, `works`, `relations` and `merge` modules are available. The first three modules model basic biographical, bibliographical, and intertextual information based on data from Wikidata and can be dynamically extended. The module `merge` can be used to merge the outputted Turtle files.
+🚧 The repository is under active development. Currently, the `authors`, `works`, `relations` and `merge` modules are available. The first three modules model basic biographical, bibliographical, and intertextual information based on data from Wikidata and can be dynamically extended. The `merge` module can be used to merge the outputted Turtle files.
 
 📌 **Still to do:**
 - Extended ontology alignments
