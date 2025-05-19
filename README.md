@@ -830,6 +830,7 @@ Further, it’s highly recommended to manually refine the generated triples afte
         <https://sappho-digital.com/identifier/Q17892> ;
     owl:sameAs <http://www.wikidata.org/entity/Q43649390> .
 ```
+</details>
 
 ---
 
