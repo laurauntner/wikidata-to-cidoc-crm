@@ -16,7 +16,7 @@ The `merge` module can be used to merge the outputted Turtle files.
 
 The `map-and-align` module looks for more identifiers from [Schema.org](https://schema.org/), [DBpedia](https://www.dbpedia.org/), [GND](https://www.dnb.de/DE/Professionell/Standardisierung/GND/gnd_node.html), [VIAF](https://viaf.org/), [GeoNames](http://www.geonames.org/) and [Goodreads](https://www.goodreads.com/) and adds more ontology alignments mainly using [SKOS](http://www.w3.org/2004/02/skos/core#). The aligned ontologies are: [BIBO](http://purl.org/ontology/bibo/), [CiTO](http://purl.org/spar/cito/), [DC](http://purl.org/dc/terms/), [DoCo](http://purl.org/spar/doco/), [DraCor](http://dracor.org/ontology#), [FaBiO](http://purl.org/spar/fabio/), [FOAF](http://xmlns.com/foaf/0.1/), [FRBRoo](https://www.iflastandards.info/fr/frbr/frbroo), [GOLEM](https://ontology.golemlab.eu/), [Intertextuality Ontology](https://github.com/intertextor/intertextuality-ontology), [MiMoText](https://data.mimotext.uni-trier.de/wiki/Main_Page) and [POSTDATA / OntoPoetry](https://postdata.linhd.uned.es/results/ontopoetry-v2-0/). 
 
-The mapping and alignment are done separately so that the script can hopefully be more easily updated. It focuses specifically on those classes and properties that are important for the relations module.
+The mappings and alignments are done separately so that the script can hopefully be more easily updated. It focuses specifically on those classes and properties that are important for the relations module.
 
 📌 **Still to do:**
 - SHACL Shapes
