@@ -859,7 +859,7 @@ The Python script assumes that the Turtle files to be mapped and aligned already
 ⚡ This module is still in development.
 
 Identifiers added from:
-- [Schema.org](https://schema.org/)-
+- [Schema.org](https://schema.org/)
 - [DBpedia](https://www.dbpedia.org/)
 - [GND](https://www.dnb.de/DE/Professionell/Standardisierung/GND/gnd_node.html)
 - [VIAF](https://viaf.org/)
@@ -878,7 +878,7 @@ Alignments with:
 - [GOLEM](https://ontology.golemlab.eu/)
 - [Intertextuality Ontology](https://github.com/intertextor/intertextuality-ontology)
 - [MiMoText](https://data.mimotext.uni-trier.de/wiki/Main_Page)
-- [POSTDATA / OntoPoetry](https://postdata.linhd.uned.es/results/ontopoetry-v2-0/)). 
+- [POSTDATA / OntoPoetry](https://postdata.linhd.uned.es/results/ontopoetry-v2-0/) 
 
 </details>
 
