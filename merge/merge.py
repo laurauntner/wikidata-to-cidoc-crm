@@ -21,7 +21,6 @@ efrbroo  = Namespace("http://erlangen-crm.org/efrbroo/")
 intro    = Namespace("https://w3id.org/lso/intro/currentbeta#")
 intro_uri = URIRef("https://w3id.org/lso/intro/currentbeta#")
 prov     = Namespace("http://www.w3.org/ns/prov#")
-prov_uri = URIRef("http://www.w3.org/ns/prov#")
 
 # Load Graphs
 g_authors = Graph().parse("../authors/authors.ttl", format="turtle")
@@ -60,7 +59,6 @@ cleaned_graph.add((ontology_uri, RDF.type, OWL.Ontology))
 cleaned_graph.add((ontology_uri, OWL.imports, ecrm_uri))
 cleaned_graph.add((ontology_uri, OWL.imports, lrmoo_uri))
 cleaned_graph.add((ontology_uri, OWL.imports, intro_uri))
-cleaned_graph.add((ontology_uri, OWL.imports, prov_uri))
 
 # Bind Namespaces
 cleaned_graph.bind("sappho", sappho)
