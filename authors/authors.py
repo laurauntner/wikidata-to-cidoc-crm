@@ -18,7 +18,6 @@ CRM = Namespace("http://www.cidoc-crm.org/cidoc-crm/") # CIDOC CRM
 ECRM = Namespace("http://erlangen-crm.org/current/")  # eCRM - CIDOC CRM (OWL version)
 ECRM_URI = URIRef("http://erlangen-crm.org/current/")
 PROV = Namespace("http://www.w3.org/ns/prov#")  # PROV-O - Provenance Ontology
-PROV_URI = URIRef("http://www.w3.org/ns/prov#")
 WD = "http://www.wikidata.org/entity/"  # Base URI for Wikidata entities
 SAPPHO_BASE_URI = "https://sappho-digital.com/"  # Base URI for Sappho
 SAPPHO = Namespace("https://sappho-digital.com/")
@@ -39,7 +38,6 @@ ontology_uri = URIRef("https://sappho-digital.com/ontology/authors")
 g.add((ontology_uri, RDF.type, OWL.Ontology))
 
 g.add((ontology_uri, OWL.imports, ECRM_URI))
-g.add((ontology_uri, OWL.imports, PROV_URI))
 
 # CIDOC CRM alignment and property inverses
 
