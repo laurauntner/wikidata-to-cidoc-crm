@@ -28,7 +28,6 @@ efrbroo = Namespace("http://erlangen-crm.org/efrbroo/")
 intro    = Namespace("https://w3id.org/lso/intro/currentbeta#")
 intro_uri = URIRef("https://w3id.org/lso/intro/currentbeta#")
 prov     = Namespace("http://www.w3.org/ns/prov#")
-prov_uri = URIRef("http://www.w3.org/ns/prov#")
 
 # SPARQL Setup
 SPARQL_URL = "https://query.wikidata.org/sparql"
@@ -90,7 +89,6 @@ g.add((ontology_uri, RDF.type, OWL.Ontology))
 g.add((ontology_uri, OWL.imports, ecrm_uri))
 g.add((ontology_uri, OWL.imports, lrmoo_uri))
 g.add((ontology_uri, OWL.imports, intro_uri))
-g.add((ontology_uri, OWL.imports, prov_uri))
 
 # ID-Type
 ID_TYPE = URIRef(sappho + "id_type/wikidata")
