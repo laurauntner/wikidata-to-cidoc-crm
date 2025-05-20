@@ -851,7 +851,7 @@ The Python script assumes that the Turtle files to be merged already exist, so y
 
 Use this module to map and align the outputted Turtle files.
 
-The Python script assumes that the Turtle files to be merged already exist, so you first have to run the other scripts.
+The Python script assumes that the Turtle files to be mapped and aligned already exist, so you first have to run the other scripts.
 
 ⚡ This module is still in development.
 
