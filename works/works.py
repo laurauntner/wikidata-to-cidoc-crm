@@ -22,7 +22,6 @@ LRMOO_URI = URIRef("https://cidoc-crm.org/extensions/lrmoo/owl/1.0/LRMoo_v1.0.ow
 FRBROO = Namespace("http://iflastandards.info/ns/fr/frbr/frbroo/") # FRBRoo
 EFRBROO = Namespace("http://erlangen-crm.org/efrbroo/") # eFRBRoo
 PROV = Namespace("http://www.w3.org/ns/prov#") # PROV-O - Provenance Ontology
-PROV_URI = URIRef("http://www.w3.org/ns/prov#")
 WD = "http://www.wikidata.org/entity/" # Base URI for Wikidata entities
 SAPPHO_BASE_URI = Namespace("https://sappho-digital.com/")
 
@@ -46,7 +45,6 @@ g.add((ontology_uri, RDF.type, OWL.Ontology))
 
 g.add((ontology_uri, OWL.imports, ECRM_URI))
 g.add((ontology_uri, OWL.imports, LRMOO_URI))
-g.add((ontology_uri, OWL.imports, PROV_URI))
 
 # Ontology Alignments (ECRM - CRM, LRMoo - FRBRoo/eFRBRoo) and property inverses
 
