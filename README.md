@@ -1,6 +1,6 @@
 # Wikidata to CIDOC CRM
 
-This repository contains Python scripts that transform structured data from [Wikidata](https://www.wikidata.org/) into RDF using [CIDOC CRM](https://cidoc-crm.org/) (OWL version, [eCRM](https://erlangen-crm.org/docs/ecrm/current/)) and models based on CIDOC CRM: [LRMoo](https://repository.ifla.org/handle/20.500.14598/3677) and [INTRO](https://github.com/BOberreither/INTRO). The scripts generate—depending on the module—an ontology (`owl:Ontology`) for authors, works, or intertexts.
+This repository contains Python scripts that transform structured data from [Wikidata](https://www.wikidata.org/) into RDF using [CIDOC CRM](https://cidoc-crm.org/) (OWL version, [eCRM](https://erlangen-crm.org/docs/ecrm/current/)) and models based on CIDOC CRM: [LRMoo](https://repository.ifla.org/handle/20.500.14598/3677) and [INTRO](https://github.com/BOberreither/INTRO). 
 
 The goal is to enable CIDOC CRM-based semantic enrichment from Wikidata and other linked data sources. The scripts also use [PROV-O](https://www.w3.org/TR/prov-o/) (`prov:wasDerivedFrom`) to link data back to Wikidata.
 
@@ -10,7 +10,7 @@ To improve inference capabilities, all ECRM classes and properties have been map
 
 🚧 The repository is under active development. Currently, the `authors`, `works`, `relations`, `merge` and `map-and-align` modules are available. 
 
-The first three modules model basic biographical, bibliographical, and intertextual information based on data from Wikidata and can be dynamically extended. 
+The first three modules model basic biographical, bibliographical, and intertextual information based on data from Wikidata and can be dynamically extended. The scripts generate—depending on the module—an ontology (`owl:Ontology`) for authors, works, or intertexts. 
 
 The `merge` module can be used to merge the outputted Turtle files. 
 
