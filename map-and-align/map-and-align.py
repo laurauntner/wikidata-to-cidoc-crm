@@ -308,7 +308,7 @@ def main():
     
     # intro:INT1_Segment
     if any(g.triples((None, RDF.type, INTRO.INT1_Segment))):
-        g.add((INTERTEXT_AF.Segment, SKOS.closeMatch, INTRO.INT1_Segment))
+        g.add((INTERTEXT_AF.Segment, SKOS.broadMatch, INTRO.INT1_Segment))
     
     # intro:INT2_ActualizationOfFeature
     if any(g.triples((None, RDF.type, INTRO.INT2_ActualizationOfFeature))):
@@ -324,18 +324,29 @@ def main():
     
     # intro:INT6_Architext
     if any(g.triples((None, RDF.type, INTRO.INT6_Architext))):
-        g.add((INTERTEXT_AF.System, SKOS.closeMatch, INTRO.INT6_Architext))
+        g.add((INTERTEXT_AF.System, SKOS.broadMatch, INTRO.INT6_Architext))
     
     # intro:INT11_TypeOfInterrelation
     if any(g.triples((None, RDF.type, INTRO.INT11_TypeOfInterrelation))):
-        g.add((INTERTEXT_AB.IntertexualSpecification, SKOS.broadMatch, INTRO.INT11_TypeOfInterrelation))
+        g.add((INTERTEXT_AB.IntertexualSpecification, SKOS.closeMatch, INTRO.INT11_TypeOfInterrelation))
     
     # intro:INT21_TextPassage
     if any(g.triples((None, RDF.type, INTRO.INT21_TextPassage))):
         g.add((INTRO.INT21_TextPassage, SKOS.broadMatch, DOCO.Part))
+        g.add((INTRO.INT21_TextPassage, SKOS.broadMatch, DOCO.BackMatter))
+        g.add((INTRO.INT21_TextPassage, SKOS.broadMatch, DOCO.BodyMatter))
+        g.add((INTRO.INT21_TextPassage, SKOS.broadMatch, DOCO.CaptionedBox))
+        g.add((INTRO.INT21_TextPassage, SKOS.broadMatch, DOCO.Chapter))
+        g.add((INTRO.INT21_TextPassage, SKOS.broadMatch, DOCO.ComplexRunInQuotation))
+        g.add((INTRO.INT21_TextPassage, SKOS.broadMatch, DOCO.Footnote))
+        g.add((INTRO.INT21_TextPassage, SKOS.broadMatch, DOCO.Formula))
+        g.add((INTRO.INT21_TextPassage, SKOS.broadMatch, DOCO.FormulaBox))
+        g.add((INTRO.INT21_TextPassage, SKOS.broadMatch, DOCO.FrontMatter))
+        g.add((INTRO.INT21_TextPassage, SKOS.broadMatch, DOCO.List))
+        g.add((INTRO.INT21_TextPassage, SKOS.broadMatch, DOCO.Section))
+        g.add((INTRO.INT21_TextPassage, SKOS.broadMatch, DOCO.Table))
         g.add((INTRO.INT21_TextPassage, SKOS.broadMatch, INTERTEXT_AB.Mediator))
         g.add((BIBO.Quote, SKOS.broadMatch, INTRO.INT21_TextPassage))
-        g.add((CITO.Citation, SKOS.broadMatch, INTRO.INT21_TextPassage))
         g.add((FABIO.Quotation, SKOS.broadMatch, INTRO.INT21_TextPassage))
         g.add((INTERTEXT_TX.TextSegment, SKOS.closeMatch, INTRO.INT21_TextPassage))
     
@@ -346,6 +357,10 @@ def main():
     # intro:INT_Character
     if any(g.triples((None, RDF.type, INTRO.INT_Character))):
         g.add((GOLEM["G0_Character-Stoff"], SKOS.closeMatch, INTRO.INT_Character))
+        g.add((FRBROO.F38_Character, SKOS.broadMatch, INTRO.INT_Character))
+        g.add((EFRBROO.F38_Character, SKOS.broadMatch, INTRO.INT_Character))
+        g.add((DRACOR.character, SKOS.broadMatch, INTRO.INT_Character))
+        g.add((POSTDATA_CORE.Character, SKOS.broadMatch, INTRO.INT_Character))
     
     # intro:INT_Plot
     if any(g.triples((None, RDF.type, INTRO.INT_Plot))):
