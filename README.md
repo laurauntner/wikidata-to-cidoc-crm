@@ -359,7 +359,7 @@ Please also note that all searches are strictly one-way: Work → Phenomenon.
 
 📎 A [visual documentation](https://github.com/laurauntner/wikidata-to-cidoc-crm/blob/main/relations/relations.png) of the relations data model is included in the `relations` folder.
 
-Special thanks to [Bernhard Oberreither](https://github.com/BOberreither) for feedback.
+🙏 Special thanks to [Bernhard Oberreither](https://github.com/BOberreither) for feedback.
 
 <h3>Example Input</h3>
 
