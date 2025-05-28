@@ -186,7 +186,7 @@ Q1242002
 
 <h3>Example Output</h3>
 
-Namespace declarations and mappings to CRM and FRBRoo are applied but not shown in this exemplary output.
+Namespace declarations and mappings to CRM, FRBRoo and eFRBRoo are applied but not shown in this exemplary output.
 
 ```turtle
 <https://sappho-digital.com/work_creation/Q1242002> a lrmoo:F27_Work_Creation ;
@@ -373,7 +373,7 @@ Q120199245 # Adolph von Schaden’s "Die moderne Sappho"
 
 <h3>Example Output</h3>
 
-Namespace declarations and mappings to CRM and FRBRoo are applied but not shown in this exemplary output.
+Namespace declarations and mappings to CRM, FRBRoo and eFRBRoo are applied but not shown in this exemplary output.
 
 Please also note that the output is currently sparse because the relevant data in Wikidata is simply too limited. The script also remains fairly slow and should be tested (and possibly optimized) on larger data sets.
 
