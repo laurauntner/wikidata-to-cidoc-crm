@@ -35,8 +35,9 @@ INTERTEXT_TX = Namespace("https://intertextuality.org/extensions/text#")
 INTERTEXT_AF = Namespace("https://intertextuality.org/extensions/artifacts#")
 INTERTEXT_MT = Namespace("https://intertextuality.org/extensions/motifs#")
 MIMOTEXT = Namespace("http://data.mimotext.uni-trier.de/entity/")
-POSTDATA_CORE = Namespace("http://postdata.linhd.uned.es/ontology/postdata-core#")
-POSTDATA_ANALYSIS = Namespace("http://postdata.linhd.uned.es/ontology/postdata-poeticAnalysis#")
+ONTOPOETRY_CORE = Namespace("http://postdata.linhd.uned.es/ontology/postdata-core#")
+ONTOPOETRY_ANALYSIS = Namespace("http://postdata.linhd.uned.es/ontology/postdata-poeticAnalysis#")
+SCHEMA = Namespace("https://schema.org/")
 
 # Mapping
 
@@ -206,8 +207,9 @@ def main():
     g.bind("intertext_af", INTERTEXT_AF)
     g.bind("intertext_mt", INTERTEXT_MT)
     g.bind("mimotext", MIMOTEXT)
-    g.bind("postdata_core", POSTDATA_CORE)
-    g.bind("postdata_analysis", POSTDATA_ANALYSIS)
+    g.bind("ontopoetry_core", ONTOPOETRY_CORE)
+    g.bind("ontopoetry_analysis", ONTOPOETRY_ANALYSIS)
+    g.bind("schema", SCHEMA)
 
     ## Classes ##
     
@@ -217,7 +219,7 @@ def main():
         g.add((ECRM.E21_Person, SKOS.broadMatch, FOAF.Agent))
         g.add((MIMOTEXT.Q11, SKOS.broadMatch, ECRM.E21_Person)) # author
         g.add((MIMOTEXT.Q10, SKOS.closeMatch, ECRM.E21_Person)) # person
-        g.add((POSTDATA_CORE.Person, SKOS.closeMatch, ECRM.E21_Person)) 
+        g.add((ONTOPOETRY_CORE.Person, SKOS.closeMatch, ECRM.E21_Person)) 
     
     # ecrm:E35_Title
     if any(g.triples((None, RDF.type, ECRM.E35_Title))):
@@ -231,18 +233,18 @@ def main():
     # ecrm:E40_Legal_Body
     if any(g.triples((None, RDF.type, ECRM.E40_Legal_Body))):
         g.add((ECRM.E40_Legal_Body, SKOS.broadMatch, FOAF.Agent))
-        g.add((POSTDATA_CORE.Organisation, SKOS.broadMatch, ECRM.E40_Legal_Body))
+        g.add((ONTOPOETRY_CORE.Organisation, SKOS.broadMatch, ECRM.E40_Legal_Body))
     
     # ecrm:E52_Time-Span
     if any(g.triples((None, RDF.type, ECRM["E52_Time-Span"]))):
         g.add((DC.PeriodOfTime, SKOS.closeMatch, ECRM["E52_Time-Span"]))
-        g.add((POSTDATA_CORE.TimeSpan, SKOS.closeMatch, ECRM["E52_Time-Span"]))
+        g.add((ONTOPOETRY_CORE.TimeSpan, SKOS.closeMatch, ECRM["E52_Time-Span"]))
 
     # ecrm:E53_Place
     if any(g.triples((None, RDF.type, ECRM.E53_Place))):
         g.add((DC.Location, SKOS.closeMatch, ECRM.E53_Place))
         g.add((MIMOTEXT.Q26, SKOS.closeMatch, ECRM.E53_Place)) # spatial concept
-        g.add((POSTDATA_CORE.Place, SKOS.closeMatch, ECRM.E53_Place))
+        g.add((ONTOPOETRY_CORE.Place, SKOS.closeMatch, ECRM.E53_Place))
         
     # ecrm:E55_Type
     if any(g.triples((None, RDF.type, ECRM.E55_Type))):
@@ -252,11 +254,11 @@ def main():
 
     # ecrm:E67_Birth
     if any(g.triples((None, RDF.type, ECRM.E67_Birth))):
-        g.add((POSTDATA_CORE.Birth, SKOS.closeMatch, ECRM.E67_Birth))
+        g.add((ONTOPOETRY_CORE.Birth, SKOS.closeMatch, ECRM.E67_Birth))
     
     # ecrm:E69_Death
     if any(g.triples((None, RDF.type, ECRM.E69_Death))):
-        g.add((POSTDATA_CORE.Death, SKOS.closeMatch, ECRM.E69_Death))
+        g.add((ONTOPOETRY_CORE.Death, SKOS.closeMatch, ECRM.E69_Death))
         
     # ecrm:E73_Information_Object
     if any(g.triples((None, RDF.type, ECRM.E73_Information_Object))):
@@ -266,8 +268,8 @@ def main():
     if any(g.triples((None, RDF.type, LRMOO.F1_Work))):
         g.add((FABIO.Work, SKOS.broadMatch, LRMOO.F1_Work))
         g.add((FABIO.LiteraryArtisticWork, SKOS.broadMatch, LRMOO.F1_Work))
-        g.add((POSTDATA_CORE.Work, SKOS.closeMatch, LRMOO.F1_Work))
-        g.add((POSTDATA_CORE.PoeticWork, SKOS.broadMatch, LRMOO.F1_Work))
+        g.add((ONTOPOETRY_CORE.Work, SKOS.closeMatch, LRMOO.F1_Work))
+        g.add((ONTOPOETRY_CORE.PoeticWork, SKOS.broadMatch, LRMOO.F1_Work))
     
     # lrmoo:F2_Expression
     if any(g.triples((None, RDF.type, LRMOO.F2_Expression))):
@@ -280,11 +282,11 @@ def main():
         g.add((INTERTEXT_AF.Work, SKOS.broadMatch, LRMOO.F2_Expression))
         g.add((INTERTEXT_AB.Reference, SKOS.broadMatch, LRMOO.F2_Expression))
         g.add((MIMOTEXT.Q2, SKOS.broadMatch, LRMOO.F2_Expression)) # literary work
-        g.add((POSTDATA_CORE.Expression, SKOS.closeMatch, LRMOO.F2_Expression))
-        g.add((POSTDATA_ANALYSIS.Intertextuality, SKOS.broadMatch, LRMOO.F2_Expression))
-        g.add((POSTDATA_ANALYSIS.Source, SKOS.broadMatch, LRMOO.F2_Expression))
-        g.add((POSTDATA_ANALYSIS.Redaction, SKOS.broadMatch, LRMOO.F2_Expression))
-        g.add((POSTDATA_ANALYSIS.Excerpt, SKOS.broadMatch, LRMOO.F2_Expression))
+        g.add((ONTOPOETRY_CORE.Expression, SKOS.closeMatch, LRMOO.F2_Expression))
+        g.add((ONTOPOETRY_ANALYSIS.Intertextuality, SKOS.broadMatch, LRMOO.F2_Expression))
+        g.add((ONTOPOETRY_ANALYSIS.Source, SKOS.broadMatch, LRMOO.F2_Expression))
+        g.add((ONTOPOETRY_ANALYSIS.Redaction, SKOS.broadMatch, LRMOO.F2_Expression))
+        g.add((ONTOPOETRY_ANALYSIS.Excerpt, SKOS.broadMatch, LRMOO.F2_Expression))
     
     # lrmoo:F3_Manifestation
     if any(g.triples((None, RDF.type, LRMOO.F3_Manifestation))):
@@ -300,11 +302,11 @@ def main():
     
     # lrmoo:F27_Work_Creation
     if any(g.triples((None, RDF.type, LRMOO.F27_Work_Creation))):
-        g.add((POSTDATA_CORE.WorkConception, SKOS.closeMatch, LRMOO.F27_Work_Creation))
+        g.add((ONTOPOETRY_CORE.WorkConception, SKOS.closeMatch, LRMOO.F27_Work_Creation))
 
     # lrmoo:F28_Expression_Creation
     if any(g.triples((None, RDF.type, LRMOO.F28_Expression_Creation))):
-        g.add((POSTDATA_CORE.ExpressionCreation, SKOS.closeMatch, LRMOO.F28_Expression_Creation))
+        g.add((ONTOPOETRY_CORE.ExpressionCreation, SKOS.closeMatch, LRMOO.F28_Expression_Creation))
     
     # intro:INT1_Segment
     if any(g.triples((None, RDF.type, INTRO.INT1_Segment))):
@@ -316,11 +318,13 @@ def main():
         g.add((EFRBROO.F38_Character, SKOS.broadMatch, INTRO.INT2_ActualizationOfFeature))
         g.add((DRACOR.character, SKOS.broadMatch, INTRO.INT2_ActualizationOfFeature))
         g.add((GOLEM.G1_Character, SKOS.broadMatch, INTRO.INT2_ActualizationOfFeature))
-        g.add((POSTDATA_CORE.Character, SKOS.broadMatch, INTRO.INT2_ActualizationOfFeature))
+        g.add((GOLEM.G7_Narrative_Sequence, SKOS.broadMatch, INTRO.INT2_ActualizationOfFeature))
+        g.add((ONTOPOETRY_CORE.Character, SKOS.broadMatch, INTRO.INT2_ActualizationOfFeature))
     
     # intro:INT4_Feature
     if any(g.triples((None, RDF.type, INTRO.INT4_Feature))):
         g.add((INTRO.INT4_Feature, SKOS.broadMatch, INTERTEXT_AB.Mediator))
+        g.add((GOLEM.G9_Narrative_Unit, SKOS.broadMatch, INTRO.INT4_Feature))
     
     # intro:INT6_Architext
     if any(g.triples((None, RDF.type, INTRO.INT6_Architext))):
@@ -360,7 +364,7 @@ def main():
         g.add((FRBROO.F38_Character, SKOS.broadMatch, INTRO.INT_Character))
         g.add((EFRBROO.F38_Character, SKOS.broadMatch, INTRO.INT_Character))
         g.add((DRACOR.character, SKOS.broadMatch, INTRO.INT_Character))
-        g.add((POSTDATA_CORE.Character, SKOS.broadMatch, INTRO.INT_Character))
+        g.add((ONTOPOETRY_CORE.Character, SKOS.broadMatch, INTRO.INT_Character))
     
     # intro:INT_Plot
     if any(g.triples((None, RDF.type, INTRO.INT_Plot))):
@@ -386,8 +390,9 @@ def main():
         g.add((DRACOR.has_genre, SKOS.broadMatch, ECRM.P2_has_type))
         g.add((FOAF.gender, SKOS.broadMatch, ECRM.P2_has_type))
         g.add((MIMOTEXT.P12, SKOS.broadMatch, ECRM.P2_has_type)) # genre
-        g.add((POSTDATA_CORE.gender, SKOS.broadMatch, ECRM.P2_has_type))
-        g.add((POSTDATA_CORE.genre, SKOS.broadMatch, ECRM.P2_has_type))
+        g.add((ONTOPOETRY_CORE.gender, SKOS.broadMatch, ECRM.P2_has_type))
+        g.add((ONTOPOETRY_CORE.genre, SKOS.broadMatch, ECRM.P2_has_type))
+        g.add((SCHEMA.genre, SKOS.broadMatch, ECRM.P2_has_type))
     
     # ecrm:P4_has_time-span
     if any(g.triples((None, ECRM["P4_has_time-span"], None))):
@@ -397,21 +402,24 @@ def main():
         g.add((DRACOR.printYear, SKOS.broadMatch, ECRM["P4_has_time-span"]))
         g.add((DRACOR.writtenYear, SKOS.broadMatch, ECRM["P4_has_time-span"]))
         g.add((MIMOTEXT.P9, SKOS.broadMatch, ECRM["P4_has_time-span"])) # publication date
-        g.add((POSTDATA_CORE.hasTimeSpan, SKOS.closeMatch, ECRM["P4_has_time-span"]))
+        g.add((ONTOPOETRY_CORE.hasTimeSpan, SKOS.closeMatch, ECRM["P4_has_time-span"]))
+        g.add((SCHEMA.dateCreated, SKOS.broadMatch, ECRM["P4_has_time-span"]))
+        g.add((SCHEMA.datePublished, SKOS.broadMatch, ECRM["P4_has_time-span"]))
     
     # ecrm:P4i_is_time-span_of
     if any(g.triples((None, ECRM["P4i_is_time-span_of"], None))):
-        g.add((POSTDATA_CORE.isTimeSpanOf, SKOS.closeMatch, ECRM["P4i_is_time-span_of"]))
+        g.add((ONTOPOETRY_CORE.isTimeSpanOf, SKOS.closeMatch, ECRM["P4i_is_time-span_of"]))
     
     # ecrm:P7_took_place_at
     if any(g.triples((None, ECRM.P7_took_place_at, None))):
         g.add((FABIO.hasPlaceOfPublication, SKOS.broadMatch, ECRM.P7_took_place_at))
         g.add((MIMOTEXT.P10, SKOS.broadMatch, ECRM.P7_took_place_at)) # publication place
-        g.add((POSTDATA_CORE.tookPlaceAt, SKOS.closeMatch, ECRM.P7_took_place_at))
+        g.add((ONTOPOETRY_CORE.tookPlaceAt, SKOS.closeMatch, ECRM.P7_took_place_at))
+        g.add((SCHEMA.locationCreated, SKOS.broadMatch, ECRM.P7_took_place_at))
     
     # ecrm:P7i_witnessed
     if any(g.triples((None, ECRM.P7i_witnessed, None))):
-        g.add((POSTDATA_CORE.witnessed, SKOS.closeMatch, ECRM.P7i_witnessed))
+        g.add((ONTOPOETRY_CORE.witnessed, SKOS.closeMatch, ECRM.P7i_witnessed))
     
     # ecrm:P14_carried_out_by
     if any(g.triples((None, ECRM.P14_carried_out_by, None))):
@@ -419,6 +427,8 @@ def main():
         g.add((DRACOR.has_author, SKOS.broadMatch, ECRM.P14_carried_out_by))
         g.add((FOAF.maker, SKOS.broadMatch, ECRM.P14_carried_out_by))
         g.add((MIMOTEXT.P5, SKOS.broadMatch, ECRM.P14_carried_out_by)) # has author
+        g.add((SCHEMA.author, SKOS.broadMatch, ECRM.P14_carried_out_by))
+        g.add((SCHEMA.creator, SKOS.broadMatch, ECRM.P14_carried_out_by))
     
     # ecrm:P14i_performed
     if any(g.triples((None, ECRM.P14i_performed, None))):
@@ -429,19 +439,19 @@ def main():
     
     # ecrm:P98i_was_born
     if any(g.triples((None, ECRM.P98i_was_born, None))):
-        g.add((POSTDATA_CORE.wasBorn, SKOS.closeMatch, ECRM.P98i_was_born))
+        g.add((ONTOPOETRY_CORE.wasBorn, SKOS.closeMatch, ECRM.P98i_was_born))
     
     # ecrm:P98_brought_into_life
     if any(g.triples((None, ECRM.P98_brought_into_life, None))):
-        g.add((POSTDATA_CORE.broughtIntoLife, SKOS.closeMatch, ECRM.P98_brought_into_life))
+        g.add((ONTOPOETRY_CORE.broughtIntoLife, SKOS.closeMatch, ECRM.P98_brought_into_life))
     
     # ecrm:P100_was_death_of
     if any(g.triples((None, ECRM.P100_was_death_of, None))):
-        g.add((POSTDATA_CORE.wasDeathOf, SKOS.closeMatch, ECRM.P100_was_death_of))
+        g.add((ONTOPOETRY_CORE.wasDeathOf, SKOS.closeMatch, ECRM.P100_was_death_of))
     
     # ecrm:P100i_died_in
     if any(g.triples((None, ECRM.P100i_died_in, None))):
-        g.add((POSTDATA_CORE.diedIn, SKOS.closeMatch, ECRM.P100i_died_in))
+        g.add((ONTOPOETRY_CORE.diedIn, SKOS.closeMatch, ECRM.P100i_died_in))
         
     # ecrm:P102_has_title
     if any(g.triples((None, ECRM.P102_has_title, None))):
@@ -472,27 +482,27 @@ def main():
     
     # lrmoo:R16_created
     if any(g.triples((None, LRMOO.R16_created, None))):
-        g.add((POSTDATA_CORE.initiated, SKOS.closeMatch, LRMOO.R16_created))
+        g.add((ONTOPOETRY_CORE.initiated, SKOS.closeMatch, LRMOO.R16_created))
     
     # lrmoo:R16i_was_created_by
     if any(g.triples((None, LRMOO.R16i_was_created_by, None))):
-        g.add((POSTDATA_CORE.wasInitiatedBy, SKOS.closeMatch, LRMOO.R16i_was_created_by))
+        g.add((ONTOPOETRY_CORE.wasInitiatedBy, SKOS.closeMatch, LRMOO.R16i_was_created_by))
     
     # lrmoo:R17_created
     if any(g.triples((None, LRMOO.R17_created, None))):
-        g.add((POSTDATA_CORE.createdExpressionFromExpressionCreation, SKOS.closeMatch, LRMOO.R17_created))
+        g.add((ONTOPOETRY_CORE.createdExpressionFromExpressionCreation, SKOS.closeMatch, LRMOO.R17_created))
     
     # lrmoo:R17i_was_created_by
     if any(g.triples((None, LRMOO.R17i_was_created_by, None))):
-        g.add((POSTDATA_CORE.wasCreatedByExpressionCreationForExpression, SKOS.closeMatch, LRMOO.R17i_was_created_by))
+        g.add((ONTOPOETRY_CORE.wasCreatedByExpressionCreationForExpression, SKOS.closeMatch, LRMOO.R17i_was_created_by))
     
     # lrmoo:R19_created_a_realisation_of
     if any(g.triples((None, LRMOO.R19_created_a_realisation_of, None))):
-        g.add((POSTDATA_CORE.createdWorkByExpressionCreation, SKOS.closeMatch, LRMOO.R19_created_a_realisation_of))
+        g.add((ONTOPOETRY_CORE.createdWorkByExpressionCreation, SKOS.closeMatch, LRMOO.R19_created_a_realisation_of))
     
     # lrmoo:R19i_was_realised_through
     if any(g.triples((None, LRMOO.R19i_was_realised_through, None))):
-        g.add((POSTDATA_CORE.realisedThroughExpressionCreation, SKOS.closeMatch, LRMOO.R19i_was_realised_through))
+        g.add((ONTOPOETRY_CORE.realisedThroughExpressionCreation, SKOS.closeMatch, LRMOO.R19i_was_realised_through))
     
     # intro:R12i_isReferredToEntity
     if any(g.triples((None, INTRO.R12i_isReferredToEntity, None))):
@@ -504,16 +514,16 @@ def main():
     
     # intro:R18_showsActualization
     if any(g.triples((None, INTRO.R18_showsActualization, None))):
-        g.add((POSTDATA_ANALYSIS.presentsIntertextuality, SKOS.broadMatch, INTRO.R18_showsActualization))
+        g.add((ONTOPOETRY_ANALYSIS.presentsIntertextuality, SKOS.broadMatch, INTRO.R18_showsActualization))
     
     # intro:R18i_actualizationFoundOn
     if any(g.triples((None, INTRO.R18i_actualizationFoundOn, None))):
-        g.add((POSTDATA_ANALYSIS.isIntertextualityPresentAt, SKOS.broadMatch, INTRO.R18i_actualizationFoundOn))
+        g.add((ONTOPOETRY_ANALYSIS.isIntertextualityPresentAt, SKOS.broadMatch, INTRO.R18i_actualizationFoundOn))
 
     # intro:R19i_isTypeOf
     if any(g.triples((None, INTRO.R19i_isTypeOf, None))):
         g.add((INTERTEXT_AB.specifiedBy, SKOS.broadMatch, INTRO.R19i_isTypeOf))
-        g.add((POSTDATA_ANALYSIS.typeOfIntertextuality, SKOS.broadMatch, INTRO.R19i_isTypeOf))
+        g.add((ONTOPOETRY_ANALYSIS.typeOfIntertextuality, SKOS.broadMatch, INTRO.R19i_isTypeOf))
     
     # intro:R22i_relationIsBasedOnSimilarity
     if any(g.triples((None, INTRO.R22i_relationIsBasedOnSimilarity, None))):
@@ -526,11 +536,11 @@ def main():
     # intro:R30_hasTextPassage
     if any(g.triples((None, INTRO.R30_hasTextPassage, None))):
         g.add((INTRO.R30_hasTextPassage, SKOS.broadMatch, DC.hasPart))
-        g.add((POSTDATA_ANALYSIS.presentsIntertextuality, SKOS.broadMatch, INTRO.R30_hasTextPassage))
+        g.add((ONTOPOETRY_ANALYSIS.presentsIntertextuality, SKOS.broadMatch, INTRO.R30_hasTextPassage))
     
     # intro:R30i_isTextPassageOf
     if any(g.triples((None, INTRO.R30i_isTextPassageOf, None))):
-        g.add((POSTDATA_ANALYSIS.isIntertextualityPresentAt, SKOS.broadMatch, INTRO.R30i_isTextPassageOf))
+        g.add((ONTOPOETRY_ANALYSIS.isIntertextualityPresentAt, SKOS.broadMatch, INTRO.R30i_isTextPassageOf))
     
     # prov:wasDerivedFrom
     if any(g.triples((None, PROV.wasDerivedFrom, None))):
@@ -765,14 +775,14 @@ def main():
         g.add((CITO.cites, SKOS.broadMatch, SAPPHO_PROP.expr_possibly_cites))
         g.add((CITO.isCitedBy, SKOS.broadMatch, SAPPHO_PROP.expr_possibly_cited_by))
         
-        g.add((POSTDATA_ANALYSIS.usedAsRedaction, SKOS.broadMatch, SAPPHO_PROP.expr_possibly_cites)) # young to old
-        g.add((POSTDATA_ANALYSIS.usedAsSource, SKOS.broadMatch, SAPPHO_PROP.expr_possibly_cites)) # young to old
-        g.add((POSTDATA_ANALYSIS.showsInfluencesOf, SKOS.broadMatch, SAPPHO_PROP.expr_possibly_cites)) # young to old
-        g.add((POSTDATA_ANALYSIS.isDerivativeOf, SKOS.broadMatch, SAPPHO_PROP.expr_possibly_cites)) # young to old
-        g.add((POSTDATA_ANALYSIS.isUsedRedactionIn, SKOS.broadMatch, SAPPHO_PROP.expr_possibly_cited_by)) # old to young
-        g.add((POSTDATA_ANALYSIS.isUsedSourceIn, SKOS.broadMatch, SAPPHO_PROP.expr_possibly_cited_by)) # old to young
-        g.add((POSTDATA_ANALYSIS.influencesAreFoundOn, SKOS.broadMatch, SAPPHO_PROP.expr_possibly_cited_by)) # old to young
-        g.add((POSTDATA_ANALYSIS.hasDerivative, SKOS.broadMatch, SAPPHO_PROP.expr_possibly_cited_by)) # old to young
+        g.add((ONTOPOETRY_ANALYSIS.usedAsRedaction, SKOS.broadMatch, SAPPHO_PROP.expr_possibly_cites)) # young to old
+        g.add((ONTOPOETRY_ANALYSIS.usedAsSource, SKOS.broadMatch, SAPPHO_PROP.expr_possibly_cites)) # young to old
+        g.add((ONTOPOETRY_ANALYSIS.showsInfluencesOf, SKOS.broadMatch, SAPPHO_PROP.expr_possibly_cites)) # young to old
+        g.add((ONTOPOETRY_ANALYSIS.isDerivativeOf, SKOS.broadMatch, SAPPHO_PROP.expr_possibly_cites)) # young to old
+        g.add((ONTOPOETRY_ANALYSIS.isUsedRedactionIn, SKOS.broadMatch, SAPPHO_PROP.expr_possibly_cited_by)) # old to young
+        g.add((ONTOPOETRY_ANALYSIS.isUsedSourceIn, SKOS.broadMatch, SAPPHO_PROP.expr_possibly_cited_by)) # old to young
+        g.add((ONTOPOETRY_ANALYSIS.influencesAreFoundOn, SKOS.broadMatch, SAPPHO_PROP.expr_possibly_cited_by)) # old to young
+        g.add((ONTOPOETRY_ANALYSIS.hasDerivative, SKOS.broadMatch, SAPPHO_PROP.expr_possibly_cited_by)) # old to young
         
         # sappho_prop:tp_possibly_cites / sappho_prop:tp_possibly_cited_by
         # if two expressions have intro:INT21_TextPassages that are part of their intro:INT31, 
@@ -860,8 +870,8 @@ def main():
         g.add((SAPPHO_PROP.expr_references, SKOS.closeMatch, MIMOTEXT.P50)) # mentions
         g.add((MIMOTEXT.P51, OWL.inverseOf, MIMOTEXT.P50))
 
-        g.add((POSTDATA_CORE.mentions, SKOS.broadMatch, SAPPHO_PROP.expr_references))
-        g.add((POSTDATA_CORE.isMentionedIn, OWL.inverseOf, POSTDATA_CORE.mentions))
+        g.add((ONTOPOETRY_CORE.mentions, SKOS.broadMatch, SAPPHO_PROP.expr_references))
+        g.add((ONTOPOETRY_CORE.isMentionedIn, OWL.inverseOf, ONTOPOETRY_CORE.mentions))
         
     # sappho_prop:references_person / sappho_prop:person_referenced_by
     
@@ -886,8 +896,8 @@ def main():
         g.add((SAPPHO_PROP.person_referenced_by, RDFS.domain, LRMOO.F2_Expression))
         g.add((SAPPHO_PROP.person_referenced_by, RDFS.range,  ECRM.E21_Person))
             
-        g.add((POSTDATA_CORE.mentionsAgent, SKOS.broadMatch, SAPPHO_PROP.references_person))
-        g.add((POSTDATA_CORE.isAgentMentionedIn, OWL.inverseOf, POSTDATA_CORE.mentionsAgent))
+        g.add((ONTOPOETRY_CORE.mentionsAgent, SKOS.broadMatch, SAPPHO_PROP.references_person))
+        g.add((ONTOPOETRY_CORE.isAgentMentionedIn, OWL.inverseOf, ONTOPOETRY_CORE.mentionsAgent))
     
     # sappho_prop:references_place / sappho_prop:place_referenced_by
     
@@ -912,8 +922,8 @@ def main():
         g.add((SAPPHO_PROP.place_referenced_by, RDFS.domain, LRMOO.F2_Expression))
         g.add((SAPPHO_PROP.place_referenced_by, RDFS.range,  ECRM.E53_Place))
         
-        g.add((POSTDATA_CORE.mentionsPlace, SKOS.broadMatch, SAPPHO_PROP.references_place))
-        g.add((POSTDATA_CORE.isPlaceMentionedIn, OWL.inverseOf, POSTDATA_CORE.mentionsPlace))
+        g.add((ONTOPOETRY_CORE.mentionsPlace, SKOS.broadMatch, SAPPHO_PROP.references_place))
+        g.add((ONTOPOETRY_CORE.isPlaceMentionedIn, OWL.inverseOf, ONTOPOETRY_CORE.mentionsPlace))
 
     # sappho_prop:has_character / sappho_prop:is_character_in: link character and expression
     if any(g.triples((None, RDF.type, INTRO.INT_Character))):
@@ -942,23 +952,20 @@ def main():
                     g.add((expr, SAPPHO_PROP.has_character,    act))
                     g.add((act,  SAPPHO_PROP.is_character_in, expr))
         
-        g.add((POSTDATA_CORE.characterIn, SKOS.closeMatch, SAPPHO_PROP.is_character_in))
-        g.add((POSTDATA_CORE.hasCharacter, SKOS.closeMatch, SAPPHO_PROP.has_character))
+        g.add((ONTOPOETRY_CORE.characterIn, SKOS.closeMatch, SAPPHO_PROP.is_character_in))
+        g.add((ONTOPOETRY_CORE.hasCharacter, SKOS.closeMatch, SAPPHO_PROP.has_character))
     
 # Serialize
     
     out_file = ttl_file.replace(".ttl", "_mapped-and-aligned.ttl")   
     g.serialize(destination=out_file, format="turtle")
     
-# Remove Schema.org and DBpedia prefixes 
+# Remove DBpedia prefixes 
 
     with open(out_file, 'r', encoding='utf-8') as f:
         ttl = f.read()
 
-    ttl = re.sub(r'^@prefix schema:.*\n', '', ttl, flags=re.MULTILINE)
     ttl = re.sub(r'^@prefix dbpedia:.*\n', '', ttl, flags=re.MULTILINE)
-
-    ttl = re.sub(r'\bschema:([A-Za-z0-9_]+)\b', r'<https://schema.org/\1>', ttl)
 
     ttl = re.sub(r'\bdbpedia:([A-Za-z0-9_/]+)\b', r'<https://dbpedia.org/\1>', ttl)
 
