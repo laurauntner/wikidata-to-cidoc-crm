@@ -886,8 +886,9 @@ Alignments with:
 - [Intertextuality Ontology](https://github.com/intertextor/intertextuality-ontology)
 - [MiMoText](https://data.mimotext.uni-trier.de/wiki/Main_Page)
 - [OntoPoetry](https://postdata.linhd.uned.es/results/ontopoetry-v2-0/)
+- [Schema.org](https://schema.org/)
 
-Despite overlaps in content, various ontologies were not considered because they are hardly used, not publicly accessible, or outdated. These include: SAWS, DanteSources, Hypermedia Dante Network, HyperHamlet. Also, the alignments focus specifically on those classes and properties that are important for the relations module.
+Despite overlaps in content, various ontologies were not considered because they are hardly used, not publicly accessible, or outdated. These include: DanteSources, Hypermedia Dante Network, HyperHamlet, SAWS. Also, the alignments focus specifically on those classes and properties that are important for the relations module.
 
 </details>
 
