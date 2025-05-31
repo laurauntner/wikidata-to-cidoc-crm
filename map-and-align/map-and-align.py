@@ -636,6 +636,7 @@ def main():
         g.add((SAPPHO_PROP.about, SKOS.closeMatch, DC.subject))
         g.add((SAPPHO_PROP.about, SKOS.closeMatch, FOAF.topic))
         g.add((SAPPHO_PROP.about, SKOS.closeMatch, MIMOTEXT.P36)) # about
+        g.add((SAPPHO_PROP.about, SKOS.closeMatch, SCHEMA.about))
         g.add((SAPPHO_PROP.about, RDFS.domain, LRMOO.F2_Expression))
         g.add((SAPPHO_PROP.about, RDFS.range, INTRO.INT_Topic))
 
@@ -784,6 +785,8 @@ def main():
         g.add((ONTOPOETRY_ANALYSIS.influencesAreFoundOn, SKOS.broadMatch, SAPPHO_PROP.expr_possibly_cited_by)) # old to young
         g.add((ONTOPOETRY_ANALYSIS.hasDerivative, SKOS.broadMatch, SAPPHO_PROP.expr_possibly_cited_by)) # old to young
         
+        g.add((SCHEMA.citation, SKOS.broadMatch, SAPPHO_PROP.expr_possibly_cites))
+        
         # sappho_prop:tp_possibly_cites / sappho_prop:tp_possibly_cited_by
         # if two expressions have intro:INT21_TextPassages that are part of their intro:INT31, 
         # it is also possible (but not necessary) that the younger text cites the text passage of the older text. 
@@ -869,11 +872,13 @@ def main():
         g.add((SAPPHO_PROP.expr_references, SKOS.closeMatch, DC.references))
         g.add((DC.isReferencedBy, OWL.inverseOf, DC.references))
         
-        g.add((SAPPHO_PROP.expr_references, SKOS.closeMatch, MIMOTEXT.P50)) # mentions
+        g.add((SAPPHO_PROP.expr_references, SKOS.narrowMatch, MIMOTEXT.P50)) # mentions
         g.add((MIMOTEXT.P51, OWL.inverseOf, MIMOTEXT.P50))
 
         g.add((ONTOPOETRY_CORE.mentions, SKOS.broadMatch, SAPPHO_PROP.expr_references))
         g.add((ONTOPOETRY_CORE.isMentionedIn, OWL.inverseOf, ONTOPOETRY_CORE.mentions))
+        
+        g.add((SCHEMA.mentions, SKOS.broadMatch, SAPPHO.expr_references))
         
     # sappho_prop:references_person / sappho_prop:person_referenced_by
     
@@ -962,6 +967,7 @@ def main():
         
         g.add((ONTOPOETRY_CORE.characterIn, SKOS.closeMatch, SAPPHO_PROP.is_character_in))
         g.add((ONTOPOETRY_CORE.hasCharacter, SKOS.closeMatch, SAPPHO_PROP.has_character))
+        g.add((SCHEMA.character, SKOS.closeMatch, SAPPHO_PROP.has_character))
     
 # Serialize
     
