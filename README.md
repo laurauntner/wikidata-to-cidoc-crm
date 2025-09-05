@@ -420,7 +420,9 @@ Further, it’s highly recommended to manually refine the generated triples afte
     rdfs:label "Intertextual relation between Die moderne Sappho and Sappho"@en ;
     intro:R21i_isIdentifiedBy <https://sappho-digital.com/actualization/interpretation/Q120199245_Q1242002> ;
     intro:R22i_relationIsBasedOnSimilarity <https://sappho-digital.com/feature/character/Q17892> ;
-    intro:R24_hasRelatedEntity <https://sappho-digital.com/actualization/character/Q17892_Q120199245>,
+    intro:R24_hasRelatedEntity <https://sappho-digital.com/expression/Q1242002>,
+        <https://sappho-digital.com/expression/Q120199245>,
+        <https://sappho-digital.com/actualization/character/Q17892_Q120199245>,
         <https://sappho-digital.com/actualization/character/Q17892_Q1242002> .
 
 <https://sappho-digital.com/feature/interpretation/Q120199245_Q1242002> a intro:INT_Interpretation ;
@@ -438,7 +440,9 @@ Further, it’s highly recommended to manually refine the generated triples afte
     rdfs:label "Intertextual relation between Sappho and Die Schwestern von Lesbos"@en ;
     intro:R21i_isIdentifiedBy <https://sappho-digital.com/actualization/interpretation/Q1242002_Q19179765> ;
     intro:R22i_relationIsBasedOnSimilarity <https://sappho-digital.com/feature/place_ref/Q128087> ;
-    intro:R24_hasRelatedEntity <https://sappho-digital.com/actualization/place_ref/Q128087_Q1242002>,
+    intro:R24_hasRelatedEntity <https://sappho-digital.com/expression/Q1242002>,
+        <https://sappho-digital.com/expression/Q19179765>,
+        <https://sappho-digital.com/actualization/place_ref/Q128087_Q1242002>,
         <https://sappho-digital.com/actualization/place_ref/Q128087_Q19179765> .
 
 <https://sappho-digital.com/feature/interpretation/Q1242002_Q19179765> a intro:INT_Interpretation ;
@@ -460,7 +464,9 @@ Further, it’s highly recommended to manually refine the generated triples afte
         <https://sappho-digital.com/feature/plot/Q134285870>,
         <https://sappho-digital.com/feature/topic/Q10737>,
         <https://sappho-digital.com/feature/work_ref/Q1242002> ;
-    intro:R24_hasRelatedEntity <https://sappho-digital.com/actualization/motif/Q165_Q119292643>,
+    intro:R24_hasRelatedEntity <https://sappho-digital.com/expression/Q1242002>,
+        <https://sappho-digital.com/expression/Q119292643>,
+        <https://sappho-digital.com/actualization/motif/Q165_Q119292643>,
         <https://sappho-digital.com/actualization/motif/Q165_Q1242002>,
         <https://sappho-digital.com/actualization/person_ref/Q17892_Q119292643>,
         <https://sappho-digital.com/actualization/person_ref/Q17892_Q1242002>,
