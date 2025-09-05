@@ -183,6 +183,8 @@ def add_actualization(feature: URIRef, expression: URIRef, label: str, relation:
     g.add((expression, intro.R18_showsActualization, act))
     g.add((act, intro.R24i_isRelatedEntity, relation))
     g.add((relation, intro.R24_hasRelatedEntity, act))
+    g.add((expression, intro.R24i_isRelatedEntity, relation))
+    g.add((relation, intro.R24_hasRelatedEntity, expression))
     feat_intp, act_intp = add_interpretation(
         act,
         f"Interpretation of {label}",
