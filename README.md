@@ -335,28 +335,28 @@ The [relations.py](https://github.com/laurauntner/wikidata-to-cidoc-crm/blob/mai
   - linked to the Wikidata item via `owl:sameAs`
 - Intertextual relations (`INT31_IntertextualRelation`) between expressions
   - with `INT_Interpretation` instances linked to the Wikidata items of the expressions via `prov:wasDerivedFrom`
-  - derived from actualizations, citations and optionally `wdt:P4969`, `wdt:P2512` and `wdt:P921`
+  - derived from actualizations, citations, and optionally `wdt:P4969` (derivative work), `wdt:P144` (based on), `wdt:P5059` (modified version of) and `wdt:P941` (inspired by)
 - References (`INT18_Reference`) for …
-  - persons: `E21_Person` with `E42_Identifier`, derived from `wdt:P180`, `wdt:P921` and `wdt:P9527` for `wdt:Q5`
-  - places: `E53_Place` with `E42_Identifier`, derived from the same properties for `wdt:Q2221906`
-  - expressions: derived from `wdt:P361` and `wdt:P1299` for given QIDs
+  - persons: `E21_Person` with `E42_Identifier`, derived from `wdt:P180` (depicts), `wdt:P921` (main subject) and `wdt:P527` (has part(s)) for `wdt:Q5` (human)
+  - places: `E53_Place` with `E42_Identifier`, derived from `wdt:P921` (main subject) for `wdt:Q2221906` (geographical location)
+  - expressions: derived from `wdt:P921` (main subject) for given QIDs
   - with actualizations (`INT2_ActualizationOfFeature`) of these references in specific expressions
     - with `INT_Interpretation` linked to the Wikidata items of the expressions via `prov:wasDerivedFrom`
 - Citations via `INT21_TextPassage` instances
   - linked to the expressions
-  - derived from `wdt:P2860` and `wdt:P6166` for given QIDs
+  - derived from `wdt:P2860` (cites work) and `wdt:P6166` (quotes work) for given QIDs
   - linked to the citing Wikidata item via `prov:wasDerivedFrom`
 - Characters (`INT_Character`)
   - linked to the Wikidata item via `owl:sameAs` and identified by `E42_Identifier`
-  - derived from `wdt:P674` or `wdt:P180`, `wdt:P921` and `wdt:P527` if the item is `wdt:Q95074`, `wdt:Q3658341`, `wdt:Q15632617`, `wdt:Q97498056`, `wdt:Q122192387` or `wdt:Q115537581`
+  - derived from `wdt:P674` (characters) or `wdt:P180` (depicts) and `wdt:P921` (main subject) if the item is `wdt:Q3658341` (literary character) or `wdt:Q15632617` (fictional human)
   - optionally linked to a real Person (`E21_Person`)
   - always with actualizations (`INT2_ActualizationOfFeature`) of these characters in specific expressions
     - with `INT_Interpretation` linked to the Wikidata items of the expressions via `prov:wasDerivedFrom`
 - Motifs, Plots and Topics
   - all linked to Wikidata items via `owl:sameAs` and identified by `E42_Identifier`
-  - `INT_Motif`: derived from `wdt:P180` and `wdt:P9527` for `wdt:Q1229071`, `wdt:Q68614425` or `wdt:Q1697305`, otherwise the item has to be linked via `wdt:P6962`
-  - `INT_Plot`: derived from `wdt:P180`, `wdt:P527` and `wdt:P921` for `wdt:Q42109240`
-  - `INT_Topic`: derived from `wdt:P921`, `wdt:P180` and `wdt:P527` for `wdt:Q26256810`
+  - `INT_Motif`: derived from `wdt:P6962` (narrative motif)
+  - `INT_Plot`: derived from `wdt:P921` (main subject) for `wdt:Q42109240` (stoff)
+  - `INT_Topic`: derived from `wdt:P921` (main subject) for `wdt:Q26256810` (topic)
   - with `INT2_ActualizationOfFeature` instances for specific expressions
     - with interpretations (`INT_Interpretation`) linked to the Wikidata items of the expressions via `prov:wasDerivedFrom`
 
