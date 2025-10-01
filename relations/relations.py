@@ -223,21 +223,28 @@ def process_int31(qids):
 
     sparql_fwd = f"""
 PREFIX wdt: <http://www.wikidata.org/prop/direct/>
+PREFIX wd:   <http://www.wikidata.org/entity/>
+PREFIX wikibase: <http://wikiba.se/ontology#>
 SELECT DISTINCT ?w1 ?w2 ?p WHERE {{
   VALUES ?w1 {{ {vals} }}
   VALUES ?w2 {{ {vals} }}
+  ?prop wdt:P1647* wd:P4969 ;
+        wikibase:directClaim ?p .
   ?w1 ?p ?w2 .
-  FILTER(?p IN (wdt:P4969,wdt:P2512,wdt:P921))
 }}
 """
 
     sparql_bwd = f"""
 PREFIX wdt: <http://www.wikidata.org/prop/direct/>
+PREFIX wd:   <http://www.wikidata.org/entity/>
+PREFIX wikibase: <http://wikiba.se/ontology#>
 SELECT DISTINCT ?w1 ?w2 ?p WHERE {{
   VALUES ?w1 {{ {vals} }}
   VALUES ?w2 {{ {vals} }}
+  VALUES ?base {{ wd:P144 wd:P5059 wd:P941 }}
+  ?prop wdt:P1647* ?base ;
+        wikibase:directClaim ?p .
   ?w2 ?p ?w1 .
-  FILTER(?p IN (wdt:P144,wdt:P5059,wdt:P941))
   BIND(?w1 AS ?tmp) .
   BIND(?w2 AS ?w1) .
   BIND(?tmp AS ?w2) .
@@ -276,27 +283,30 @@ SELECT DISTINCT ?w1 ?w2 ?p WHERE {{
                    Literal(f"Intertextual relation ({p}) between {get_label(w1)} and {get_label(w2)}", lang="en")))
 
 # Plots
-def process_plots(qids, props, target_q, cls, prefix, use_app=False):
+def process_plots(qids):
     vals = " ".join(f"wd:{q}" for q in qids)
 
     query = f"""
 PREFIX wdt: <http://www.wikidata.org/prop/direct/>
 PREFIX wd:   <http://www.wikidata.org/entity/>
+PREFIX wikibase: <http://wikiba.se/ontology#>
 SELECT ?wrk ?tgt WHERE {{
   VALUES ?wrk {{ {vals} }}
   {{
     SELECT ?tgt WHERE {{
       VALUES ?wrk {{ {vals} }}
+      ?prop wdt:P1647* wd:P921 ;
+            wikibase:directClaim ?p .
       ?wrk ?p ?tgt .
-      FILTER(?p IN ({', '.join('wdt:'+p for p in props)}))
-      ?tgt wdt:P31/wdt:P279* wd:{target_q}
+      ?tgt wdt:P31/wdt:P279* wd:Q42109240 .
     }}
     GROUP BY ?tgt
     HAVING(COUNT(DISTINCT ?wrk) > 1)
   }}
+  ?prop wdt:P1647* wd:P921 ;
+        wikibase:directClaim ?p .
   ?wrk ?p ?tgt .
-  FILTER(?p IN ({', '.join('wdt:'+p for p in props)}))
-  ?tgt wdt:P31/wdt:P279* wd:{target_q}
+  ?tgt wdt:P31/wdt:P279* wd:Q42109240 .
 }}
 """
     res = run_sparql(query)["results"]["bindings"]
@@ -333,20 +343,23 @@ def process_topics(qids):
     query = f"""
 PREFIX wdt: <http://www.wikidata.org/prop/direct/>
 PREFIX wd:   <http://www.wikidata.org/entity/>
+PREFIX wikibase: <http://wikiba.se/ontology#>
 SELECT ?wrk ?tgt WHERE {{
   VALUES ?wrk {{ {vals} }}
   {{
     SELECT ?tgt WHERE {{
       VALUES ?wrk {{ {vals} }}
+      ?prop wdt:P1647* wd:P921 ;
+            wikibase:directClaim ?p .
       ?wrk ?p ?tgt .
-      FILTER(?p IN (wdt:P921, wdt:P180, wdt:P527))
       ?tgt wdt:P31/wdt:P279* wd:Q26256810 .
     }}
     GROUP BY ?tgt
     HAVING(COUNT(DISTINCT ?wrk) > 1)
   }}
+  ?prop wdt:P1647* wd:P921 ;
+        wikibase:directClaim ?p .
   ?wrk ?p ?tgt .
-  FILTER(?p IN (wdt:P921, wdt:P180, wdt:P527))
 }}
 """
     res = run_sparql(query)["results"]["bindings"]
@@ -383,30 +396,22 @@ def process_motifs(qids):
     query = f"""
 PREFIX wdt: <http://www.wikidata.org/prop/direct/>
 PREFIX wd:   <http://www.wikidata.org/entity/>
+PREFIX wikibase: <http://wikiba.se/ontology#>
 SELECT ?wrk ?motif WHERE {{
   VALUES ?wrk {{ {vals} }}
-  VALUES ?class {{ wd:Q1229071 wd:Q68614425 wd:Q1697305 }}
   {{
     SELECT ?motif WHERE {{
       VALUES ?wrk {{ {vals} }}
-      {{ ?wrk wdt:P6962 ?motif . }}
-      UNION
-      {{
-        ?wrk wdt:P180|wdt:P527 ?x .
-        ?x wdt:P31/wdt:P279* ?class ;
-           owl:sameAs ?motif .
-      }}
+      ?prop wdt:P1647* wd:P6962 ;
+            wikibase:directClaim ?p .
+      ?wrk ?p ?motif .
     }}
     GROUP BY ?motif
     HAVING(COUNT(DISTINCT ?wrk) > 1)
   }}
-  {{ ?wrk wdt:P6962 ?motif . }}
-  UNION
-  {{
-    ?wrk wdt:P180|wdt:P527 ?x .
-    ?x wdt:P31/wdt:P279* ?class ;
-       owl:sameAs ?motif .
-  }}
+  ?prop wdt:P1647* wd:P6962 ;
+        wikibase:directClaim ?p .
+  ?wrk ?p ?motif .
 }}
 """
     res = run_sparql(query)["results"]["bindings"]
@@ -418,34 +423,39 @@ SELECT ?wrk ?motif WHERE {{
         mp.setdefault(m, []).append(w)
 
     for motif, works in mp.items():
-            raw_lbl = get_label(motif)
-            feat_lbl = f"{raw_lbl} (motif)"
-            feat = ensure_feature(motif, intro.INT_Motif, feat_lbl, path="feature/motif")
+        raw_lbl = get_label(motif)
+        feat_lbl = f"{raw_lbl} (motif)"
+        feat = ensure_feature(motif, intro.INT_Motif, feat_lbl, path="feature/motif")
 
-            for w1, w2 in combinations(works, 2):
-                expr1 = ensure_expression(w1, get_label(w1))
-                expr2 = ensure_expression(w2, get_label(w2))
+        for w1, w2 in combinations(works, 2):
+            expr1 = ensure_expression(w1, get_label(w1))
+            expr2 = ensure_expression(w2, get_label(w2))
 
-                rel = get_or_create_int31_relation(expr1, expr2)
-                if rel is None:
-                    continue
+            rel = get_or_create_int31_relation(expr1, expr2)
+            if rel is None:
+                continue
 
-                if (feat, intro.R22_providesSimilarityForRelation, rel) not in g:
-                    g.add((feat, intro.R22_providesSimilarityForRelation, rel))
-                    g.add((rel, intro.R22i_relationIsBasedOnSimilarity, feat))
+            if (feat, intro.R22_providesSimilarityForRelation, rel) not in g:
+                g.add((feat, intro.R22_providesSimilarityForRelation, rel))
+                g.add((rel, intro.R22i_relationIsBasedOnSimilarity, feat))
 
-                add_actualization(feat, expr1, f"{raw_lbl} in {get_label(w1)}", rel)
-                add_actualization(feat, expr2, f"{raw_lbl} in {get_label(w2)}", rel)
+            add_actualization(feat, expr1, f"{raw_lbl} in {get_label(w1)}", rel)
+            add_actualization(feat, expr2, f"{raw_lbl} in {get_label(w2)}", rel)
 
 # Person References
 def process_person(qids):
     vals = " ".join(f"wd:{q}" for q in qids)
     q = f"""
+PREFIX wdt: <http://www.wikidata.org/prop/direct/>
+PREFIX wd:   <http://www.wikidata.org/entity/>
+PREFIX wikibase: <http://wikiba.se/ontology#>
 SELECT DISTINCT ?wrk ?pers WHERE {{
   VALUES ?wrk {{ {vals} }}
+  VALUES ?base {{ wd:P180 wd:P921 wd:P527 }}
+  ?prop wdt:P1647* ?base ;
+        wikibase:directClaim ?p .
   ?wrk ?p ?pers .
-  FILTER(?p IN (wdt:P180,wdt:P921,wdt:P527))
-  ?pers wdt:P31/wdt:P279* wd:Q5
+  ?pers wdt:P31/wdt:P279* wd:Q5 .
 }}
 """
     mp = {}
@@ -498,17 +508,21 @@ SELECT DISTINCT ?wrk ?pers WHERE {{
 def process_place(qids):
     vals = " ".join(f"wd:{q}" for q in qids)
     q = f"""
-SELECT DISTINCT ?wrk ?pers WHERE {{
+PREFIX wdt: <http://www.wikidata.org/prop/direct/>
+PREFIX wd:   <http://www.wikidata.org/entity/>
+PREFIX wikibase: <http://wikiba.se/ontology#>
+SELECT DISTINCT ?wrk ?place WHERE {{
   VALUES ?wrk {{ {vals} }}
-  ?wrk ?p ?pers .
-  FILTER(?p IN (wdt:P180, wdt:P921, wdt:P527))
-  ?pers wdt:P31/wdt:P279* wd:Q2221906
+  ?prop wdt:P1647* wd:P921 ;
+        wikibase:directClaim ?p .
+  ?wrk ?p ?place .
+  ?place wdt:P31/wdt:P279* wd:Q2221906 .
 }}
 """
     mp = {}
     for row in run_sparql(q)["results"]["bindings"]:
         w = row["wrk"]["value"].split("/")[-1]
-        p = row["pers"]["value"].split("/")[-1]
+        p = row["place"]["value"].split("/")[-1]
         mp.setdefault(p, set()).add(w)
 
     for pl, works in mp.items():
@@ -558,11 +572,14 @@ def process_work_references(qids):
 
     sparql = f"""
 PREFIX wdt: <http://www.wikidata.org/prop/direct/>
+PREFIX wd:   <http://www.wikidata.org/entity/>
+PREFIX wikibase: <http://wikiba.se/ontology#>
 SELECT DISTINCT ?src ?tgt WHERE {{
   VALUES ?src {{ {vals} }}
+  ?prop wdt:P1647* wd:P921 ;
+        wikibase:directClaim ?p .
   ?src ?p ?tgt .
-  FILTER(?p IN (wdt:P361,wdt:P1299))
-  FILTER(STRSTARTS(STR(?tgt),"http://www.wikidata.org/entity/Q"))
+  FILTER(STRSTARTS(STR(?tgt), "http://www.wikidata.org/entity/Q"))
 }}
 """
     binds = run_sparql(sparql)["results"]["bindings"]
@@ -615,7 +632,6 @@ SELECT DISTINCT ?src ?tgt WHERE {{
             g.add((expr_src, ecrm.P67i_is_referred_to_by, act))
             
 # Characters
-from itertools import combinations
 
 def ensure_person_reference(char_qid: str):
     p_uri  = URIRef(f"{sappho}person/{char_qid}")
@@ -639,14 +655,22 @@ def process_characters(qids):
     vals = " ".join(f"wd:{q}" for q in qids)
     sparql = f"""
 PREFIX wdt: <http://www.wikidata.org/prop/direct/>
+PREFIX wd:   <http://www.wikidata.org/entity/>
+PREFIX wikibase: <http://wikiba.se/ontology#>
 SELECT DISTINCT ?wrk ?char WHERE {{
   VALUES ?wrk {{ {vals} }}
-  {{ ?wrk wdt:P674 ?char . }}
+  {{ 
+    ?prop674 wdt:P1647* wd:P674 ;
+             wikibase:directClaim ?p674 .
+    ?wrk ?p674 ?char .
+    }}
   UNION
   {{
+    VALUES ?base {{ wd:P180 wd:P921 }}
+    ?prop wdt:P1647* ?base ;
+          wikibase:directClaim ?p .
     ?wrk ?p ?char .
-    FILTER(?p IN (wdt:P180, wdt:P921, wdt:P527))
-    VALUES ?cls {{ wd:Q95074 wd:Q3658341 wd:Q15632617 wd:Q97498056 wd:Q122192387 wd:Q115537581 }}
+    VALUES ?cls {{ wd:Q3658341 wd:Q15632617 }}
     ?char wdt:P31/wdt:P279* ?cls .
   }}
 }}
@@ -715,19 +739,24 @@ def process_citations(qids):
 
     q1 = f"""
 PREFIX wdt: <http://www.wikidata.org/prop/direct/>
+PREFIX wd:   <http://www.wikidata.org/entity/>
+PREFIX wikibase: <http://wikiba.se/ontology#>
 SELECT DISTINCT ?src ?tgt WHERE {{
   VALUES ?src {{ {vals} }}
-  ?tgt ?p ?src FILTER(?p IN (wdt:P2860,wdt:P6166))
+  VALUES ?tgt {{ {vals} }}
+  VALUES ?base {{ wd:P2860 wd:P6166 }}
+  ?prop wdt:P1647* ?base ;
+        wikibase:directClaim ?p .
+  ?tgt ?p ?src .
 }}
-"""
+""" 
     binds = run_sparql(q1)["results"]["bindings"]
 
     pair_set = set()
     for row in binds:
         s = row["src"]["value"].rsplit("/",1)[-1]
         t = row["tgt"]["value"].rsplit("/",1)[-1]
-        if s in qids or t in qids:
-            pair_set.add(tuple(sorted((s, t))))
+        pair_set.add(tuple(sorted((s, t))))
 
     for w1, w2 in pair_set:
         expr1 = ensure_expression(w1, get_label(w1))
@@ -745,7 +774,7 @@ SELECT DISTINCT ?src ?tgt WHERE {{
                 g.add((tp_uri, RDF.type, intro.INT21_TextPassage))
                 g.add((tp_uri, RDFS.label, Literal(tp_label, lang="en")))
                 
-                other_qid = w2
+                other_qid = w2 if X == w1 else w1
                 wd_uri    = URIRef(WD_ENTITY + other_qid)
                 g.add((tp_uri, prov.wasDerivedFrom, wd_uri))
 
@@ -758,9 +787,8 @@ SELECT DISTINCT ?src ?tgt WHERE {{
 # Main execution
 if __name__ == "__main__":
     processors = [
-        lambda q: process_int31(q),
-        lambda q: process_plots(q, ["P180","P527","P921"], "Q42109240", intro.INT_Plot, "plot_", True),
-        process_person,
+        process_int31,
+        process_plots,
         process_citations,
         process_topics,
         process_motifs,
