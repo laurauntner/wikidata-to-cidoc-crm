@@ -18,6 +18,8 @@ The `map-and-align` module looks for more identifiers from [Schema.org](https://
 
 The mappings and alignments are done separately so that the script can hopefully be more easily updated. It focuses specifically on those classes and properties that are important for the relations module.
 
+![Overview](https://github.com/laurauntner/wikidata-to-cidoc-crm/blob/main/workflow_overview.png?raw=true)
+
 📌 **Still to do:**
 - SHACL Shapes
 - Python package for better reuse
@@ -54,7 +56,9 @@ The [authors.py](https://github.com/laurauntner/wikidata-to-cidoc-crm/blob/main/
   - `E55_Type` (genders, derived from `wdt:P21`)
   - `E36_Visual_Item` (visual representations) and `E38_Image` (image reference with Wikimedia `seeAlso`, derived from `wdt:P18`)
 
-📎 A [visual documentation](https://github.com/laurauntner/wikidata-to-cidoc-crm/blob/main/authors/authors.png) of the authors data model is included in the `authors` folder.
+![Overview](https://github.com/laurauntner/wikidata-to-cidoc-crm/blob/main/authors/authors_simple.png?raw=true)
+
+📎 A complete [visual documentation](https://github.com/laurauntner/wikidata-to-cidoc-crm/blob/main/authors/authors.png) of the authors data model is included in the `authors` folder.
     
 <h3>Example Input</h3>
 
@@ -173,7 +177,9 @@ The [works.py](https://github.com/laurauntner/wikidata-to-cidoc-crm/blob/main/wo
 
 Translators are not modeled per default, but the data model can, of course, be extended or adapted accordingly.
 
-📎 A [visual documentation](https://github.com/laurauntner/wikidata-to-cidoc-crm/blob/main/works/works.png) of the works data model is included in the `works` folder.
+![Overview](https://github.com/laurauntner/wikidata-to-cidoc-crm/blob/main/works/works_simple.png?raw=true)
+
+📎 A complete [visual documentation](https://github.com/laurauntner/wikidata-to-cidoc-crm/blob/main/works/works.png) of the works data model is included in the `works` folder.
 
 <h3>Example Input</h3>
 
@@ -357,7 +363,9 @@ The [relations.py](https://github.com/laurauntner/wikidata-to-cidoc-crm/blob/mai
 The current data model focuses exclusively on textual works, but—based on INTRO—it could be extended to cover intermedial and interpictorial aspects as well. It also only models intertextual relationships among the texts listed in the CSV file, i.e. it assumes you’re seeking intertexts of known works rather than exploring every possible intertext. 
 Please also note that all searches are strictly one-way: Work → Phenomenon. 
 
-📎 A [visual documentation](https://github.com/laurauntner/wikidata-to-cidoc-crm/blob/main/relations/relations.png) of the relations data model is included in the `relations` folder.
+![Overview](https://github.com/laurauntner/wikidata-to-cidoc-crm/blob/main/relations/relations_simple.png?raw=true)
+
+📎 A complete [visual documentation](https://github.com/laurauntner/wikidata-to-cidoc-crm/blob/main/relations/relations.png) of the relations data model is included in the `relations` folder.
 
 🙏 Special thanks to [Bernhard Oberreither](https://github.com/BOberreither) for feedback.
 
@@ -865,8 +873,6 @@ The Python script assumes that the Turtle files to be merged already exist, so y
 
 <summary><h2>🔍 Map and Align Module </h2></summary>
 
-⚡ This module is still in development.
-
 Use this module to map and align the outputted Turtle files.
 
 The Python script assumes that the Turtle files to be mapped and aligned already exist, so you first have to run the other scripts.
@@ -893,6 +899,8 @@ Alignments with:
 - [MiMoText](https://data.mimotext.uni-trier.de/wiki/Main_Page)
 - [OntoPoetry](https://postdata.linhd.uned.es/results/ontopoetry-v2-0/)
 - [Schema.org](https://schema.org/)
+
+The full alignment table can be found [here](https://github.com/laurauntner/wikidata-to-cidoc-crm/blob/main/map-and-align/alignment_full.pdf).
 
 Despite overlaps in content, various ontologies were not considered because they are hardly used, not publicly accessible, or outdated. These include: DanteSources, Hypermedia Dante Network, HyperHamlet, SAWS. Also, the alignments focus specifically on those classes and properties that are important for the relations module.
 
