@@ -56,8 +56,6 @@ The [authors.py](https://github.com/laurauntner/wikidata-to-cidoc-crm/blob/main/
   - `E55_Type` (genders, derived from `wdt:P21`)
   - `E36_Visual_Item` (visual representations) and `E38_Image` (image reference with Wikimedia `seeAlso`, derived from `wdt:P18`)
 
-Please note that subclasses and subproperties are also queried.
-
 ![Overview](https://github.com/laurauntner/wikidata-to-cidoc-crm/blob/main/authors/authors_simple.png?raw=true)
 
 📎 A complete [visual documentation](https://github.com/laurauntner/wikidata-to-cidoc-crm/blob/main/authors/authors.png) of the authors data model is included in the `authors` folder.
@@ -176,8 +174,6 @@ The [works.py](https://github.com/laurauntner/wikidata-to-cidoc-crm/blob/main/wo
   - `E52_Time-Span` (publication years, derived from `wdt:P577`)
   - `E53_Place` (publication places, derived from `wdt:P291`)
 - `F5_Item` (specific copies of manifestations) and `F32_Item_Production_Event`
-
-Please note that subclasses and subproperties are also queried.
 
 Translators are not modeled per default, but the data model can, of course, be extended or adapted accordingly.
 
