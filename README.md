@@ -56,6 +56,8 @@ The [authors.py](https://github.com/laurauntner/wikidata-to-cidoc-crm/blob/main/
   - `E55_Type` (genders, derived from `wdt:P21`)
   - `E36_Visual_Item` (visual representations) and `E38_Image` (image reference with Wikimedia `seeAlso`, derived from `wdt:P18`)
 
+Please note that subclasses and subproperties are also queried.
+
 ![Overview](https://github.com/laurauntner/wikidata-to-cidoc-crm/blob/main/authors/authors_simple.png?raw=true)
 
 📎 A complete [visual documentation](https://github.com/laurauntner/wikidata-to-cidoc-crm/blob/main/authors/authors.png) of the authors data model is included in the `authors` folder.
@@ -174,6 +176,8 @@ The [works.py](https://github.com/laurauntner/wikidata-to-cidoc-crm/blob/main/wo
   - `E52_Time-Span` (publication years, derived from `wdt:P577`)
   - `E53_Place` (publication places, derived from `wdt:P291`)
 - `F5_Item` (specific copies of manifestations) and `F32_Item_Production_Event`
+
+Please note that subclasses and subproperties are also queried.
 
 Translators are not modeled per default, but the data model can, of course, be extended or adapted accordingly.
 
@@ -359,6 +363,8 @@ The [relations.py](https://github.com/laurauntner/wikidata-to-cidoc-crm/blob/mai
   - `INT_Topic`: derived from `wdt:P921` (main subject) for `wd:Q26256810` (topic)
   - with `INT2_ActualizationOfFeature` instances for specific expressions
     - with interpretations (`INT_Interpretation`) linked to the Wikidata items of the expressions via `prov:wasDerivedFrom`
+
+Please note that subclasses and subproperties are also queried.
 
 The current data model focuses exclusively on textual works, but—based on INTRO—it could be extended to cover intermedial and interpictorial aspects as well. It also only models intertextual relationships among the texts listed in the CSV file, i.e. it assumes you’re seeking intertexts of known works rather than exploring every possible intertext. 
 Please also note that all searches are strictly one-way: Work → Phenomenon. 
