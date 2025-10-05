@@ -138,15 +138,15 @@ Namespace declarations and mappings to CRM are applied but not shown in this exe
     ecrm:P7_took_place_at <https://sappho-digital.com/place/Q64> ;
     prov:wasDerivedFrom <http://www.wikidata.org/entity/Q469571> .
 
-<https://sappho-digital.com/place/Q64> a ecrm:E53_Place ;
-    rdfs:label "Berlin"@en ;
-    ecrm:P7i_witnessed <https://sappho-digital.com/birth/Q469571> ;
-    owl:sameAs <http://www.wikidata.org/entity/Q64> .
-
 <https://sappho-digital.com/place/Q659063> a ecrm:E53_Place ;
     rdfs:label "Gmina Skąpe"@en ;
-    ecrm:P7i_witnessed <https://sappho-digital.com/death/Q469571> ;
+    ecrm:P7i_witnessed <https://sappho-digital.com/birth/Q469571> ;
     owl:sameAs <http://www.wikidata.org/entity/Q659063> .
+
+<https://sappho-digital.com/place/Q64> a ecrm:E53_Place ;
+    rdfs:label "Berlin"@en ;
+    ecrm:P7i_witnessed <https://sappho-digital.com/death/Q469571> ;
+    owl:sameAs <http://www.wikidata.org/entity/Q64> .
 
 <https://sappho-digital.com/timespan/17221201> a ecrm:E52_Time-Span ;
     rdfs:label "1722-12-01"^^xsd:date ;
