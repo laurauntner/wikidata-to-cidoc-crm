@@ -1,0 +1,160 @@
+@prefix crm: <http://www.cidoc-crm.org/cidoc-crm/> .
+@prefix ecrm: <http://erlangen-crm.org/current/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<https://sappho-digital.com/ontology/authors> a owl:Ontology ;
+    owl:imports ecrm: .
+
+ecrm:E21_Person owl:equivalentClass crm:E21_Person .
+
+ecrm:E36_Visual_Item owl:equivalentClass crm:E36_Visual_Item .
+
+ecrm:E38_Image owl:equivalentClass crm:E38_Image .
+
+ecrm:E42_Identifier owl:equivalentClass crm:E42_Identifier .
+
+ecrm:E67_Birth owl:equivalentClass crm:E67_Birth .
+
+ecrm:E69_Death owl:equivalentClass crm:E69_Death .
+
+ecrm:E82_Actor_Appellation owl:equivalentClass crm:E82_Actor_Appellation .
+
+ecrm:P100_was_death_of owl:equivalentProperty crm:P100_was_death_of ;
+    owl:inverseOf ecrm:P100i_died_in .
+
+ecrm:P100i_died_in owl:equivalentProperty crm:P100i_died_in ;
+    owl:inverseOf ecrm:P100_was_death_of .
+
+ecrm:P131_is_identified_by owl:equivalentProperty crm:P131_is_identified_by ;
+    owl:inverseOf ecrm:P131i_identifies .
+
+ecrm:P131i_identifies owl:equivalentProperty crm:P131i_identifies ;
+    owl:inverseOf ecrm:P131_is_identified_by .
+
+ecrm:P138_represents owl:equivalentProperty crm:P138_represents ;
+    owl:inverseOf ecrm:P138i_has_representation .
+
+ecrm:P138i_has_representation owl:equivalentProperty crm:P138i_has_representation ;
+    owl:inverseOf ecrm:P138_represents .
+
+ecrm:P1_is_identified_by owl:equivalentProperty crm:P1_is_identified_by ;
+    owl:inverseOf ecrm:P1i_identifies .
+
+ecrm:P1i_identifies owl:equivalentProperty crm:P1i_identifies ;
+    owl:inverseOf ecrm:P1_is_identified_by .
+
+ecrm:P2_has_type owl:equivalentProperty crm:P2_has_type ;
+    owl:inverseOf ecrm:P2i_is_type_of .
+
+ecrm:P2i_is_type_of owl:equivalentProperty crm:P2i_is_type_of ;
+    owl:inverseOf ecrm:P2_has_type .
+
+ecrm:P4_has_time-span owl:equivalentProperty crm:P4_has_time-span ;
+    owl:inverseOf ecrm:P4i_is_time-span_of .
+
+ecrm:P4i_is_time-span_of owl:equivalentProperty crm:P4i_is_time-span_of ;
+    owl:inverseOf ecrm:P4_has_time-span .
+
+ecrm:P65_shows_visual_item owl:equivalentProperty crm:P65_shows_visual_item ;
+    owl:inverseOf ecrm:P65i_is_shown_by .
+
+ecrm:P65i_is_shown_by owl:equivalentProperty crm:P65i_is_shown_by ;
+    owl:inverseOf ecrm:P65_shows_visual_item .
+
+ecrm:P7_took_place_at owl:equivalentProperty crm:P7_took_place_at ;
+    owl:inverseOf ecrm:P7i_witnessed .
+
+ecrm:P7i_witnessed owl:equivalentProperty crm:P7i_witnessed ;
+    owl:inverseOf ecrm:P7_took_place_at .
+
+ecrm:P98_brought_into_life owl:equivalentProperty crm:P98_brought_into_life ;
+    owl:inverseOf ecrm:P98i_was_born .
+
+ecrm:P98i_was_born owl:equivalentProperty crm:P98i_was_born ;
+    owl:inverseOf ecrm:P98_brought_into_life .
+
+<https://sappho-digital.com/appellation/Q469571> a ecrm:E82_Actor_Appellation ;
+    rdfs:label "Anna Louisa Karsch"@en ;
+    ecrm:P131i_identifies <https://sappho-digital.com/person/Q469571> ;
+    prov:wasDerivedFrom <http://www.wikidata.org/entity/Q469571> .
+
+<https://sappho-digital.com/gender_type/wikidata> a ecrm:E55_Type ;
+    rdfs:label "Wikidata Gender"@en ;
+    ecrm:P2i_is_type_of <https://sappho-digital.com/gender/Q6581072> .
+
+<https://sappho-digital.com/id_type/wikidata> a ecrm:E55_Type ;
+    rdfs:label "Wikidata ID"@en ;
+    ecrm:P2i_is_type_of <https://sappho-digital.com/identifier/Q469571> .
+
+<https://sappho-digital.com/image/Q469571> a ecrm:E38_Image ;
+    ecrm:P65_shows_visual_item <https://sappho-digital.com/visual_item/Q469571> ;
+    rdfs:seeAlso <http://commons.wikimedia.org/wiki/Special:FilePath/Karschin%20bild.JPG> ;
+    prov:wasDerivedFrom <http://www.wikidata.org/entity/Q469571> .
+
+<https://sappho-digital.com/place/Q64> a ecrm:E53_Place ;
+    rdfs:label "Berlin"@en ;
+    ecrm:P7i_witnessed <https://sappho-digital.com/death/Q469571> ;
+    owl:sameAs <http://www.wikidata.org/entity/Q64> .
+
+<https://sappho-digital.com/place/Q659063> a ecrm:E53_Place ;
+    rdfs:label "Gmina Skąpe"@en ;
+    ecrm:P7i_witnessed <https://sappho-digital.com/birth/Q469571> ;
+    owl:sameAs <http://www.wikidata.org/entity/Q659063> .
+
+<https://sappho-digital.com/timespan/17221201> a ecrm:E52_Time-Span ;
+    rdfs:label "1722-12-01"^^xsd:date ;
+    ecrm:P4i_is_time-span_of <https://sappho-digital.com/birth/Q469571> .
+
+<https://sappho-digital.com/timespan/17911012> a ecrm:E52_Time-Span ;
+    rdfs:label "1791-10-12"^^xsd:date ;
+    ecrm:P4i_is_time-span_of <https://sappho-digital.com/death/Q469571> .
+
+ecrm:E52_Time-Span owl:equivalentClass crm:E52_Time-Span .
+
+ecrm:E53_Place owl:equivalentClass crm:E53_Place .
+
+<https://sappho-digital.com/gender/Q6581072> a ecrm:E55_Type ;
+    rdfs:label "female"@en ;
+    ecrm:P2_has_type <https://sappho-digital.com/gender_type/wikidata> ;
+    ecrm:P2i_is_type_of <https://sappho-digital.com/person/Q469571> ;
+    owl:sameAs <http://www.wikidata.org/entity/Q6581072> .
+
+<https://sappho-digital.com/identifier/Q469571> a ecrm:E42_Identifier ;
+    rdfs:label "Q469571" ;
+    ecrm:P1i_identifies <https://sappho-digital.com/person/Q469571> ;
+    ecrm:P2_has_type <https://sappho-digital.com/id_type/wikidata> .
+
+<https://sappho-digital.com/visual_item/Q469571> a ecrm:E36_Visual_Item ;
+    rdfs:label "Visual representation of Anna Louisa Karsch"@en ;
+    ecrm:P138_represents <https://sappho-digital.com/person/Q469571> ;
+    ecrm:P65i_is_shown_by <https://sappho-digital.com/image/Q469571> .
+
+ecrm:E55_Type owl:equivalentClass crm:E55_Type .
+
+<https://sappho-digital.com/birth/Q469571> a ecrm:E67_Birth ;
+    rdfs:label "Birth of Anna Louisa Karsch"@en ;
+    ecrm:P4_has_time-span <https://sappho-digital.com/timespan/17221201> ;
+    ecrm:P7_took_place_at <https://sappho-digital.com/place/Q659063> ;
+    ecrm:P98_brought_into_life <https://sappho-digital.com/person/Q469571> ;
+    prov:wasDerivedFrom <http://www.wikidata.org/entity/Q469571> .
+
+<https://sappho-digital.com/death/Q469571> a ecrm:E69_Death ;
+    rdfs:label "Death of Anna Louisa Karsch"@en ;
+    ecrm:P100_was_death_of <https://sappho-digital.com/person/Q469571> ;
+    ecrm:P4_has_time-span <https://sappho-digital.com/timespan/17911012> ;
+    ecrm:P7_took_place_at <https://sappho-digital.com/place/Q64> ;
+    prov:wasDerivedFrom <http://www.wikidata.org/entity/Q469571> .
+
+<https://sappho-digital.com/person/Q469571> a ecrm:E21_Person ;
+    rdfs:label "Anna Louisa Karsch"@en ;
+    ecrm:P100i_died_in <https://sappho-digital.com/death/Q469571> ;
+    ecrm:P131_is_identified_by <https://sappho-digital.com/appellation/Q469571> ;
+    ecrm:P138i_has_representation <https://sappho-digital.com/visual_item/Q469571> ;
+    ecrm:P1_is_identified_by <https://sappho-digital.com/identifier/Q469571> ;
+    ecrm:P2_has_type <https://sappho-digital.com/gender/Q6581072> ;
+    ecrm:P98i_was_born <https://sappho-digital.com/birth/Q469571> ;
+    owl:sameAs <http://www.wikidata.org/entity/Q469571> .
+
