@@ -42,10 +42,16 @@ pip install rdflib requests tqdm
 
 ## Usage
 
-Define your CSV and Turtle inputs by looking for `author-qids.csv` (authors module), `work-qids.csv` (works and relations modules), `authors.ttl`/`works.ttl`/`relations.ttl` (merge and map-and-align modules).
+### Inputs & defaults
 
-Run the scripts with:
+Each script has a small settings section at the top where you can change default paths. `map-and-align.py` is the exception: on start it asks which Turtle file to map/align and writes `*_mapped-and-aligned.ttl`. 
 
+`authors.py` writes `authors.ttl`, `works.py` writes `works.ttl`, `relations.py` writes `relations.ttl` and `merge.py` writes `all.ttl`. `merge.py` also accepts CLI flags.
+
+
+You can run all scripts with their defaults; adjust the constants at the top if your files live elsewhere.
+
+### Run
 ```
 python3 authors.py
 python3 works.py
