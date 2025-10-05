@@ -425,7 +425,10 @@ Further, it’s highly recommended to manually refine the generated triples afte
         <https://sappho-digital.com/actualization/place_ref/Q128087_Q1242002>,
         <https://sappho-digital.com/actualization/plot/Q134285870_Q1242002>,
         <https://sappho-digital.com/actualization/topic/Q10737_Q1242002> ;
-    intro:R30_hasTextPassage <https://sappho-digital.com/textpassage/Q1242002_Q119292643> .
+    intro:R30_hasTextPassage <https://sappho-digital.com/textpassage/Q1242002_Q119292643> ;
+    intro:R24i_isRelatedEntity <https://sappho-digital.com/relation/Q119292643_Q1242002>,
+            <https://sappho-digital.com/relation/Q120199245_Q1242002>,
+            <https://sappho-digital.com/relation/Q1242002_Q19179765> .
 
 <https://sappho-digital.com/expression/Q119292643> a lrmoo:F2_Expression ;
     rdfs:label "Expression of Sappho. Eine Novelle"@en ;
@@ -435,17 +438,20 @@ Further, it’s highly recommended to manually refine the generated triples afte
         <https://sappho-digital.com/actualization/plot/Q134285870_Q119292643>,
         <https://sappho-digital.com/actualization/topic/Q10737_Q119292643>,
         <https://sappho-digital.com/actualization/work_ref/Q1242002_Q119292643> ;
-    intro:R30_hasTextPassage <https://sappho-digital.com/textpassage/Q119292643_Q1242002> .
+    intro:R30_hasTextPassage <https://sappho-digital.com/textpassage/Q119292643_Q1242002> ;
+    intro:R24i_isRelatedEntity <https://sappho-digital.com/relation/Q119292643_Q1242002> .
 
 <https://sappho-digital.com/expression/Q19179765> a lrmoo:F2_Expression ;
     rdfs:label "Expression of Die Schwestern von Lesbos"@en ;
     owl:sameAs <http://www.wikidata.org/entity/Q19179765> ;
-    intro:R18_showsActualization <https://sappho-digital.com/actualization/place_ref/Q128087_Q19179765> .
+    intro:R18_showsActualization <https://sappho-digital.com/actualization/place_ref/Q128087_Q19179765> ;
+    intro:R24i_isRelatedEntity <https://sappho-digital.com/relation/Q1242002_Q19179765> .
 
 <https://sappho-digital.com/expression/Q120199245> a lrmoo:F2_Expression ;
     rdfs:label "Expression of Die moderne Sappho"@en ;
     owl:sameAs <http://www.wikidata.org/entity/Q120199245> ;
-    intro:R18_showsActualization <https://sappho-digital.com/actualization/character/Q17892_Q120199245> .
+    intro:R18_showsActualization <https://sappho-digital.com/actualization/character/Q17892_Q120199245> ;
+    intro:R24i_isRelatedEntity <https://sappho-digital.com/relation/Q120199245_Q1242002> .
 
 # Intertextual Relations
 
