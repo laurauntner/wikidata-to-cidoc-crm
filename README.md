@@ -42,6 +42,22 @@ pip install rdflib requests tqdm
 
 ---
 
+## Usage
+
+Define your CSV and Turtle inputs by looking for `author-qids.csv` (authors module), `work-qids.csv` (works and relations modules), `authors.ttl`/`works.ttl`/`relations.ttl` (merge and map-and-align modules).
+
+Run the scripts with:
+
+```
+python3 authors.py
+python3 works.py
+python3 relations.py
+python3 merge.py
+python3 map-and-align.py
+```
+
+---
+
 <details>
 <summary><h2>✍️ Authors Module (e/CRM)</h2></summary>
   
