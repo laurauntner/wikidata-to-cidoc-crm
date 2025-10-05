@@ -3,7 +3,6 @@ This script retrieves intertextual data from Wikidata based on a list of QIDs (f
 and transforms it into RDF triples according to INTRO, LRMoo/FRBRoo and CIDOC CRM (OWL/eCRM).
 
 The output is serialized as Turtle and written to 'relations.ttl'.
-
 """
 
 import csv
@@ -48,9 +47,6 @@ prov     = Namespace("http://www.w3.org/ns/prov#")
 
 # HTTP helpers
 def _parse_retry_after(header_val: str) -> Optional[float]:
-    """
-    Parse 'Retry-After' (seconds or HTTP-date). Return seconds as float, or None.
-    """
     if not header_val:
         return None
     header_val = header_val.strip()
@@ -65,9 +61,6 @@ def _parse_retry_after(header_val: str) -> Optional[float]:
         return None
 
 def make_session() -> requests.Session:
-    """
-    Create pooled session; manual retry control respects Retry-After fully.
-    """
     sess = requests.Session()
     sess.headers.update({"Accept": "application/sparql-results+json", "User-Agent": USER_AGENT})
     retry = Retry(
@@ -95,14 +88,10 @@ def http_request_with_retry(
     max_retries: int = MAX_RETRIES,
     timeout: int = HTTP_TIMEOUT,
 ) -> requests.Response:
-    """
-    Perform HTTP request; retry on 429/5xx. Respect Retry-After; otherwise gentle backoff.
-    """
     tries = 0
     while True:
         tries += 1
         resp = SESSION.request(method, url, params=params, headers=headers, timeout=timeout)
-
         if resp.status_code in ok_statuses:
             return resp
 
@@ -126,9 +115,6 @@ def http_request_with_retry(
         resp.raise_for_status()
 
 def run_sparql(query: str) -> dict:
-    """
-    Run a SPARQL query using the Retry-After-aware HTTP routine.
-    """
     resp = http_request_with_retry("GET", SPARQL_URL, params={"query": query})
     return resp.json()
 
@@ -162,8 +148,8 @@ def build_graph() -> Graph:
         ("prov", prov),
     ]:
         g.bind(prefix, ns)
-        g.bind("rdfs", RDFS)
-        g.bind("owl", OWL)
+    g.bind("rdfs", RDFS)
+    g.bind("owl", OWL)
 
     # Ontology
     ontology_uri = URIRef("https://sappho-digital.com/ontology/relations")
@@ -179,7 +165,7 @@ def build_graph() -> Graph:
     g.add((ID_TYPE, OWL.sameAs, URIRef(WD_ENTITY + "Q43649390")))
     return g
 
-# Helper functions
+# Helpers for nodes/links
 def add_identifier(g: Graph, entity: URIRef, qid: str):
     uri = URIRef(f"{sappho}identifier/{qid}")
     pure = qid.split("_")[-1]
@@ -207,13 +193,15 @@ def ensure_feature(
     label: str,
     path: str = "feature"
 ) -> URIRef:
-     uri = URIRef(f"{sappho}{path}/{qid}")
-     if (uri, None, None) not in g:
-         g.add((uri, RDF.type, cls))
-         g.add((uri, RDFS.label, Literal(label, lang="en")))
-         g.add((uri, OWL.sameAs, URIRef(WD_ENTITY + qid)))
-         add_identifier(g, uri, qid)
-     return uri
+    uri = URIRef(f"{sappho}{path}/{qid}")
+    if (uri, None, None) not in g:
+        g.add((uri, RDF.type, cls))
+        g.add((uri, RDFS.label, Literal(label, lang="en")))
+        # only add owl:sameAs for "entity-like" features (e.g., characters) – not for *reference* features
+        if "character" in path or "plot" in path or "motif" in path or "topic" in path:
+            g.add((uri, OWL.sameAs, URIRef(WD_ENTITY + qid)))
+        add_identifier(g, uri, qid)
+    return uri
 
 def add_interpretation(
     g: Graph,
@@ -221,7 +209,6 @@ def add_interpretation(
     label: str,
     derived_from: Union[URIRef, Iterable[URIRef]]
 ) -> Tuple[URIRef, URIRef]:
-
     tid      = str(target).split("/")[-1]
     feat_uri = URIRef(f"{sappho}feature/interpretation/{tid}")
     if (feat_uri, None, None) not in g:
@@ -243,33 +230,46 @@ def add_interpretation(
 
     g.add((act_uri, intro.R21_identifies, target))
     g.add((target, intro.R21i_isIdentifiedBy, act_uri))
-
     return feat_uri, act_uri
 
-def add_actualization(g: Graph, feature: URIRef, expression: URIRef, label: str, relation: URIRef):
+def add_actualization(g: Graph, feature: URIRef, expression: URIRef, label: str, relation: URIRef) -> URIRef:
+    """
+    Creates an actualization node for a (feature, expression) pair, links it up
+    with relation and expression, and returns the actualization URI.
+    """
     parts = str(feature).rstrip("/").split("/")
     parts = [p for p in parts if p != "feature"]
     typ = parts[-2]
     qid = parts[-1]
-    fid = f"{typ}/{qid}"
     eid = str(expression).split("/")[-1]
-    act = URIRef(f"{sappho}actualization/{fid}_{eid}")
+    act = URIRef(f"{sappho}actualization/{typ}/{qid}_{eid}")
     if any(g.triples((act, None, None))):
         return act
+
     g.add((act, RDF.type, intro.INT2_ActualizationOfFeature))
     g.add((act, RDFS.label, Literal(label, lang="en")))
+    # Feature ↔ Actualization
     g.add((feature, intro.R17i_featureIsActualizedIn, act))
     g.add((act, intro.R17_actualizesFeature, feature))
+    # Expression ↔ Actualization
     g.add((act, intro.R18i_actualizationFoundOn, expression))
     g.add((expression, intro.R18_showsActualization, act))
+    # Relation ↔ Actualization + Expression (and inverses)
     g.add((act, intro.R24i_isRelatedEntity, relation))
     g.add((relation, intro.R24_hasRelatedEntity, act))
     g.add((expression, intro.R24i_isRelatedEntity, relation))
     g.add((relation, intro.R24_hasRelatedEntity, expression))
-    feat_intp, act_intp = add_interpretation(
+
+    # Default interpretation of the actualization, source = expression itself
+    interp_label = label
+    prefix = "Reference to "
+    if interp_label.startswith(prefix):
+        interp_label = interp_label[len(prefix):]
+
+    add_interpretation(
         g,
         act,
-        f"Interpretation of {label}",
+        f"Interpretation of {interp_label}",
         URIRef(WD_ENTITY + eid)
     )
     return act
@@ -278,24 +278,21 @@ def get_or_create_int31_relation(g: Graph, expr1: URIRef, expr2: URIRef) -> Opti
     if expr1 == expr2:
         return None
     w1, w2 = str(expr1).split("/")[-1], str(expr2).split("/")[-1]
+    rel_uri = URIRef(f"{sappho}relation/{w1}_{w2}" if w1 < w2 else f"{sappho}relation/{w2}_{w1}")
 
-    if w1 < w2:
-        rel_uri = URIRef(f"{sappho}relation/{w1}_{w2}")
-    else:
-        rel_uri = URIRef(f"{sappho}relation/{w2}_{w1}")
+    l1, l2 = get_label(w1), get_label(w2)
+    a, b = sorted([l1, l2], key=str.casefold)
 
     if (rel_uri, RDF.type, intro.INT31_IntertextualRelation) not in g:
         g.add((rel_uri, RDF.type, intro.INT31_IntertextualRelation))
         g.add((rel_uri, RDFS.label,
-               Literal(f"Intertextual relation between {get_label(w1)} and {get_label(w2)}", lang="en")))
-
-        feat_intp, act_intp = add_interpretation(
+               Literal(f"Intertextual relation between {a} and {b}", lang="en")))
+        add_interpretation(
             g,
             rel_uri,
-            f"Interpretation of intertextual relation between {get_label(w1)} and {get_label(w2)}",
+            f"Interpretation of intertextual relation between {a} and {b}",
             [expr1, expr2]
         )
-        
     return rel_uri
 
 # Processors
@@ -337,16 +334,14 @@ SELECT DISTINCT ?w1 ?w2 ?p WHERE {{
         w1 = row["w1"]["value"].rsplit("/",1)[-1]
         w2 = row["w2"]["value"].rsplit("/",1)[-1]
         p  = row["p"]["value"].rsplit("/",1)[-1]
-        if w1 == w2:
-            continue
-        tripel.append((w1, w2, p))
+        if w1 != w2:
+            tripel.append((w1, w2, p))
     for row in run_sparql(sparql_bwd)["results"]["bindings"]:
         w1 = row["w1"]["value"].rsplit("/",1)[-1]
         w2 = row["w2"]["value"].rsplit("/",1)[-1]
         p  = row["p"]["value"].rsplit("/",1)[-1]
-        if w1 == w2:
-            continue
-        tripel.append((w1, w2, p))
+        if w1 != w2:
+            tripel.append((w1, w2, p))
 
     seen = set()
     for w1, w2, p in tripel:
@@ -354,18 +349,11 @@ SELECT DISTINCT ?w1 ?w2 ?p WHERE {{
         if key in seen:
             continue
         seen.add(key)
-
-        uri = f"{w1}_{w2}" if w1 < w2 else f"{w2}_{w1}"
-        rel = URIRef(f"{sappho}relation/{uri}")
-
-        if (rel, RDF.type, intro.INT31_IntertextualRelation) not in g:
-            g.add((rel, RDF.type, intro.INT31_IntertextualRelation))
-            g.add((rel, RDFS.label,
-                   Literal(f"Intertextual relation ({p}) between {get_label(w1)} and {get_label(w2)}", lang="en")))
+        rel = get_or_create_int31_relation(g, ensure_expression(g, w1, get_label(w1)),
+                                              ensure_expression(g, w2, get_label(w2)))
 
 def process_plots(g: Graph, qids: List[str]):
     vals = " ".join(f"wd:{q}" for q in qids)
-
     query = f"""
 PREFIX wdt: <http://www.wikidata.org/prop/direct/>
 PREFIX wd:   <http://www.wikidata.org/entity/>
@@ -406,8 +394,7 @@ SELECT ?wrk ?tgt WHERE {{
             expr1 = ensure_expression(g, w1, get_label(w1))
             expr2 = ensure_expression(g, w2, get_label(w2))
             rel   = get_or_create_int31_relation(g, expr1, expr2)
-            if rel is None:
-                continue
+            if rel is None: continue
 
             if (feat, intro.R22_providesSimilarityForRelation, rel) not in g:
                 g.add((feat, intro.R22_providesSimilarityForRelation, rel))
@@ -418,7 +405,6 @@ SELECT ?wrk ?tgt WHERE {{
 
 def process_topics(g: Graph, qids: List[str]):
     vals = " ".join(f"wd:{q}" for q in qids)
-
     query = f"""
 PREFIX wdt: <http://www.wikidata.org/prop/direct/>
 PREFIX wd:   <http://www.wikidata.org/entity/>
@@ -450,24 +436,22 @@ SELECT ?wrk ?tgt WHERE {{
         mp.setdefault(t, []).append(w)
 
     for tgt, works in mp.items():
-            raw_lbl = get_label(tgt)
-            feat_lbl = f"{raw_lbl} (topic)"
-            feat = ensure_feature(g, tgt, intro.INT_Topic, feat_lbl, path="feature/topic")
+        raw_lbl = get_label(tgt)
+        feat_lbl = f"{raw_lbl} (topic)"
+        feat = ensure_feature(g, tgt, intro.INT_Topic, feat_lbl, path="feature/topic")
 
-            for w1, w2 in combinations(works, 2):
-                expr1 = ensure_expression(g, w1, get_label(w1))
-                expr2 = ensure_expression(g, w2, get_label(w2))
+        for w1, w2 in combinations(works, 2):
+            expr1 = ensure_expression(g, w1, get_label(w1))
+            expr2 = ensure_expression(g, w2, get_label(w2))
+            rel = get_or_create_int31_relation(g, expr1, expr2)
+            if rel is None: continue
 
-                rel = get_or_create_int31_relation(g, expr1, expr2)
-                if rel is None:
-                    continue
+            if (feat, intro.R22_providesSimilarityForRelation, rel) not in g:
+                g.add((feat, intro.R22_providesSimilarityForRelation, rel))
+                g.add((rel, intro.R22i_relationIsBasedOnSimilarity, feat))
 
-                if (feat, intro.R22_providesSimilarityForRelation, rel) not in g:
-                    g.add((feat, intro.R22_providesSimilarityForRelation, rel))
-                    g.add((rel, intro.R22i_relationIsBasedOnSimilarity, feat))
-
-                add_actualization(g, feat, expr1, f"{raw_lbl} in {get_label(w1)}", rel)
-                add_actualization(g, feat, expr2, f"{raw_lbl} in {get_label(w2)}", rel)
+            add_actualization(g, feat, expr1, f"{raw_lbl} in {get_label(w1)}", rel)
+            add_actualization(g, feat, expr2, f"{raw_lbl} in {get_label(w2)}", rel)
 
 def process_motifs(g: Graph, qids: List[str]):
     vals = " ".join(f"wd:{q}" for q in qids)
@@ -508,10 +492,8 @@ SELECT ?wrk ?motif WHERE {{
         for w1, w2 in combinations(works, 2):
             expr1 = ensure_expression(g, w1, get_label(w1))
             expr2 = ensure_expression(g, w2, get_label(w2))
-
             rel = get_or_create_int31_relation(g, expr1, expr2)
-            if rel is None:
-                continue
+            if rel is None: continue
 
             if (feat, intro.R22_providesSimilarityForRelation, rel) not in g:
                 g.add((feat, intro.R22_providesSimilarityForRelation, rel))
@@ -544,39 +526,33 @@ SELECT DISTINCT ?wrk ?pers WHERE {{
     for p, works in mp.items():
         if len(works) < 2:
             continue
-
         name  = get_label(p)
         p_uri = URIRef(f"{sappho}person/{p}")
-
-        g.add((p_uri, RDF.type, ecrm.E21_Person))
-        g.add((p_uri, RDFS.label, Literal(name, lang="en")))
-        g.add((p_uri, OWL.sameAs, URIRef(WD_ENTITY + p)))
-        add_identifier(g, p_uri, p)  
+        if (p_uri, RDF.type, ecrm.E21_Person) not in g:
+            g.add((p_uri, RDF.type, ecrm.E21_Person))
+            g.add((p_uri, RDFS.label, Literal(name, lang="en")))
+            g.add((p_uri, OWL.sameAs, URIRef(WD_ENTITY + p)))
+            add_identifier(g, p_uri, p)
 
         feat = URIRef(f"{sappho}feature/person_ref/{p}")
         if (feat, None, None) not in g:
             g.add((feat, RDF.type, intro.INT18_Reference))
-            g.add((feat, RDFS.label,
-                   Literal(f"Reference to {name} (person)", lang="en")))
+            g.add((feat, RDFS.label, Literal(f"Reference to {name} (person)", lang="en")))
 
         for w1, w2 in combinations(sorted(works), 2):
             expr1 = ensure_expression(g, w1, get_label(w1))
             expr2 = ensure_expression(g, w2, get_label(w2))
-
             rel = get_or_create_int31_relation(g, expr1, expr2)
-            if rel is None:
-                continue
+            if rel is None: continue
 
             if (feat, intro.R22_providesSimilarityForRelation, rel) not in g:
                 g.add((feat, intro.R22_providesSimilarityForRelation, rel))
                 g.add((rel, intro.R22i_relationIsBasedOnSimilarity, feat))
 
-            add_actualization(g, feat, expr1, f"{name} in {get_label(w1)}", rel)
             act1 = add_actualization(g, feat, expr1, f"Reference to {name} in {get_label(w1)}", rel)
             g.add((act1, ecrm.P67_refers_to, p_uri))
             g.add((p_uri,  ecrm.P67i_is_referred_to_by, act1))
 
-            add_actualization(g, feat, expr2, f"{name} in {get_label(w2)}", rel)
             act2 = add_actualization(g, feat, expr2, f"Reference to {name} in {get_label(w2)}", rel)
             g.add((act2, ecrm.P67_refers_to, p_uri))
             g.add((p_uri,  ecrm.P67i_is_referred_to_by, act2))
@@ -604,54 +580,46 @@ SELECT DISTINCT ?wrk ?place WHERE {{
     for pl, works in mp.items():
         if len(works) < 2:
             continue
-
         name  = get_label(pl)
         p_uri = URIRef(f"{sappho}place/{pl}")
-        g.add((p_uri, RDF.type, ecrm.E53_Place))
-        g.add((p_uri, RDFS.label, Literal(name, lang="en")))
-        g.add((p_uri, OWL.sameAs, URIRef(WD_ENTITY + pl)))
-        add_identifier(g, p_uri, pl) 
+        if (p_uri, RDF.type, ecrm.E53_Place) not in g:
+            g.add((p_uri, RDF.type, ecrm.E53_Place))
+            g.add((p_uri, RDFS.label, Literal(name, lang="en")))
+            g.add((p_uri, OWL.sameAs, URIRef(WD_ENTITY + pl)))
+            add_identifier(g, p_uri, pl)
 
         feat = URIRef(f"{sappho}feature/place_ref/{pl}")
         if (feat, None, None) not in g:
             g.add((feat, RDF.type, intro.INT18_Reference))
-            g.add((feat, RDFS.label,
-                   Literal(f"Reference to {name} (place)", lang="en")))
+            g.add((feat, RDFS.label, Literal(f"Reference to {name} (place)", lang="en")))
 
         for w1, w2 in combinations(sorted(works), 2):
             expr1 = ensure_expression(g, w1, get_label(w1))
             expr2 = ensure_expression(g, w2, get_label(w2))
             rel   = get_or_create_int31_relation(g, expr1, expr2)
-            if rel is None:
-                continue
-            
+            if rel is None: continue
+
             if (feat, intro.R22_providesSimilarityForRelation, rel) not in g:
                 g.add((feat, intro.R22_providesSimilarityForRelation, rel))
                 g.add((rel, intro.R22i_relationIsBasedOnSimilarity, feat))
 
-            add_actualization(g, feat, expr1, f"{name} in {get_label(w1)}", rel)
-            fid = str(feat).split("/")[-1]
-            eid = str(expr1).split("/")[-1]
-            act1 = URIRef(f"{sappho}actualization/place_ref/{fid}_{eid}")
+            act1 = add_actualization(g, feat, expr1, f"Reference to {name} in {get_label(w1)}", rel)
             g.add((act1, ecrm.P67_refers_to, p_uri))
             g.add((p_uri,  ecrm.P67i_is_referred_to_by, act1))
 
-            add_actualization(g, feat, expr2, f"{name} in {get_label(w2)}", rel)
-            eid = str(expr2).split("/")[-1]
-            act2 = URIRef(f"{sappho}actualization/place_ref/{fid}_{eid}")
+            act2 = add_actualization(g, feat, expr2, f"Reference to {name} in {get_label(w2)}", rel)
             g.add((act2, ecrm.P67_refers_to, p_uri))
             g.add((p_uri,  ecrm.P67i_is_referred_to_by, act2))
 
 def process_work_references(g: Graph, qids: List[str]):
     vals = " ".join(f"wd:{q}" for q in qids)
-
     sparql = f"""
 PREFIX wdt: <http://www.wikidata.org/prop/direct/>
 PREFIX wd:   <http://www.wikidata.org/entity/>
 PREFIX wikibase: <http://wikiba.se/ontology#>
 SELECT DISTINCT ?src ?tgt WHERE {{
   VALUES ?src {{ {vals} }}
-  ?prop wdt:P1647* wd:P921 ;
+  ?prop wdt:P1647* wd:P921 ;        
         wikibase:directClaim ?p .
   ?src ?p ?tgt .
   FILTER(STRSTARTS(STR(?tgt), "http://www.wikidata.org/entity/Q"))
@@ -659,53 +627,45 @@ SELECT DISTINCT ?src ?tgt WHERE {{
 """
     binds = run_sparql(sparql)["results"]["bindings"]
 
-    all_srcs = {
-        row["src"]["value"].rsplit("/", 1)[-1]
-        for row in binds
-        if row["src"]["value"].rsplit("/", 1)[-1] in qids
-    }
-
-    ref_map: Dict[str, set] = {}
+    by_target: Dict[str, set] = {}
     for row in binds:
-        src = row["src"]["value"].rsplit("/", 1)[-1]
-        tgt = row["tgt"]["value"].rsplit("/", 1)[-1]
-        if src in qids and tgt in qids and tgt not in all_srcs:
-            ref_map.setdefault(src, set()).add(tgt)
+        source = row["src"]["value"].rsplit("/", 1)[-1]  
+        target = row["tgt"]["value"].rsplit("/", 1)[-1]
+        if source in qids and target in qids:
+            by_target.setdefault(target, set()).add(source)
 
-    for src, tgts in ref_map.items():
-        src_lbl   = get_label(src)
-        feat = URIRef(f"{sappho}feature/work_ref/{src}")
-        if (feat, RDF.type, intro.INT18_Reference) not in g:
+    for target, sources in by_target.items():
+        tgt_lbl  = get_label(target)
+        src_exprs = []
+
+        feat = URIRef(f"{sappho}feature/work_ref/{target}")
+        if (feat, None, None) not in g:
             g.add((feat, RDF.type, intro.INT18_Reference))
-            g.add((feat, RDFS.label,
-                   Literal(f"Reference to {src_lbl} (expression)", lang="en")))
+            g.add((feat, RDFS.label, Literal(f"Reference to {tgt_lbl} (expression)", lang="en")))
 
-        expr_src = ensure_expression(g, src, src_lbl)
+        expr_tgt = ensure_expression(g, target, tgt_lbl)
 
-        for tgt in sorted(tgts):
-            tgt_lbl  = get_label(tgt)
-            expr_tgt = ensure_expression(g, tgt, tgt_lbl)
-            rel      = get_or_create_int31_relation(g, expr_src, expr_tgt)
+        for source in sorted(sources):
+            src_lbl  = get_label(source)
+            expr_src = ensure_expression(g, source, src_lbl)
+
+            rel = get_or_create_int31_relation(g, expr_src, expr_tgt)
             if rel is None:
                 continue
 
             if (feat, intro.R22_providesSimilarityForRelation, rel) not in g:
                 g.add((feat, intro.R22_providesSimilarityForRelation, rel))
-                g.add((rel, intro.R22i_relationIsBasedOnSimilarity, feat))
+                g.add((rel,  intro.R22i_relationIsBasedOnSimilarity, feat))
 
-            add_actualization(
+            act = add_actualization(
                 g,
                 feat,
-                expr_tgt,
-                f"{src_lbl} in {tgt_lbl}",
+                expr_src,
+                f"Reference to {tgt_lbl} in {src_lbl}",
                 rel
             )
-            
-            fid = str(feat).split("/")[-1]
-            eid = str(expr_tgt).split("/")[-1]
-            act = URIRef(f"{sappho}actualization/work_ref/{fid}_{eid}")
-            g.add((act, ecrm.P67_refers_to, expr_src))
-            g.add((expr_src, ecrm.P67i_is_referred_to_by, act))
+            g.add((act,      ecrm.P67_refers_to,          expr_tgt))
+            g.add((expr_tgt, ecrm.P67i_is_referred_to_by, act))
 
 def ensure_person_reference(g: Graph, char_qid: str):
     p_uri  = URIRef(f"{sappho}person/{char_qid}")
@@ -720,9 +680,7 @@ def ensure_person_reference(g: Graph, char_qid: str):
 
     if (feat, RDF.type, intro.INT18_Reference) not in g:
         g.add((feat, RDF.type, intro.INT18_Reference))
-        g.add((feat, RDFS.label,
-               Literal(f"Reference to {name} (person)", lang="en")))
-
+        g.add((feat, RDFS.label, Literal(f"Reference to {name} (person)", lang="en")))
     return p_uri, feat
 
 def process_characters(g: Graph, qids: List[str]):
@@ -762,7 +720,6 @@ SELECT DISTINCT ?wrk ?char WHERE {{
             continue
 
         lbl = get_label(char)
-        
         is_person = run_sparql(f"""
           SELECT ?x WHERE {{
             wd:{char} wdt:P31/wdt:P279* wd:Q5.
@@ -783,10 +740,8 @@ SELECT DISTINCT ?wrk ?char WHERE {{
         for w1, w2 in combinations(sorted(works), 2):
             expr1 = ensure_expression(g, w1, get_label(w1))
             expr2 = ensure_expression(g, w2, get_label(w2))
-
             rel = get_or_create_int31_relation(g, expr1, expr2)
-            if rel is None:
-                continue
+            if rel is None: continue
 
             if (feat, intro.R22_providesSimilarityForRelation, rel) not in g:
                 g.add((feat, intro.R22_providesSimilarityForRelation, rel))
@@ -799,9 +754,9 @@ SELECT DISTINCT ?wrk ?char WHERE {{
                 for act in (act1, act2):
                     g.add((act, ecrm.P67_refers_to, p_node))
                     g.add((p_node, ecrm.P67i_is_referred_to_by, act))
-            
+
             for act, expr, work in ((act1, expr1, w1), (act2, expr2, w2)):
-                feat_intp, act_intp = add_interpretation(
+                add_interpretation(
                     g,
                     act,
                     f"Interpretation of {lbl} in {get_label(work)}",
@@ -810,53 +765,57 @@ SELECT DISTINCT ?wrk ?char WHERE {{
 
 def process_citations(g: Graph, qids: List[str]):
     vals = " ".join(f"wd:{q}" for q in qids)
-
-    q1 = f"""
+    sparql = f"""
 PREFIX wdt: <http://www.wikidata.org/prop/direct/>
 PREFIX wd:   <http://www.wikidata.org/entity/>
 PREFIX wikibase: <http://wikiba.se/ontology#>
 SELECT DISTINCT ?src ?tgt WHERE {{
-  VALUES ?src {{ {vals} }}
-  VALUES ?tgt {{ {vals} }}
-  VALUES ?base {{ wd:P2860 wd:P6166 }}
+  VALUES ?src {{ {vals} }}  
+  VALUES ?tgt {{ {vals} }}  
+  VALUES ?base {{ wd:P2860 wd:P6166 }}  
   ?prop wdt:P1647* ?base ;
         wikibase:directClaim ?p .
   ?tgt ?p ?src .
 }}
-""" 
-    binds = run_sparql(q1)["results"]["bindings"]
+"""
+    rows = run_sparql(sparql)["results"]["bindings"]
 
-    pair_set = set()
-    for row in binds:
-        s = row["src"]["value"].rsplit("/",1)[-1]
-        t = row["tgt"]["value"].rsplit("/",1)[-1]
-        pair_set.add(tuple(sorted((s, t))))
+    undirected_keys = set()
+    directed_pairs  = []
+    for b in rows:
+        src = b["src"]["value"].rsplit("/", 1)[-1]
+        tgt = b["tgt"]["value"].rsplit("/", 1)[-1]
+        if src == tgt:
+            continue
+        directed_pairs.append((src, tgt))
 
-    for w1, w2 in pair_set:
-        expr1 = ensure_expression(g, w1, get_label(w1))
-        expr2 = ensure_expression(g, w2, get_label(w2))
-        rel   = get_or_create_int31_relation(g, expr1, expr2)
+    for src, tgt in directed_pairs:
+        key = tuple(sorted((src, tgt)))
+        if key in undirected_keys:
+            continue
+        undirected_keys.add(key)
+
+        expr_src = ensure_expression(g, src, get_label(src))
+        expr_tgt = ensure_expression(g, tgt, get_label(tgt))
+        rel = get_or_create_int31_relation(g, expr_src, expr_tgt)
         if rel is None:
             continue
 
-        for X, expr in ((w1, expr1), (w2, expr2)):
-            tp_qid  = f"{X}_{(w2 if X==w1 else w1)}"
-            tp_uri  = URIRef(f"{sappho}textpassage/{tp_qid}")
-            tp_label = f"Text passage in {get_label(X)}"
-
+        def add_textpassage_for(host_qid: str, other_qid: str, derived_from_target: str):
+            host_lbl  = get_label(host_qid)
+            host_expr = ensure_expression(g, host_qid, host_lbl)
+            tp_uri    = URIRef(f"{sappho}textpassage/{host_qid}_{other_qid}")
             if (tp_uri, None, None) not in g:
                 g.add((tp_uri, RDF.type, intro.INT21_TextPassage))
-                g.add((tp_uri, RDFS.label, Literal(tp_label, lang="en")))
-                
-                other_qid = w2 if X == w1 else w1
-                wd_uri    = URIRef(WD_ENTITY + other_qid)
-                g.add((tp_uri, prov.wasDerivedFrom, wd_uri))
+                g.add((tp_uri, RDFS.label, Literal(f"Text passage in {host_lbl}", lang="en")))
+                g.add((tp_uri, prov.wasDerivedFrom, URIRef(WD_ENTITY + derived_from_target)))
+            g.add((host_expr, intro.R30_hasTextPassage, tp_uri))
+            g.add((tp_uri,    intro.R30i_isTextPassageOf, host_expr))
+            g.add((rel,       intro.R24_hasRelatedEntity, tp_uri))
+            g.add((tp_uri,    intro.R24i_isRelatedEntity, rel))
 
-            g.add((expr, intro.R30_hasTextPassage, tp_uri))
-            g.add((tp_uri, intro.R30i_isTextPassageOf, expr))
-
-            g.add((rel, intro.R24_hasRelatedEntity, tp_uri))
-            g.add((tp_uri, intro.R24i_isRelatedEntity, rel))
+        add_textpassage_for(tgt, src, tgt)  
+        add_textpassage_for(src, tgt, tgt) 
 
 # CLI / Entry
 def parse_args(argv=None):
@@ -883,15 +842,16 @@ def main(argv=None) -> int:
         process_citations,
         process_topics,
         process_motifs,
+        process_person, 
         process_place,
         process_characters,
-        process_work_references
+        process_work_references,
     ]
 
     for fn in tqdm(processors, unit="task"):
         fn(g, qids)
-    
-    # Mapping
+
+    # Mapping ECRM ↔ CRM + inverses
     ecrm_classes = [
         "E21_Person",
         "E42_Identifier",
@@ -903,15 +863,16 @@ def main(argv=None) -> int:
 
     ecrm_props = [
         ("P1_is_identified_by",  "P1i_identifies"),
-        ("P2_has_type",           "P2i_is_type_of"),
-        ("P67_refers_to",         "P67i_is_referred_to_by"),
+        ("P2_has_type",          "P2i_is_type_of"),
+        ("P67_refers_to",        "P67i_is_referred_to_by"),
     ]
     for direct, inverse in ecrm_props:
         g.add((ecrm[direct],  OWL.equivalentProperty, crm[direct]))
         g.add((ecrm[inverse], OWL.equivalentProperty, crm[inverse]))
         g.add((ecrm[direct],  OWL.inverseOf, ecrm[inverse]))
         g.add((ecrm[inverse], OWL.inverseOf, ecrm[direct]))
-    
+
+    # FRBRoo/eFRBRoo mapping for Expressions (wie in deinen Sets)
     g.add((lrmoo.F2_Expression, OWL.equivalentClass, frbroo.F2_Expression))
     g.add((lrmoo.F2_Expression, OWL.equivalentClass, efrbroo.F2_Expression))
 
