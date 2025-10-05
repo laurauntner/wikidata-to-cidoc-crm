@@ -648,7 +648,7 @@ def main():
 
     # get younger and older expressions and text passages
     directions = []
-    
+
     for rel in g.subjects(RDF.type, INTRO.INT31_IntertextualRelation):
         tp_expr = []
         for tp in g.objects(rel, INTRO.R24_hasRelatedEntity):
@@ -679,6 +679,11 @@ def main():
             older_tp,    younger_tp    = tp2,    tp1
 
         directions.append((younger_expr, older_expr, younger_tp, older_tp))
+        
+        g.add((rel, INTRO.R13_hasReferringEntity, younger_expr))
+        g.add((younger_expr, INTRO.R13i_isReferringEntity, rel))
+        g.add((rel, INTRO.R12_hasReferredToEntity, older_expr))
+        g.add((older_expr, INTRO.R12i_isReferredToEntity, rel))
     
     # sappho_prop:expr_relation: expressions that are linked via intro:INT31 will be linked via this property
     if any(g.triples((None, RDF.type, INTRO.INT31_IntertextualRelation))):
@@ -702,13 +707,6 @@ def main():
         g.add((SAPPHO_PROP.expr_relation, SKOS.closeMatch, MIMOTEXT.P34))  # relation
         g.add((SAPPHO_PROP.expr_relation, RDFS.domain, LRMOO.F2_Expression))
         g.add((SAPPHO_PROP.expr_relation, RDFS.range,  LRMOO.F2_Expression))
-        
-        # add directions to intro:INT31_IntertextualRelation
-
-        g.add((rel, INTRO.R13_hasReferringEntity, younger_expr))
-        g.add((younger_expr, INTRO.R13i_isReferringEntity, rel))
-        g.add((rel, INTRO.R12_hasReferredToEntity, older_expr))
-        g.add((older_expr, INTRO.R12i_isReferredToEntity, rel))
 
         for rel in g.subjects(RDF.type, INTRO.INT31_IntertextualRelation):
             acts = list(g.objects(rel, INTRO.R24_hasRelatedEntity))
