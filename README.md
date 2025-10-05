@@ -237,7 +237,6 @@ Namespace declarations and mappings to CRM, FRBRoo and eFRBRoo are applied but n
 <https://sappho-digital.com/person/Q154438> a ecrm:E21_Person ;
     rdfs:label "Franz Grillparzer" ;
     ecrm:P14i_performed <https://sappho-digital.com/manifestation_creation/Q1242002>,
-        <https://sappho-digital.com/work/Q1242002>,
         <https://sappho-digital.com/work_creation/Q1242002> ;
     owl:sameAs <http://www.wikidata.org/entity/Q154438> .
 
