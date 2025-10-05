@@ -677,13 +677,13 @@ Further, it’s highly recommended to manually refine the generated triples afte
 
 <https://sappho-digital.com/textpassage/Q119292643_Q1242002> a intro:INT21_TextPassage ;
     rdfs:label "Text passage in Sappho. Eine Novelle"@en ;
-    prov:wasDerivedFrom <http://www.wikidata.org/entity/Q1242002> ;
+    prov:wasDerivedFrom <http://www.wikidata.org/entity/Q119292643> ;
     intro:R24i_isRelatedEntity <https://sappho-digital.com/relation/Q119292643_Q1242002> ;
     intro:R30i_isTextPassageOf <https://sappho-digital.com/expression/Q119292643> .
 
 <https://sappho-digital.com/textpassage/Q1242002_Q119292643> a intro:INT21_TextPassage ;
     rdfs:label "Text passage in Sappho"@en ;
-    prov:wasDerivedFrom <http://www.wikidata.org/entity/Q1242002> ;
+    prov:wasDerivedFrom <http://www.wikidata.org/entity/Q119292643> ;
     intro:R24i_isRelatedEntity <https://sappho-digital.com/relation/Q119292643_Q1242002> ;
     intro:R30i_isTextPassageOf <https://sappho-digital.com/expression/Q1242002> .
 
