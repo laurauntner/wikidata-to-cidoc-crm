@@ -9,9 +9,6 @@
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
-<https://sappho-digital.com/feature/person_ref/Q17892> a intro:INT18_Reference ;
-    rdfs:label "Reference to Sappho (person)"@en .
-
 <https://sappho-digital.com/ontology/all> a owl:Ontology ;
     owl:imports ecrm:,
         <https://cidoc-crm.org/extensions/lrmoo/owl/1.0/LRMoo_v1.0.owl>,
@@ -221,12 +218,28 @@ lrmoo:R7i_is_exemplified_by owl:equivalentProperty efrbroo:R7i_has_example,
     intro:R17i_featureIsActualizedIn <https://sappho-digital.com/actualization/interpretation/Q10737_Q1242002> .
 
 <https://sappho-digital.com/feature/interpretation/Q119292643_Q1242002> a intro:INT_Interpretation ;
-    rdfs:label "Interpretation of intertextual relation between Sappho. Eine Novelle and Sappho"@en ;
+    rdfs:label "Interpretation of intertextual relation between Sappho and Sappho. Eine Novelle"@en ;
     intro:R17i_featureIsActualizedIn <https://sappho-digital.com/actualization/interpretation/Q119292643_Q1242002> .
 
 <https://sappho-digital.com/feature/interpretation/Q120199245_Q1242002> a intro:INT_Interpretation ;
     rdfs:label "Interpretation of intertextual relation between Die moderne Sappho and Sappho"@en ;
     intro:R17i_featureIsActualizedIn <https://sappho-digital.com/actualization/interpretation/Q120199245_Q1242002> .
+
+<https://sappho-digital.com/feature/interpretation/Q1242002_Q119292643> a intro:INT_Interpretation ;
+    rdfs:label "Interpretation of Sappho in Sappho. Eine Novelle"@en ;
+    intro:R17i_featureIsActualizedIn <https://sappho-digital.com/actualization/interpretation/Q1242002_Q119292643> .
+
+<https://sappho-digital.com/feature/interpretation/Q1242002_Q19179765> a intro:INT_Interpretation ;
+    rdfs:label "Interpretation of intertextual relation between Die Schwestern von Lesbos and Sappho"@en ;
+    intro:R17i_featureIsActualizedIn <https://sappho-digital.com/actualization/interpretation/Q1242002_Q19179765> .
+
+<https://sappho-digital.com/feature/interpretation/Q128087_Q1242002> a intro:INT_Interpretation ;
+    rdfs:label "Interpretation of Lesbos in Sappho"@en ;
+    intro:R17i_featureIsActualizedIn <https://sappho-digital.com/actualization/interpretation/Q128087_Q1242002> .
+
+<https://sappho-digital.com/feature/interpretation/Q128087_Q19179765> a intro:INT_Interpretation ;
+    rdfs:label "Interpretation of Lesbos in Die Schwestern von Lesbos"@en ;
+    intro:R17i_featureIsActualizedIn <https://sappho-digital.com/actualization/interpretation/Q128087_Q19179765> .
 
 <https://sappho-digital.com/feature/interpretation/Q134285870_Q119292643> a intro:INT_Interpretation ;
     rdfs:label "Interpretation of Sappho’s Leap in Sappho. Eine Novelle"@en ;
@@ -244,6 +257,10 @@ lrmoo:R7i_is_exemplified_by owl:equivalentProperty efrbroo:R7i_has_example,
     rdfs:label "Interpretation of sea in Sappho"@en ;
     intro:R17i_featureIsActualizedIn <https://sappho-digital.com/actualization/interpretation/Q165_Q1242002> .
 
+<https://sappho-digital.com/feature/interpretation/Q17892_Q119292643> a intro:INT_Interpretation ;
+    rdfs:label "Interpretation of Sappho in Sappho. Eine Novelle"@en ;
+    intro:R17i_featureIsActualizedIn <https://sappho-digital.com/actualization/interpretation/Q17892_Q119292643> .
+
 <https://sappho-digital.com/feature/interpretation/Q17892_Q120199245> a intro:INT_Interpretation ;
     rdfs:label "Interpretation of Sappho in Die moderne Sappho"@en ;
     intro:R17i_featureIsActualizedIn <https://sappho-digital.com/actualization/interpretation/Q17892_Q120199245> .
@@ -258,7 +275,7 @@ lrmoo:R7i_is_exemplified_by owl:equivalentProperty efrbroo:R7i_has_example,
 
 <https://sappho-digital.com/genre_type/wikidata> a ecrm:E55_Type ;
     rdfs:label "Wikidata Genre"@en ;
-    ecrm:P2_is_type_of <https://sappho-digital.com/genre/Q80930> .
+    ecrm:P2i_is_type_of <https://sappho-digital.com/genre/Q80930> .
 
 <https://sappho-digital.com/image/Q469571> a ecrm:E38_Image ;
     ecrm:P65_shows_visual_item <https://sappho-digital.com/visual_item/Q469571> ;
@@ -299,7 +316,7 @@ lrmoo:R7i_is_exemplified_by owl:equivalentProperty efrbroo:R7i_has_example,
 
 <https://sappho-digital.com/timespan/1819> a ecrm:E52_Time-Span ;
     rdfs:label "1819"^^xsd:gYear ;
-    ecrm:P4_is_time-span_of <https://sappho-digital.com/manifestation_creation/Q1242002> .
+    ecrm:P4i_is_time-span_of <https://sappho-digital.com/manifestation_creation/Q1242002> .
 
 <https://sappho-digital.com/title_string/expression/Q1242002> a ecrm:E62_String ;
     rdfs:label "Sappho"@de ;
@@ -326,7 +343,7 @@ ecrm:E62_String owl:equivalentClass crm:E62_String .
     intro:R21_identifies <https://sappho-digital.com/actualization/topic/Q10737_Q1242002> .
 
 <https://sappho-digital.com/actualization/interpretation/Q119292643_Q1242002> a intro:INT2_ActualizationOfFeature ;
-    rdfs:label "Interpretation of intertextual relation between Sappho. Eine Novelle and Sappho"@en ;
+    rdfs:label "Interpretation of intertextual relation between Sappho and Sappho. Eine Novelle"@en ;
     prov:wasDerivedFrom <http://www.wikidata.org/entity/Q119292643>,
         <http://www.wikidata.org/entity/Q1242002> ;
     intro:R17_actualizesFeature <https://sappho-digital.com/feature/interpretation/Q119292643_Q1242002> ;
@@ -338,6 +355,31 @@ ecrm:E62_String owl:equivalentClass crm:E62_String .
         <http://www.wikidata.org/entity/Q1242002> ;
     intro:R17_actualizesFeature <https://sappho-digital.com/feature/interpretation/Q120199245_Q1242002> ;
     intro:R21_identifies <https://sappho-digital.com/relation/Q120199245_Q1242002> .
+
+<https://sappho-digital.com/actualization/interpretation/Q1242002_Q119292643> a intro:INT2_ActualizationOfFeature ;
+    rdfs:label "Interpretation of Sappho in Sappho. Eine Novelle"@en ;
+    prov:wasDerivedFrom <http://www.wikidata.org/entity/Q119292643> ;
+    intro:R17_actualizesFeature <https://sappho-digital.com/feature/interpretation/Q1242002_Q119292643> ;
+    intro:R21_identifies <https://sappho-digital.com/actualization/work_ref/Q1242002_Q119292643> .
+
+<https://sappho-digital.com/actualization/interpretation/Q1242002_Q19179765> a intro:INT2_ActualizationOfFeature ;
+    rdfs:label "Interpretation of intertextual relation between Die Schwestern von Lesbos and Sappho"@en ;
+    prov:wasDerivedFrom <http://www.wikidata.org/entity/Q1242002>,
+        <http://www.wikidata.org/entity/Q19179765> ;
+    intro:R17_actualizesFeature <https://sappho-digital.com/feature/interpretation/Q1242002_Q19179765> ;
+    intro:R21_identifies <https://sappho-digital.com/relation/Q1242002_Q19179765> .
+
+<https://sappho-digital.com/actualization/interpretation/Q128087_Q1242002> a intro:INT2_ActualizationOfFeature ;
+    rdfs:label "Interpretation of Lesbos in Sappho"@en ;
+    prov:wasDerivedFrom <http://www.wikidata.org/entity/Q1242002> ;
+    intro:R17_actualizesFeature <https://sappho-digital.com/feature/interpretation/Q128087_Q1242002> ;
+    intro:R21_identifies <https://sappho-digital.com/actualization/place_ref/Q128087_Q1242002> .
+
+<https://sappho-digital.com/actualization/interpretation/Q128087_Q19179765> a intro:INT2_ActualizationOfFeature ;
+    rdfs:label "Interpretation of Lesbos in Die Schwestern von Lesbos"@en ;
+    prov:wasDerivedFrom <http://www.wikidata.org/entity/Q19179765> ;
+    intro:R17_actualizesFeature <https://sappho-digital.com/feature/interpretation/Q128087_Q19179765> ;
+    intro:R21_identifies <https://sappho-digital.com/actualization/place_ref/Q128087_Q19179765> .
 
 <https://sappho-digital.com/actualization/interpretation/Q134285870_Q119292643> a intro:INT2_ActualizationOfFeature ;
     rdfs:label "Interpretation of Sappho’s Leap in Sappho. Eine Novelle"@en ;
@@ -363,23 +405,34 @@ ecrm:E62_String owl:equivalentClass crm:E62_String .
     intro:R17_actualizesFeature <https://sappho-digital.com/feature/interpretation/Q165_Q1242002> ;
     intro:R21_identifies <https://sappho-digital.com/actualization/motif/Q165_Q1242002> .
 
+<https://sappho-digital.com/actualization/interpretation/Q17892_Q119292643> a intro:INT2_ActualizationOfFeature ;
+    rdfs:label "Interpretation of Sappho in Sappho. Eine Novelle"@en ;
+    prov:wasDerivedFrom <http://www.wikidata.org/entity/Q119292643> ;
+    intro:R17_actualizesFeature <https://sappho-digital.com/feature/interpretation/Q17892_Q119292643> ;
+    intro:R21_identifies <https://sappho-digital.com/actualization/person_ref/Q17892_Q119292643> .
+
 <https://sappho-digital.com/actualization/interpretation/Q17892_Q120199245> a intro:INT2_ActualizationOfFeature ;
     rdfs:label "Interpretation of Sappho in Die moderne Sappho"@en ;
     prov:wasDerivedFrom <http://www.wikidata.org/entity/Q120199245> ;
     intro:R17_actualizesFeature <https://sappho-digital.com/feature/interpretation/Q17892_Q120199245> ;
     intro:R21_identifies <https://sappho-digital.com/actualization/character/Q17892_Q120199245> .
 
-<https://sappho-digital.com/actualization/interpretation/Q17892_Q1242002> a intro:INT2_ActualizationOfFeature ;
-    rdfs:label "Interpretation of Sappho in Sappho"@en ;
-    prov:wasDerivedFrom <http://www.wikidata.org/entity/Q1242002> ;
-    intro:R17_actualizesFeature <https://sappho-digital.com/feature/interpretation/Q17892_Q1242002> ;
-    intro:R21_identifies <https://sappho-digital.com/actualization/character/Q17892_Q1242002> .
-
 <https://sappho-digital.com/expression/Q120199245> a lrmoo:F2_Expression ;
     rdfs:label "Expression of Die moderne Sappho"@en ;
     owl:sameAs <http://www.wikidata.org/entity/Q120199245> ;
     intro:R18_showsActualization <https://sappho-digital.com/actualization/character/Q17892_Q120199245> ;
     intro:R24i_isRelatedEntity <https://sappho-digital.com/relation/Q120199245_Q1242002> .
+
+<https://sappho-digital.com/expression/Q19179765> a lrmoo:F2_Expression ;
+    rdfs:label "Expression of Die Schwestern von Lesbos"@en ;
+    owl:sameAs <http://www.wikidata.org/entity/Q19179765> ;
+    intro:R18_showsActualization <https://sappho-digital.com/actualization/place_ref/Q128087_Q19179765> ;
+    intro:R24i_isRelatedEntity <https://sappho-digital.com/relation/Q1242002_Q19179765> .
+
+<https://sappho-digital.com/feature/work_ref/Q1242002> a intro:INT18_Reference ;
+    rdfs:label "Reference to Sappho (expression)"@en ;
+    intro:R17i_featureIsActualizedIn <https://sappho-digital.com/actualization/work_ref/Q1242002_Q119292643> ;
+    intro:R22_providesSimilarityForRelation <https://sappho-digital.com/relation/Q119292643_Q1242002> .
 
 <https://sappho-digital.com/gender/Q6581072> a ecrm:E55_Type ;
     rdfs:label "female"@en ;
@@ -390,7 +443,7 @@ ecrm:E62_String owl:equivalentClass crm:E62_String .
 <https://sappho-digital.com/genre/Q80930> a ecrm:E55_Type ;
     rdfs:label "tragedy"@en ;
     ecrm:P2_has_type <https://sappho-digital.com/genre_type/wikidata> ;
-    ecrm:P2_is_type_of <https://sappho-digital.com/expression/Q1242002> ;
+    ecrm:P2i_is_type_of <https://sappho-digital.com/expression/Q1242002> ;
     owl:sameAs <http://www.wikidata.org/entity/Q80930> .
 
 <https://sappho-digital.com/identifier/Q10737> a ecrm:E42_Identifier ;
@@ -403,6 +456,12 @@ ecrm:E62_String owl:equivalentClass crm:E62_String .
     rdfs:label "Q1242002" ;
     ecrm:P1i_identifies <https://sappho-digital.com/expression/Q1242002> ;
     ecrm:P2_has_type <https://sappho-digital.com/id_type/wikidata> .
+
+<https://sappho-digital.com/identifier/Q128087> a ecrm:E42_Identifier ;
+    rdfs:label "Q128087"@en ;
+    ecrm:P1i_identifies <https://sappho-digital.com/place/Q128087> ;
+    ecrm:P2_has_type <https://sappho-digital.com/id_type/wikidata> ;
+    prov:wasDerivedFrom <http://www.wikidata.org/entity/Q128087> .
 
 <https://sappho-digital.com/identifier/Q134285870> a ecrm:E42_Identifier ;
     rdfs:label "Q134285870"@en ;
@@ -433,7 +492,7 @@ ecrm:E62_String owl:equivalentClass crm:E62_String .
 
 <https://sappho-digital.com/textpassage/Q119292643_Q1242002> a intro:INT21_TextPassage ;
     rdfs:label "Text passage in Sappho. Eine Novelle"@en ;
-    prov:wasDerivedFrom <http://www.wikidata.org/entity/Q1242002> ;
+    prov:wasDerivedFrom <http://www.wikidata.org/entity/Q119292643> ;
     intro:R24i_isRelatedEntity <https://sappho-digital.com/relation/Q119292643_Q1242002> ;
     intro:R30i_isTextPassageOf <https://sappho-digital.com/expression/Q119292643> .
 
@@ -464,10 +523,12 @@ ecrm:E62_String owl:equivalentClass crm:E62_String .
 
 ecrm:E21_Person owl:equivalentClass crm:E21_Person .
 
-ecrm:E53_Place owl:equivalentClass crm:E53_Place .
-
-lrmoo:F2_Expression owl:equivalentClass efrbroo:F2_Expression,
-        frbroo:F2_Expression .
+<https://sappho-digital.com/actualization/interpretation/Q17892_Q1242002> a intro:INT2_ActualizationOfFeature ;
+    rdfs:label "Interpretation of Sappho in Sappho"@en ;
+    prov:wasDerivedFrom <http://www.wikidata.org/entity/Q1242002> ;
+    intro:R17_actualizesFeature <https://sappho-digital.com/feature/interpretation/Q17892_Q1242002> ;
+    intro:R21_identifies <https://sappho-digital.com/actualization/character/Q17892_Q1242002>,
+        <https://sappho-digital.com/actualization/person_ref/Q17892_Q1242002> .
 
 <https://sappho-digital.com/birth/Q469571> a ecrm:E67_Birth ;
     rdfs:label "Birth of Anna Louisa Karsch"@en ;
@@ -491,6 +552,18 @@ lrmoo:F2_Expression owl:equivalentClass efrbroo:F2_Expression,
     lrmoo:R19_created_a_realisation_of <https://sappho-digital.com/work/Q1242002> ;
     prov:wasDerivedFrom <http://www.wikidata.org/entity/Q1242002> .
 
+<https://sappho-digital.com/feature/person_ref/Q17892> a intro:INT18_Reference ;
+    rdfs:label "Reference to Sappho (person)"@en ;
+    intro:R17i_featureIsActualizedIn <https://sappho-digital.com/actualization/person_ref/Q17892_Q119292643>,
+        <https://sappho-digital.com/actualization/person_ref/Q17892_Q1242002> ;
+    intro:R22_providesSimilarityForRelation <https://sappho-digital.com/relation/Q119292643_Q1242002> .
+
+<https://sappho-digital.com/feature/place_ref/Q128087> a intro:INT18_Reference ;
+    rdfs:label "Reference to Lesbos (place)"@en ;
+    intro:R17i_featureIsActualizedIn <https://sappho-digital.com/actualization/place_ref/Q128087_Q1242002>,
+        <https://sappho-digital.com/actualization/place_ref/Q128087_Q19179765> ;
+    intro:R22_providesSimilarityForRelation <https://sappho-digital.com/relation/Q1242002_Q19179765> .
+
 <https://sappho-digital.com/identifier/Q17892> a ecrm:E42_Identifier ;
     rdfs:label "Q17892"@en ;
     ecrm:P1i_identifies <https://sappho-digital.com/feature/character/Q17892>,
@@ -498,21 +571,31 @@ lrmoo:F2_Expression owl:equivalentClass efrbroo:F2_Expression,
     ecrm:P2_has_type <https://sappho-digital.com/id_type/wikidata> ;
     prov:wasDerivedFrom <http://www.wikidata.org/entity/Q17892> .
 
-<https://sappho-digital.com/person/Q17892> a ecrm:E21_Person ;
-    rdfs:label "Sappho"@en ;
-    ecrm:P1_is_identified_by <https://sappho-digital.com/identifier/Q17892> ;
-    ecrm:P67i_is_referred_to_by <https://sappho-digital.com/actualization/character/Q17892_Q120199245>,
-        <https://sappho-digital.com/actualization/character/Q17892_Q1242002> ;
-    owl:sameAs <http://www.wikidata.org/entity/Q17892> .
+<https://sappho-digital.com/person/Q154438> a ecrm:E21_Person ;
+    rdfs:label "Franz Grillparzer" ;
+    ecrm:P14i_performed <https://sappho-digital.com/manifestation_creation/Q1242002>,
+        <https://sappho-digital.com/work_creation/Q1242002> ;
+    owl:sameAs <http://www.wikidata.org/entity/Q154438> .
+
+<https://sappho-digital.com/place/Q128087> a ecrm:E53_Place ;
+    rdfs:label "Lesbos"@en ;
+    ecrm:P1_is_identified_by <https://sappho-digital.com/identifier/Q128087> ;
+    ecrm:P67i_is_referred_to_by <https://sappho-digital.com/actualization/place_ref/Q128087_Q1242002>,
+        <https://sappho-digital.com/actualization/place_ref/Q128087_Q19179765> ;
+    owl:sameAs <http://www.wikidata.org/entity/Q128087> .
 
 <https://sappho-digital.com/work/Q1242002> a lrmoo:F1_Work ;
     rdfs:label "Work of Sappho"@en ;
-    ecrm:P14_carried_out_by <https://sappho-digital.com/person/Q154438> ;
     lrmoo:R16i_was_created_by <https://sappho-digital.com/work_creation/Q1242002> ;
     lrmoo:R19i_was_realised_through <https://sappho-digital.com/expression_creation/Q1242002> ;
     lrmoo:R3_is_realised_in <https://sappho-digital.com/expression/Q1242002> .
 
 ecrm:E52_Time-Span owl:equivalentClass crm:E52_Time-Span .
+
+ecrm:E53_Place owl:equivalentClass crm:E53_Place .
+
+lrmoo:F2_Expression owl:equivalentClass efrbroo:F2_Expression,
+        frbroo:F2_Expression .
 
 <https://sappho-digital.com/actualization/motif/Q165_Q119292643> a intro:INT2_ActualizationOfFeature ;
     rdfs:label "sea in Sappho. Eine Novelle"@en ;
@@ -588,12 +671,6 @@ ecrm:E52_Time-Span owl:equivalentClass crm:E52_Time-Span .
         <https://sappho-digital.com/actualization/topic/Q10737_Q1242002> ;
     intro:R22_providesSimilarityForRelation <https://sappho-digital.com/relation/Q119292643_Q1242002> .
 
-<https://sappho-digital.com/person/Q154438> a ecrm:E21_Person ;
-    rdfs:label "Franz Grillparzer" ;
-    ecrm:P14i_performed <https://sappho-digital.com/manifestation_creation/Q1242002>,
-        <https://sappho-digital.com/work_creation/Q1242002> ;
-    owl:sameAs <http://www.wikidata.org/entity/Q154438> .
-
 ecrm:E55_Type owl:equivalentClass crm:E55_Type .
 
 <https://sappho-digital.com/actualization/character/Q17892_Q120199245> a intro:INT2_ActualizationOfFeature ;
@@ -612,14 +689,45 @@ ecrm:E55_Type owl:equivalentClass crm:E55_Type .
     intro:R21i_isIdentifiedBy <https://sappho-digital.com/actualization/interpretation/Q17892_Q1242002> ;
     intro:R24i_isRelatedEntity <https://sappho-digital.com/relation/Q120199245_Q1242002> .
 
-<https://sappho-digital.com/expression/Q119292643> a lrmoo:F2_Expression ;
-    rdfs:label "Expression of Sappho. Eine Novelle"@en ;
-    owl:sameAs <http://www.wikidata.org/entity/Q119292643> ;
-    intro:R18_showsActualization <https://sappho-digital.com/actualization/motif/Q165_Q119292643>,
-        <https://sappho-digital.com/actualization/plot/Q134285870_Q119292643>,
-        <https://sappho-digital.com/actualization/topic/Q10737_Q119292643> ;
-    intro:R24i_isRelatedEntity <https://sappho-digital.com/relation/Q119292643_Q1242002> ;
-    intro:R30_hasTextPassage <https://sappho-digital.com/textpassage/Q119292643_Q1242002> .
+<https://sappho-digital.com/actualization/person_ref/Q17892_Q119292643> a intro:INT2_ActualizationOfFeature ;
+    rdfs:label "Reference to Sappho in Sappho. Eine Novelle"@en ;
+    ecrm:P67_refers_to <https://sappho-digital.com/person/Q17892> ;
+    intro:R17_actualizesFeature <https://sappho-digital.com/feature/person_ref/Q17892> ;
+    intro:R18i_actualizationFoundOn <https://sappho-digital.com/expression/Q119292643> ;
+    intro:R21i_isIdentifiedBy <https://sappho-digital.com/actualization/interpretation/Q17892_Q119292643> ;
+    intro:R24i_isRelatedEntity <https://sappho-digital.com/relation/Q119292643_Q1242002> .
+
+<https://sappho-digital.com/actualization/person_ref/Q17892_Q1242002> a intro:INT2_ActualizationOfFeature ;
+    rdfs:label "Reference to Sappho in Sappho"@en ;
+    ecrm:P67_refers_to <https://sappho-digital.com/person/Q17892> ;
+    intro:R17_actualizesFeature <https://sappho-digital.com/feature/person_ref/Q17892> ;
+    intro:R18i_actualizationFoundOn <https://sappho-digital.com/expression/Q1242002> ;
+    intro:R21i_isIdentifiedBy <https://sappho-digital.com/actualization/interpretation/Q17892_Q1242002> ;
+    intro:R24i_isRelatedEntity <https://sappho-digital.com/relation/Q119292643_Q1242002> .
+
+<https://sappho-digital.com/actualization/place_ref/Q128087_Q1242002> a intro:INT2_ActualizationOfFeature ;
+    rdfs:label "Reference to Lesbos in Sappho"@en ;
+    ecrm:P67_refers_to <https://sappho-digital.com/place/Q128087> ;
+    intro:R17_actualizesFeature <https://sappho-digital.com/feature/place_ref/Q128087> ;
+    intro:R18i_actualizationFoundOn <https://sappho-digital.com/expression/Q1242002> ;
+    intro:R21i_isIdentifiedBy <https://sappho-digital.com/actualization/interpretation/Q128087_Q1242002> ;
+    intro:R24i_isRelatedEntity <https://sappho-digital.com/relation/Q1242002_Q19179765> .
+
+<https://sappho-digital.com/actualization/place_ref/Q128087_Q19179765> a intro:INT2_ActualizationOfFeature ;
+    rdfs:label "Reference to Lesbos in Die Schwestern von Lesbos"@en ;
+    ecrm:P67_refers_to <https://sappho-digital.com/place/Q128087> ;
+    intro:R17_actualizesFeature <https://sappho-digital.com/feature/place_ref/Q128087> ;
+    intro:R18i_actualizationFoundOn <https://sappho-digital.com/expression/Q19179765> ;
+    intro:R21i_isIdentifiedBy <https://sappho-digital.com/actualization/interpretation/Q128087_Q19179765> ;
+    intro:R24i_isRelatedEntity <https://sappho-digital.com/relation/Q1242002_Q19179765> .
+
+<https://sappho-digital.com/actualization/work_ref/Q1242002_Q119292643> a intro:INT2_ActualizationOfFeature ;
+    rdfs:label "Reference to Sappho in Sappho. Eine Novelle"@en ;
+    ecrm:P67_refers_to <https://sappho-digital.com/expression/Q1242002> ;
+    intro:R17_actualizesFeature <https://sappho-digital.com/feature/work_ref/Q1242002> ;
+    intro:R18i_actualizationFoundOn <https://sappho-digital.com/expression/Q119292643> ;
+    intro:R21i_isIdentifiedBy <https://sappho-digital.com/actualization/interpretation/Q1242002_Q119292643> ;
+    intro:R24i_isRelatedEntity <https://sappho-digital.com/relation/Q119292643_Q1242002> .
 
 <https://sappho-digital.com/manifestation/Q1242002> a lrmoo:F3_Manifestation ;
     rdfs:label "Manifestation of Sappho"@en ;
@@ -638,18 +746,14 @@ ecrm:E55_Type owl:equivalentClass crm:E55_Type .
     lrmoo:R24_created <https://sappho-digital.com/manifestation/Q1242002> ;
     prov:wasDerivedFrom <http://www.wikidata.org/entity/Q1242002> .
 
-ecrm:E42_Identifier owl:equivalentClass crm:E42_Identifier .
-
-<https://sappho-digital.com/id_type/wikidata> a ecrm:E55_Type ;
-    rdfs:label "Wikidata ID"@en ;
-    ecrm:P2_is_type_of <https://sappho-digital.com/identifier/Q1242002> ;
-    ecrm:P2i_is_type_of <https://sappho-digital.com/identifier/Q10737>,
-        <https://sappho-digital.com/identifier/Q134285870>,
-        <https://sappho-digital.com/identifier/Q165>,
-        <https://sappho-digital.com/identifier/Q17892>,
-        <https://sappho-digital.com/identifier/Q469571> ;
-    owl:sameAs <http://www.wikidata.org/entity/Q43649390>,
-        <http://www.wikidata.org/wiki/Q43649390> .
+<https://sappho-digital.com/person/Q17892> a ecrm:E21_Person ;
+    rdfs:label "Sappho"@en ;
+    ecrm:P1_is_identified_by <https://sappho-digital.com/identifier/Q17892> ;
+    ecrm:P67i_is_referred_to_by <https://sappho-digital.com/actualization/character/Q17892_Q120199245>,
+        <https://sappho-digital.com/actualization/character/Q17892_Q1242002>,
+        <https://sappho-digital.com/actualization/person_ref/Q17892_Q119292643>,
+        <https://sappho-digital.com/actualization/person_ref/Q17892_Q1242002> ;
+    owl:sameAs <http://www.wikidata.org/entity/Q17892> .
 
 <https://sappho-digital.com/person/Q469571> a ecrm:E21_Person ;
     rdfs:label "Anna Louisa Karsch"@en ;
@@ -670,12 +774,47 @@ ecrm:E42_Identifier owl:equivalentClass crm:E42_Identifier .
         <https://sappho-digital.com/expression/Q120199245>,
         <https://sappho-digital.com/expression/Q1242002> .
 
+<https://sappho-digital.com/relation/Q1242002_Q19179765> a intro:INT31_IntertextualRelation ;
+    rdfs:label "Intertextual relation between Die Schwestern von Lesbos and Sappho"@en ;
+    intro:R21i_isIdentifiedBy <https://sappho-digital.com/actualization/interpretation/Q1242002_Q19179765> ;
+    intro:R22i_relationIsBasedOnSimilarity <https://sappho-digital.com/feature/place_ref/Q128087> ;
+    intro:R24_hasRelatedEntity <https://sappho-digital.com/actualization/place_ref/Q128087_Q1242002>,
+        <https://sappho-digital.com/actualization/place_ref/Q128087_Q19179765>,
+        <https://sappho-digital.com/expression/Q1242002>,
+        <https://sappho-digital.com/expression/Q19179765> .
+
+ecrm:E42_Identifier owl:equivalentClass crm:E42_Identifier .
+
+<https://sappho-digital.com/expression/Q119292643> a lrmoo:F2_Expression ;
+    rdfs:label "Expression of Sappho. Eine Novelle"@en ;
+    owl:sameAs <http://www.wikidata.org/entity/Q119292643> ;
+    intro:R18_showsActualization <https://sappho-digital.com/actualization/motif/Q165_Q119292643>,
+        <https://sappho-digital.com/actualization/person_ref/Q17892_Q119292643>,
+        <https://sappho-digital.com/actualization/plot/Q134285870_Q119292643>,
+        <https://sappho-digital.com/actualization/topic/Q10737_Q119292643>,
+        <https://sappho-digital.com/actualization/work_ref/Q1242002_Q119292643> ;
+    intro:R24i_isRelatedEntity <https://sappho-digital.com/relation/Q119292643_Q1242002> ;
+    intro:R30_hasTextPassage <https://sappho-digital.com/textpassage/Q119292643_Q1242002> .
+
+<https://sappho-digital.com/id_type/wikidata> a ecrm:E55_Type ;
+    rdfs:label "Wikidata ID"@en ;
+    ecrm:P2i_is_type_of <https://sappho-digital.com/identifier/Q10737>,
+        <https://sappho-digital.com/identifier/Q1242002>,
+        <https://sappho-digital.com/identifier/Q128087>,
+        <https://sappho-digital.com/identifier/Q134285870>,
+        <https://sappho-digital.com/identifier/Q165>,
+        <https://sappho-digital.com/identifier/Q17892>,
+        <https://sappho-digital.com/identifier/Q469571> ;
+    owl:sameAs <http://www.wikidata.org/entity/Q43649390>,
+        <http://www.wikidata.org/wiki/Q43649390> .
+
 <https://sappho-digital.com/expression/Q1242002> a lrmoo:F2_Expression ;
     rdfs:label "Expression of Sappho"@en ;
     ecrm:P102_has_title <https://sappho-digital.com/title/expression/Q1242002> ;
     ecrm:P138i_has_representation <https://sappho-digital.com/digital/Q1242002> ;
     ecrm:P1_is_identified_by <https://sappho-digital.com/identifier/Q1242002> ;
     ecrm:P2_has_type <https://sappho-digital.com/genre/Q80930> ;
+    ecrm:P67i_is_referred_to_by <https://sappho-digital.com/actualization/work_ref/Q1242002_Q119292643> ;
     lrmoo:R17i_was_created_by <https://sappho-digital.com/expression_creation/Q1242002> ;
     lrmoo:R3i_realises <https://sappho-digital.com/work/Q1242002> ;
     lrmoo:R4i_is_embodied_in <https://sappho-digital.com/manifestation/Q1242002> ;
@@ -683,24 +822,32 @@ ecrm:E42_Identifier owl:equivalentClass crm:E42_Identifier .
     prov:wasDerivedFrom <http://www.wikidata.org/entity/Q1242002> ;
     intro:R18_showsActualization <https://sappho-digital.com/actualization/character/Q17892_Q1242002>,
         <https://sappho-digital.com/actualization/motif/Q165_Q1242002>,
+        <https://sappho-digital.com/actualization/person_ref/Q17892_Q1242002>,
+        <https://sappho-digital.com/actualization/place_ref/Q128087_Q1242002>,
         <https://sappho-digital.com/actualization/plot/Q134285870_Q1242002>,
         <https://sappho-digital.com/actualization/topic/Q10737_Q1242002> ;
     intro:R24i_isRelatedEntity <https://sappho-digital.com/relation/Q119292643_Q1242002>,
-        <https://sappho-digital.com/relation/Q120199245_Q1242002> ;
+        <https://sappho-digital.com/relation/Q120199245_Q1242002>,
+        <https://sappho-digital.com/relation/Q1242002_Q19179765> ;
     intro:R30_hasTextPassage <https://sappho-digital.com/textpassage/Q1242002_Q119292643> .
 
 <https://sappho-digital.com/relation/Q119292643_Q1242002> a intro:INT31_IntertextualRelation ;
-    rdfs:label "Intertextual relation between Sappho. Eine Novelle and Sappho"@en ;
+    rdfs:label "Intertextual relation between Sappho and Sappho. Eine Novelle"@en ;
     intro:R21i_isIdentifiedBy <https://sappho-digital.com/actualization/interpretation/Q119292643_Q1242002> ;
     intro:R22i_relationIsBasedOnSimilarity <https://sappho-digital.com/feature/motif/Q165>,
+        <https://sappho-digital.com/feature/person_ref/Q17892>,
         <https://sappho-digital.com/feature/plot/Q134285870>,
-        <https://sappho-digital.com/feature/topic/Q10737> ;
+        <https://sappho-digital.com/feature/topic/Q10737>,
+        <https://sappho-digital.com/feature/work_ref/Q1242002> ;
     intro:R24_hasRelatedEntity <https://sappho-digital.com/actualization/motif/Q165_Q119292643>,
         <https://sappho-digital.com/actualization/motif/Q165_Q1242002>,
+        <https://sappho-digital.com/actualization/person_ref/Q17892_Q119292643>,
+        <https://sappho-digital.com/actualization/person_ref/Q17892_Q1242002>,
         <https://sappho-digital.com/actualization/plot/Q134285870_Q119292643>,
         <https://sappho-digital.com/actualization/plot/Q134285870_Q1242002>,
         <https://sappho-digital.com/actualization/topic/Q10737_Q119292643>,
         <https://sappho-digital.com/actualization/topic/Q10737_Q1242002>,
+        <https://sappho-digital.com/actualization/work_ref/Q1242002_Q119292643>,
         <https://sappho-digital.com/expression/Q119292643>,
         <https://sappho-digital.com/expression/Q1242002>,
         <https://sappho-digital.com/textpassage/Q119292643_Q1242002>,
