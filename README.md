@@ -279,18 +279,18 @@ Namespace declarations and mappings to CRM, FRBRoo and eFRBRoo are applied but n
 
 <https://sappho-digital.com/id_type/wikidata> a ecrm:E55_Type ;
     rdfs:label "Wikidata ID"@en ;
-    ecrm:P2_is_type_of <https://sappho-digital.com/identifier/Q1242002> ;
+    ecrm:P2i_is_type_of <https://sappho-digital.com/identifier/Q1242002> ;
     owl:sameAs <http://www.wikidata.org/wiki/Q43649390> .
 
 <https://sappho-digital.com/genre/Q80930> a ecrm:E55_Type ;
     rdfs:label "tragedy"@en ;
     ecrm:P2_has_type <https://sappho-digital.com/genre_type/wikidata> ;
-    ecrm:P2_is_type_of <https://sappho-digital.com/expression/Q1242002> ;
+    ecrm:P2i_is_type_of <https://sappho-digital.com/expression/Q1242002> ;
     owl:sameAs <http://www.wikidata.org/entity/Q80930> .
 
 <https://sappho-digital.com/genre_type/wikidata> a ecrm:E55_Type ;
     rdfs:label "Wikidata Genre"@en ;
-    ecrm:P2_is_type_of <https://sappho-digital.com/genre/Q80930> .
+    ecrm:P2i_is_type_of <https://sappho-digital.com/genre/Q80930> .
 
 <https://sappho-digital.com/digital/Q1242002> a ecrm:E73_Information_Object ;
     rdfs:label "Digital copy of Sappho"@en ;
@@ -313,7 +313,7 @@ Namespace declarations and mappings to CRM, FRBRoo and eFRBRoo are applied but n
 
 <https://sappho-digital.com/timespan/1819> a ecrm:E52_Time-Span ;
     rdfs:label "1819"^^xsd:gYear ;
-    ecrm:P4_is_time-span_of <https://sappho-digital.com/manifestation_creation/Q1242002> .
+    ecrm:P4i_is_time-span_of <https://sappho-digital.com/manifestation_creation/Q1242002> .
 
 <https://sappho-digital.com/place/Q1741> a ecrm:E53_Place ;
     rdfs:label "Vienna"@en ;
