@@ -1,0 +1,309 @@
+@prefix crm: <http://www.cidoc-crm.org/cidoc-crm/> .
+@prefix ecrm: <http://erlangen-crm.org/current/> .
+@prefix efrbroo: <http://erlangen-crm.org/efrbroo/> .
+@prefix frbroo: <http://iflastandards.info/ns/fr/frbr/frbroo/> .
+@prefix lrmoo: <http://iflastandards.info/ns/lrm/lrmoo/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+ecrm:E82_Actor_Appellation owl:equivalentClass crm:E82_Actor_Appellation .
+
+<https://sappho-digital.com/ontology/works> a owl:Ontology ;
+    owl:imports ecrm:,
+        <https://cidoc-crm.org/extensions/lrmoo/owl/1.0/LRMoo_v1.0.owl> .
+
+ecrm:E21_Person owl:equivalentClass crm:E21_Person .
+
+ecrm:E40_Legal_Body owl:equivalentClass crm:E40_Legal_Body .
+
+ecrm:E42_Identifier owl:equivalentClass crm:E42_Identifier .
+
+ecrm:E53_Place owl:equivalentClass crm:E53_Place .
+
+ecrm:E73_Information_Object owl:equivalentClass crm:E73_Information_Object .
+
+ecrm:P102_has_title owl:equivalentProperty crm:P102_has_title ;
+    owl:inverseOf ecrm:P102i_is_title_of .
+
+ecrm:P102i_is_title_of owl:equivalentProperty crm:P102i_is_title_of ;
+    owl:inverseOf ecrm:P102_has_title .
+
+ecrm:P131_is_identified_by owl:equivalentProperty crm:P131_is_identified_by ;
+    owl:inverseOf ecrm:P131i_identifies .
+
+ecrm:P131i_identifies owl:equivalentProperty crm:P131i_identifies ;
+    owl:inverseOf ecrm:P131_is_identified_by .
+
+ecrm:P138_represents owl:equivalentProperty crm:P138_represents ;
+    owl:inverseOf ecrm:P138i_has_representation .
+
+ecrm:P138i_has_representation owl:equivalentProperty crm:P138i_has_representation ;
+    owl:inverseOf ecrm:P138_represents .
+
+ecrm:P14_carried_out_by owl:equivalentProperty crm:P14_carried_out_by ;
+    owl:inverseOf ecrm:P14i_performed .
+
+ecrm:P14i_performed owl:equivalentProperty crm:P14i_performed ;
+    owl:inverseOf ecrm:P14_carried_out_by .
+
+ecrm:P190_has_symbolic_content owl:equivalentProperty crm:P190_has_symbolic_content ;
+    owl:inverseOf ecrm:P190i_is_content_of .
+
+ecrm:P190i_is_content_of owl:equivalentProperty crm:P190i_is_content_of ;
+    owl:inverseOf ecrm:P190_has_symbolic_content .
+
+ecrm:P1_is_identified_by owl:equivalentProperty crm:P1_is_identified_by ;
+    owl:inverseOf ecrm:P1i_identifies .
+
+ecrm:P1i_identifies owl:equivalentProperty crm:P1i_identifies ;
+    owl:inverseOf ecrm:P1_is_identified_by .
+
+ecrm:P2_has_type owl:equivalentProperty crm:P2_has_type ;
+    owl:inverseOf ecrm:P2i_is_type_of .
+
+ecrm:P2i_is_type_of owl:equivalentProperty crm:P2i_is_type_of ;
+    owl:inverseOf ecrm:P2_has_type .
+
+ecrm:P4_has_time-span owl:equivalentProperty crm:P4_has_time-span ;
+    owl:inverseOf ecrm:P4i_is_time-span_of .
+
+ecrm:P4i_is_time-span_of owl:equivalentProperty crm:P4i_is_time-span_of ;
+    owl:inverseOf ecrm:P4_has_time-span .
+
+ecrm:P7_took_place_at owl:equivalentProperty crm:P7_took_place_at ;
+    owl:inverseOf ecrm:P7i_witnessed .
+
+ecrm:P7i_witnessed owl:equivalentProperty crm:P7i_witnessed ;
+    owl:inverseOf ecrm:P7_took_place_at .
+
+lrmoo:F1_Work owl:equivalentClass efrbroo:F1_Work,
+        frbroo:F1_Work .
+
+lrmoo:F27_Work_Creation owl:equivalentClass efrbroo:F27_Work_Conception,
+        frbroo:F27_Work_Conception .
+
+lrmoo:F28_Expression_Creation owl:equivalentClass efrbroo:F28_Expression_Creation,
+        frbroo:F28_Expression_Creation .
+
+lrmoo:F2_Expression owl:equivalentClass efrbroo:F2_Expression,
+        frbroo:F2_Expression .
+
+lrmoo:F30_Manifestation_Creation owl:equivalentClass efrbroo:F30_Publication_Event,
+        frbroo:F30_Publication_Event .
+
+lrmoo:F32_Item_Production_Event owl:equivalentClass efrbroo:F32_Carrier_Production_Event,
+        frbroo:F32_Carrier_Production_Event .
+
+lrmoo:F3_Manifestation owl:equivalentClass efrbroo:F3_Manifestation_Product_Type,
+        frbroo:F3_Manifestation_Product_Type .
+
+lrmoo:F5_Item owl:equivalentClass efrbroo:F5_Item,
+        frbroo:F5_Item .
+
+lrmoo:R16_created owl:equivalentProperty efrbroo:R16_initiated,
+        frbroo:R16_initiated ;
+    owl:inverseOf lrmoo:R16i_was_created_by .
+
+lrmoo:R16i_was_created_by owl:equivalentProperty efrbroo:R16i_was_initiated_by,
+        frbroo:R16i_was_initiated_by ;
+    owl:inverseOf lrmoo:R16_created .
+
+lrmoo:R17_created owl:equivalentProperty efrbroo:R17_created,
+        frbroo:R17_created ;
+    owl:inverseOf lrmoo:R17i_was_created_by .
+
+lrmoo:R17i_was_created_by owl:equivalentProperty efrbroo:R17i_was_created_by,
+        frbroo:R17i_was_created_by ;
+    owl:inverseOf lrmoo:R17_created .
+
+lrmoo:R19_created_a_realisation_of owl:equivalentProperty efrbroo:R19_created_a_realisation_of,
+        frbroo:R19_created_a_realisation_of ;
+    owl:inverseOf lrmoo:R19i_was_realised_through .
+
+lrmoo:R19i_was_realised_through owl:equivalentProperty efrbroo:R19i_was_realised_through,
+        frbroo:R19i_was_realised_through ;
+    owl:inverseOf lrmoo:R19_created_a_realisation_of .
+
+lrmoo:R24_created owl:equivalentProperty efrbroo:R24_created,
+        frbroo:R24_created ;
+    owl:inverseOf lrmoo:R24i_was_created_through .
+
+lrmoo:R24i_was_created_through owl:equivalentProperty efrbroo:R24i_was_created_through,
+        frbroo:R24i_was_created_through ;
+    owl:inverseOf lrmoo:R24_created .
+
+lrmoo:R27_materialized owl:equivalentProperty efrbroo:R27_used_as_source_material,
+        frbroo:R27_used_as_source_material ;
+    owl:inverseOf lrmoo:R27i_was_materialized_by .
+
+lrmoo:R27i_was_materialized_by owl:equivalentProperty efrbroo:R27i_was_used_by,
+        frbroo:R27i_was_used_by ;
+    owl:inverseOf lrmoo:R27_materialized .
+
+lrmoo:R28_produced owl:equivalentProperty efrbroo:R28_produced,
+        frbroo:R28_produced ;
+    owl:inverseOf lrmoo:R28i_was_produced_by .
+
+lrmoo:R28i_was_produced_by owl:equivalentProperty efrbroo:R28i_was_produced_by,
+        frbroo:R28i_was_produced_by ;
+    owl:inverseOf lrmoo:R28_produced .
+
+lrmoo:R3_is_realised_in owl:equivalentProperty efrbroo:R3_is_realised_in,
+        frbroo:R3_is_realised_in ;
+    owl:inverseOf lrmoo:R3i_realises .
+
+lrmoo:R3i_realises owl:equivalentProperty efrbroo:R3i_realises,
+        frbroo:R3i_realises ;
+    owl:inverseOf lrmoo:R3_is_realised_in .
+
+lrmoo:R4_embodies owl:equivalentProperty efrbroo:R4i_comprises_carriers_of,
+        frbroo:R4i_comprises_carriers_of ;
+    owl:inverseOf lrmoo:R4i_is_embodied_in .
+
+lrmoo:R4i_is_embodied_in owl:equivalentProperty efrbroo:R4_carriers_provided_by,
+        frbroo:R4_carriers_provided_by ;
+    owl:inverseOf lrmoo:R4_embodies .
+
+lrmoo:R7_exemplifies owl:equivalentProperty efrbroo:R7_is_example_of,
+        frbroo:R7_is_example_of ;
+    owl:inverseOf lrmoo:R7i_is_exemplified_by .
+
+lrmoo:R7i_is_exemplified_by owl:equivalentProperty efrbroo:R7i_has_example,
+        frbroo:R7i_has_example ;
+    owl:inverseOf lrmoo:R7_exemplifies .
+
+<https://sappho-digital.com/digital/Q1242002> a ecrm:E73_Information_Object ;
+    rdfs:label "Digital copy of Sappho"@en ;
+    ecrm:P138_represents <https://sappho-digital.com/expression/Q1242002> ;
+    rdfs:seeAlso <http://www.zeno.org/nid/20004898184> .
+
+<https://sappho-digital.com/genre_type/wikidata> a ecrm:E55_Type ;
+    rdfs:label "Wikidata Genre"@en ;
+    ecrm:P2_is_type_of <https://sappho-digital.com/genre/Q80930> .
+
+<https://sappho-digital.com/id_type/wikidata> a ecrm:E55_Type ;
+    rdfs:label "Wikidata ID"@en ;
+    ecrm:P2_is_type_of <https://sappho-digital.com/identifier/Q1242002> ;
+    owl:sameAs <http://www.wikidata.org/wiki/Q43649390> .
+
+<https://sappho-digital.com/place/Q1741> a ecrm:E53_Place ;
+    rdfs:label "Vienna"@en ;
+    ecrm:P7i_witnessed <https://sappho-digital.com/manifestation_creation/Q1242002> ;
+    owl:sameAs <http://www.wikidata.org/entity/Q1741> .
+
+<https://sappho-digital.com/publisher/Q133849481> a ecrm:E40_Legal_Body ;
+    rdfs:label "Wallishausser’sche Buchhandlung"@en ;
+    ecrm:P14i_performed <https://sappho-digital.com/manifestation_creation/Q1242002> ;
+    owl:sameAs <http://www.wikidata.org/entity/Q133849481> .
+
+<https://sappho-digital.com/timespan/1817> a ecrm:E52_Time-Span ;
+    rdfs:label "1817"^^xsd:gYear ;
+    ecrm:P4i_is_time-span_of <https://sappho-digital.com/expression_creation/Q1242002> .
+
+<https://sappho-digital.com/timespan/1819> a ecrm:E52_Time-Span ;
+    rdfs:label "1819"^^xsd:gYear ;
+    ecrm:P4_is_time-span_of <https://sappho-digital.com/manifestation_creation/Q1242002> .
+
+<https://sappho-digital.com/title_string/expression/Q1242002> a ecrm:E62_String ;
+    rdfs:label "Sappho"@de ;
+    ecrm:P190i_is_content_of <https://sappho-digital.com/title/expression/Q1242002> .
+
+<https://sappho-digital.com/title_string/manifestation/Q1242002> a ecrm:E62_String ;
+    rdfs:label "Sappho"@de ;
+    ecrm:P190i_is_content_of <https://sappho-digital.com/title/manifestation/Q1242002> .
+
+ecrm:E35_Title owl:equivalentClass crm:E35_Title .
+
+ecrm:E52_Time-Span owl:equivalentClass crm:E52_Time-Span .
+
+ecrm:E62_String owl:equivalentClass crm:E62_String .
+
+<https://sappho-digital.com/genre/Q80930> a ecrm:E55_Type ;
+    rdfs:label "tragedy"@en ;
+    ecrm:P2_has_type <https://sappho-digital.com/genre_type/wikidata> ;
+    ecrm:P2_is_type_of <https://sappho-digital.com/expression/Q1242002> ;
+    owl:sameAs <http://www.wikidata.org/entity/Q80930> .
+
+<https://sappho-digital.com/identifier/Q1242002> a ecrm:E42_Identifier ;
+    rdfs:label "Q1242002" ;
+    ecrm:P1i_identifies <https://sappho-digital.com/expression/Q1242002> ;
+    ecrm:P2_has_type <https://sappho-digital.com/id_type/wikidata> .
+
+<https://sappho-digital.com/item/Q1242002> a lrmoo:F5_Item ;
+    rdfs:label "Item of Sappho"@en ;
+    lrmoo:R28i_was_produced_by <https://sappho-digital.com/item_production/Q1242002> ;
+    lrmoo:R7_exemplifies <https://sappho-digital.com/manifestation/Q1242002> .
+
+<https://sappho-digital.com/item_production/Q1242002> a lrmoo:F32_Item_Production_Event ;
+    rdfs:label "Item production event of Sappho"@en ;
+    lrmoo:R27_materialized <https://sappho-digital.com/manifestation/Q1242002> ;
+    lrmoo:R28_produced <https://sappho-digital.com/item/Q1242002> .
+
+<https://sappho-digital.com/title/expression/Q1242002> a ecrm:E35_Title ;
+    ecrm:P102i_is_title_of <https://sappho-digital.com/expression/Q1242002> ;
+    ecrm:P190_has_symbolic_content <https://sappho-digital.com/title_string/expression/Q1242002> .
+
+<https://sappho-digital.com/title/manifestation/Q1242002> a ecrm:E35_Title ;
+    ecrm:P102i_is_title_of <https://sappho-digital.com/manifestation/Q1242002> ;
+    ecrm:P190_has_symbolic_content <https://sappho-digital.com/title_string/manifestation/Q1242002> .
+
+<https://sappho-digital.com/work_creation/Q1242002> a lrmoo:F27_Work_Creation ;
+    rdfs:label "Work creation of Sappho"@en ;
+    ecrm:P14_carried_out_by <https://sappho-digital.com/person/Q154438> ;
+    lrmoo:R16_created <https://sappho-digital.com/work/Q1242002> ;
+    prov:wasDerivedFrom <http://www.wikidata.org/entity/Q1242002> .
+
+ecrm:E55_Type owl:equivalentClass crm:E55_Type .
+
+<https://sappho-digital.com/expression_creation/Q1242002> a lrmoo:F28_Expression_Creation ;
+    rdfs:label "Expression creation of Sappho"@en ;
+    ecrm:P14_carried_out_by <https://sappho-digital.com/person/Q154438> ;
+    ecrm:P4_has_time-span <https://sappho-digital.com/timespan/1817> ;
+    lrmoo:R17_created <https://sappho-digital.com/expression/Q1242002> ;
+    lrmoo:R19_created_a_realisation_of <https://sappho-digital.com/work/Q1242002> ;
+    prov:wasDerivedFrom <http://www.wikidata.org/entity/Q1242002> .
+
+<https://sappho-digital.com/work/Q1242002> a lrmoo:F1_Work ;
+    rdfs:label "Work of Sappho"@en ;
+    ecrm:P14_carried_out_by <https://sappho-digital.com/person/Q154438> ;
+    lrmoo:R16i_was_created_by <https://sappho-digital.com/work_creation/Q1242002> ;
+    lrmoo:R19i_was_realised_through <https://sappho-digital.com/expression_creation/Q1242002> ;
+    lrmoo:R3_is_realised_in <https://sappho-digital.com/expression/Q1242002> .
+
+<https://sappho-digital.com/person/Q154438> a ecrm:E21_Person ;
+    rdfs:label "Franz Grillparzer" ;
+    ecrm:P14i_performed <https://sappho-digital.com/manifestation_creation/Q1242002>,
+        <https://sappho-digital.com/work_creation/Q1242002> ;
+    owl:sameAs <http://www.wikidata.org/entity/Q154438> .
+
+<https://sappho-digital.com/manifestation/Q1242002> a lrmoo:F3_Manifestation ;
+    rdfs:label "Manifestation of Sappho"@en ;
+    ecrm:P102_has_title <https://sappho-digital.com/title/manifestation/Q1242002> ;
+    lrmoo:R24i_was_created_through <https://sappho-digital.com/manifestation_creation/Q1242002> ;
+    lrmoo:R27i_was_materialized_by <https://sappho-digital.com/item_production/Q1242002> ;
+    lrmoo:R4_embodies <https://sappho-digital.com/expression/Q1242002> ;
+    lrmoo:R7i_is_exemplified_by <https://sappho-digital.com/item/Q1242002> .
+
+<https://sappho-digital.com/manifestation_creation/Q1242002> a lrmoo:F30_Manifestation_Creation ;
+    rdfs:label "Manifestation creation of Sappho"@en ;
+    ecrm:P14_carried_out_by <https://sappho-digital.com/person/Q154438>,
+        <https://sappho-digital.com/publisher/Q133849481> ;
+    ecrm:P4_has_time-span <https://sappho-digital.com/timespan/1819> ;
+    ecrm:P7_took_place_at <https://sappho-digital.com/place/Q1741> ;
+    lrmoo:R24_created <https://sappho-digital.com/manifestation/Q1242002> ;
+    prov:wasDerivedFrom <http://www.wikidata.org/entity/Q1242002> .
+
+<https://sappho-digital.com/expression/Q1242002> a lrmoo:F2_Expression ;
+    rdfs:label "Expression of Sappho"@en ;
+    ecrm:P102_has_title <https://sappho-digital.com/title/expression/Q1242002> ;
+    ecrm:P138i_has_representation <https://sappho-digital.com/digital/Q1242002> ;
+    ecrm:P1_is_identified_by <https://sappho-digital.com/identifier/Q1242002> ;
+    ecrm:P2_has_type <https://sappho-digital.com/genre/Q80930> ;
+    lrmoo:R17i_was_created_by <https://sappho-digital.com/expression_creation/Q1242002> ;
+    lrmoo:R3i_realises <https://sappho-digital.com/work/Q1242002> ;
+    lrmoo:R4i_is_embodied_in <https://sappho-digital.com/manifestation/Q1242002> ;
+    owl:sameAs <http://www.wikidata.org/entity/Q1242002> ;
+    prov:wasDerivedFrom <http://www.wikidata.org/entity/Q1242002> .
+
