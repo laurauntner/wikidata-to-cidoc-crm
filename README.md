@@ -83,7 +83,7 @@ The [authors.py](https://github.com/laurauntner/wikidata-to-cidoc-crm/blob/main/
 <h3>Example Input</h3>
 
 ```csv
-qid
+qids
 Q469571
 ```
 
@@ -204,7 +204,7 @@ Translators are not modeled per default, but the data model can, of course, be e
 <h3>Example Input</h3>
 
 ```csv
-qid
+qids
 Q1242002
 ```
 
