@@ -555,7 +555,7 @@ Further, it’s highly recommended to manually refine the generated triples afte
     prov:wasDerivedFrom <http://www.wikidata.org/entity/Q17892> .
 
 <https://sappho-digital.com/actualization/person_ref/Q17892_Q119292643> a intro:INT2_ActualizationOfFeature ;
-    rdfs:label "Sappho in Sappho. Eine Novelle"@en ;
+    rdfs:label "Reference to Sappho in Sappho. Eine Novelle"@en ;
     ecrm:P67_refers_to <https://sappho-digital.com/person/Q17892> ;
     intro:R17_actualizesFeature <https://sappho-digital.com/feature/person_ref/Q17892> ;
     intro:R18i_actualizationFoundOn <https://sappho-digital.com/expression/Q119292643> ;
@@ -573,7 +573,7 @@ Further, it’s highly recommended to manually refine the generated triples afte
     intro:R21_identifies <https://sappho-digital.com/actualization/person_ref/Q17892_Q119292643> .
 
 <https://sappho-digital.com/actualization/person_ref/Q17892_Q1242002> a intro:INT2_ActualizationOfFeature ;
-    rdfs:label "Sappho in Sappho"@en ;
+    rdfs:label "Reference to Sappho in Sappho"@en ;
     ecrm:P67_refers_to <https://sappho-digital.com/person/Q17892> ;
     intro:R17_actualizesFeature <https://sappho-digital.com/feature/person_ref/Q17892> ;
     intro:R18i_actualizationFoundOn <https://sappho-digital.com/expression/Q1242002> ;
@@ -613,7 +613,7 @@ Further, it’s highly recommended to manually refine the generated triples afte
     prov:wasDerivedFrom <http://www.wikidata.org/entity/Q128087> .
 
 <https://sappho-digital.com/actualization/place_ref/Q128087_Q1242002> a intro:INT2_ActualizationOfFeature ;
-    rdfs:label "Lesbos in Sappho"@en ;
+    rdfs:label "Reference to Lesbos in Sappho"@en ;
     ecrm:P67_refers_to <https://sappho-digital.com/place/Q128087> ;
     intro:R17_actualizesFeature <https://sappho-digital.com/feature/place_ref/Q128087> ;
     intro:R18i_actualizationFoundOn <https://sappho-digital.com/expression/Q1242002> ;
@@ -631,7 +631,7 @@ Further, it’s highly recommended to manually refine the generated triples afte
     intro:R21_identifies <https://sappho-digital.com/actualization/place_ref/Q128087_Q1242002> .
 
 <https://sappho-digital.com/actualization/place_ref/Q128087_Q19179765> a intro:INT2_ActualizationOfFeature ;
-    rdfs:label "Lesbos in Die Schwestern von Lesbos"@en ;
+    rdfs:label "Reference to Lesbos in Die Schwestern von Lesbos"@en ;
     ecrm:P67_refers_to <https://sappho-digital.com/place/Q128087> ;
     intro:R17_actualizesFeature <https://sappho-digital.com/feature/place_ref/Q128087> ;
     intro:R18i_actualizationFoundOn <https://sappho-digital.com/expression/Q19179765> ;
