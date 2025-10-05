@@ -8,8 +8,6 @@ To improve inference capabilities, all ECRM classes and properties have been map
 
 ---
 
-🚧 The repository is under active development. Currently, the `authors`, `works`, `relations`, `merge` and `map-and-align` modules are available. 
-
 The first three modules model basic biographical, bibliographical, and intertextual information based on data from Wikidata and can be dynamically extended. The scripts generate—depending on the module—an ontology (`owl:Ontology`) for authors, works, or intertexts. 
 
 The `merge` module can be used to merge the outputted Turtle files. 
@@ -55,6 +53,12 @@ python3 relations.py
 python3 merge.py
 python3 map-and-align.py
 ```
+
+---
+
+## Acknowledgments
+
+Special thanks to [Bernhard Oberreither](https://github.com/BOberreither) for feedback on the relations module, and [Lisa Poggel](https://github.com/lipogg) for feedback on the Python workflow.
 
 ---
 
@@ -384,8 +388,6 @@ Please also note that all searches are strictly one-way: Work → Phenomenon.
 ![Overview](https://github.com/laurauntner/wikidata-to-cidoc-crm/blob/main/relations/relations_simple.png?raw=true)
 
 📎 A complete [visual documentation](https://github.com/laurauntner/wikidata-to-cidoc-crm/blob/main/relations/relations.png) of the relations data model is included in the `relations` folder.
-
-🙏 Special thanks to [Bernhard Oberreither](https://github.com/BOberreither) for feedback.
 
 <h3>Example Input</h3>
 
