@@ -376,7 +376,6 @@ def process(g: Graph, qids: List[str]) -> None:
                 author_uri = URIRef(f"{SAPPHO_BASE_URI}person/{author_qid}")
                 g.add((work_creation_uri, ECRM.P14_carried_out_by, author_uri))
                 g.add((author_uri, ECRM.P14i_performed, work_creation_uri))
-                g.add((work_uri, ECRM.P14_carried_out_by, author_uri))
                 
                 g.add((author_uri, RDF.type, ECRM.E21_Person))
                 g.add((author_uri, RDFS.label, Literal(r.get("authorLabel", {}).get("value", "Unknown"))))
@@ -391,7 +390,7 @@ def process(g: Graph, qids: List[str]) -> None:
             g.add((identifier_uri, RDF.type, ECRM.E42_Identifier))
             g.add((identifier_uri, RDFS.label, Literal(qid)))
             g.add((identifier_uri, ECRM.P2_has_type, URIRef("https://sappho-digital.com/id_type/wikidata")))
-            g.add((URIRef("https://sappho-digital.com/id_type/wikidata"), ECRM.P2_is_type_of, identifier_uri))
+            g.add((URIRef("https://sappho-digital.com/id_type/wikidata"), ECRM.P2i_is_type_of, identifier_uri))
             
             wikidata_id_type_uri = URIRef("https://sappho-digital.com/id_type/wikidata")
             g.add((wikidata_id_type_uri, RDF.type, ECRM.E55_Type))
@@ -414,11 +413,11 @@ def process(g: Graph, qids: List[str]) -> None:
                     g.add((genre_uri, RDFS.label, Literal(r.get("genreLabel", {}).get("value", "Unknown"), lang="en")))
                     g.add((genre_uri, OWL.sameAs, URIRef(r["genre"]["value"])))
                     g.add((genre_uri, ECRM.P2_has_type, URIRef(f"{SAPPHO_BASE_URI}genre_type/wikidata")))
-                    g.add((URIRef(f"{SAPPHO_BASE_URI}genre_type/wikidata"), ECRM.P2_is_type_of, genre_uri))
+                    g.add((URIRef(f"{SAPPHO_BASE_URI}genre_type/wikidata"), ECRM.P2i_is_type_of, genre_uri))
                     g.add((URIRef(f"{SAPPHO_BASE_URI}genre_type/wikidata"), RDF.type, ECRM.E55_Type))
                     g.add((URIRef(f"{SAPPHO_BASE_URI}genre_type/wikidata"), RDFS.label, Literal("Wikidata Genre", lang="en")))
                 g.add((expression_uri, ECRM.P2_has_type, genre_cache[genre_qid]))
-                g.add((genre_cache[genre_qid], ECRM.P2_is_type_of, expression_uri))
+                g.add((genre_cache[genre_qid], ECRM.P2i_is_type_of, expression_uri))
 
             g.add((expression_uri, OWL.sameAs, URIRef(f"{WD}{qid}")))
             g.add((expression_uri, PROV.wasDerivedFrom, URIRef(f"{WD}{qid}")))
@@ -508,7 +507,7 @@ def process(g: Graph, qids: List[str]) -> None:
                         g.add((pub_date_uri, RDF.type, ECRM["E52_Time-Span"]))
                         g.add((pub_date_uri, RDFS.label, Literal(pub_year, datatype=XSD.gYear)))
                     g.add((manifestation_creation_uri, ECRM["P4_has_time-span"], date_cache[pub_year]))
-                    g.add((date_cache[pub_year], ECRM["P4_is_time-span_of"], manifestation_creation_uri))
+                    g.add((date_cache[pub_year], ECRM["P4i_is_time-span_of"], manifestation_creation_uri))
 
             if "pub_place" in r:
                 place_qid = r["pub_place"]["value"].split("/")[-1]

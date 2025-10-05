@@ -181,11 +181,11 @@ lrmoo:R7i_is_exemplified_by owl:equivalentProperty efrbroo:R7i_has_example,
 
 <https://sappho-digital.com/genre_type/wikidata> a ecrm:E55_Type ;
     rdfs:label "Wikidata Genre"@en ;
-    ecrm:P2_is_type_of <https://sappho-digital.com/genre/Q80930> .
+    ecrm:P2i_is_type_of <https://sappho-digital.com/genre/Q80930> .
 
 <https://sappho-digital.com/id_type/wikidata> a ecrm:E55_Type ;
     rdfs:label "Wikidata ID"@en ;
-    ecrm:P2_is_type_of <https://sappho-digital.com/identifier/Q1242002> ;
+    ecrm:P2i_is_type_of <https://sappho-digital.com/identifier/Q1242002> ;
     owl:sameAs <http://www.wikidata.org/wiki/Q43649390> .
 
 <https://sappho-digital.com/place/Q1741> a ecrm:E53_Place ;
@@ -204,7 +204,7 @@ lrmoo:R7i_is_exemplified_by owl:equivalentProperty efrbroo:R7i_has_example,
 
 <https://sappho-digital.com/timespan/1819> a ecrm:E52_Time-Span ;
     rdfs:label "1819"^^xsd:gYear ;
-    ecrm:P4_is_time-span_of <https://sappho-digital.com/manifestation_creation/Q1242002> .
+    ecrm:P4i_is_time-span_of <https://sappho-digital.com/manifestation_creation/Q1242002> .
 
 <https://sappho-digital.com/title_string/expression/Q1242002> a ecrm:E62_String ;
     rdfs:label "Sappho"@de ;
@@ -223,7 +223,7 @@ ecrm:E62_String owl:equivalentClass crm:E62_String .
 <https://sappho-digital.com/genre/Q80930> a ecrm:E55_Type ;
     rdfs:label "tragedy"@en ;
     ecrm:P2_has_type <https://sappho-digital.com/genre_type/wikidata> ;
-    ecrm:P2_is_type_of <https://sappho-digital.com/expression/Q1242002> ;
+    ecrm:P2i_is_type_of <https://sappho-digital.com/expression/Q1242002> ;
     owl:sameAs <http://www.wikidata.org/entity/Q80930> .
 
 <https://sappho-digital.com/identifier/Q1242002> a ecrm:E42_Identifier ;
@@ -265,18 +265,17 @@ ecrm:E55_Type owl:equivalentClass crm:E55_Type .
     lrmoo:R19_created_a_realisation_of <https://sappho-digital.com/work/Q1242002> ;
     prov:wasDerivedFrom <http://www.wikidata.org/entity/Q1242002> .
 
-<https://sappho-digital.com/work/Q1242002> a lrmoo:F1_Work ;
-    rdfs:label "Work of Sappho"@en ;
-    ecrm:P14_carried_out_by <https://sappho-digital.com/person/Q154438> ;
-    lrmoo:R16i_was_created_by <https://sappho-digital.com/work_creation/Q1242002> ;
-    lrmoo:R19i_was_realised_through <https://sappho-digital.com/expression_creation/Q1242002> ;
-    lrmoo:R3_is_realised_in <https://sappho-digital.com/expression/Q1242002> .
-
 <https://sappho-digital.com/person/Q154438> a ecrm:E21_Person ;
     rdfs:label "Franz Grillparzer" ;
     ecrm:P14i_performed <https://sappho-digital.com/manifestation_creation/Q1242002>,
         <https://sappho-digital.com/work_creation/Q1242002> ;
     owl:sameAs <http://www.wikidata.org/entity/Q154438> .
+
+<https://sappho-digital.com/work/Q1242002> a lrmoo:F1_Work ;
+    rdfs:label "Work of Sappho"@en ;
+    lrmoo:R16i_was_created_by <https://sappho-digital.com/work_creation/Q1242002> ;
+    lrmoo:R19i_was_realised_through <https://sappho-digital.com/expression_creation/Q1242002> ;
+    lrmoo:R3_is_realised_in <https://sappho-digital.com/expression/Q1242002> .
 
 <https://sappho-digital.com/manifestation/Q1242002> a lrmoo:F3_Manifestation ;
     rdfs:label "Manifestation of Sappho"@en ;
