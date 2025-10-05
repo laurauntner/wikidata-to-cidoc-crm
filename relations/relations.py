@@ -7,37 +7,132 @@ The output is serialized as Turtle and written to 'relations.ttl'.
 """
 
 import csv
-import requests
-from itertools import combinations
+import time
+import argparse
 from functools import lru_cache
+from itertools import combinations
+from typing import Union, Iterable, Tuple, List, Dict, Any, Optional
+
+import requests
+from requests.adapters import HTTPAdapter
+from urllib3.util.retry import Retry
+from email.utils import parsedate_to_datetime
+from datetime import datetime, timezone
+
 from rdflib import Graph, Namespace, URIRef, Literal
 from rdflib.namespace import RDF, RDFS, OWL
 from tqdm import tqdm
-from typing import Union, Iterable, Tuple
+
+# Settings
+INPUT_CSV_DEFAULT = "work-qids.csv"
+OUTPUT_TTL_DEFAULT = "relations.ttl"
+
+SPARQL_URL = "https://query.wikidata.org/sparql"
+USER_AGENT = "SapphoIntertextualRelationsBot/1.0 (laura.untner@fu-berlin.de)"
+HTTP_TIMEOUT = 120
+MAX_RETRIES = 5
 
 # Namespaces
 WD_ENTITY = "http://www.wikidata.org/entity/"
 sappho   = Namespace("https://sappho-digital.com/")
 ecrm     = Namespace("http://erlangen-crm.org/current/")
 ecrm_uri = URIRef("http://erlangen-crm.org/current/")
-crm = Namespace("http://www.cidoc-crm.org/cidoc-crm/")
+crm      = Namespace("http://www.cidoc-crm.org/cidoc-crm/")
 lrmoo    = Namespace("http://iflastandards.info/ns/lrm/lrmoo/")
 lrmoo_uri = URIRef("https://cidoc-crm.org/extensions/lrmoo/owl/1.0/LRMoo_v1.0.owl")
-frbroo = Namespace("http://iflastandards.info/ns/fr/frbr/frbroo/")
-efrbroo = Namespace("http://erlangen-crm.org/efrbroo/")
+frbroo   = Namespace("http://iflastandards.info/ns/fr/frbr/frbroo/")
+efrbroo  = Namespace("http://erlangen-crm.org/efrbroo/")
 intro    = Namespace("https://w3id.org/lso/intro/currentbeta#")
 intro_uri = URIRef("https://w3id.org/lso/intro/currentbeta#")
 prov     = Namespace("http://www.w3.org/ns/prov#")
 
-# SPARQL Setup
-SPARQL_URL = "https://query.wikidata.org/sparql"
-HEADERS = {
-    "Accept": "application/sparql-results+json",
-    "User-Agent": "SapphoIntertextualRelationsBot/1.0 (laura.untner@fu-berlin.de)"
-}
-session = requests.Session()
-session.headers.update(HEADERS)
+# HTTP helpers
+def _parse_retry_after(header_val: str) -> Optional[float]:
+    """
+    Parse 'Retry-After' (seconds or HTTP-date). Return seconds as float, or None.
+    """
+    if not header_val:
+        return None
+    header_val = header_val.strip()
+    if header_val.isdigit():
+        return float(header_val)
+    try:
+        dt = parsedate_to_datetime(header_val)
+        if dt.tzinfo is None:
+            dt = dt.replace(tzinfo=timezone.utc)
+        return max(0.0, (dt - datetime.now(timezone.utc)).total_seconds())
+    except Exception:
+        return None
 
+def make_session() -> requests.Session:
+    """
+    Create pooled session; manual retry control respects Retry-After fully.
+    """
+    sess = requests.Session()
+    sess.headers.update({"Accept": "application/sparql-results+json", "User-Agent": USER_AGENT})
+    retry = Retry(
+        total=0,
+        respect_retry_after_header=True,
+        backoff_factor=0,
+        status_forcelist=(429, 500, 502, 503, 504),
+        allowed_methods=frozenset(["GET", "POST"]),
+        raise_on_status=False,
+    )
+    adapter = HTTPAdapter(max_retries=retry, pool_connections=10, pool_maxsize=20)
+    sess.mount("http://", adapter)
+    sess.mount("https://", adapter)
+    return sess
+
+SESSION = make_session()
+
+def http_request_with_retry(
+    method: str,
+    url: str,
+    *,
+    params: Optional[Dict[str, Any]] = None,
+    headers: Optional[Dict[str, str]] = None,
+    ok_statuses: Iterable[int] = (200,),
+    max_retries: int = MAX_RETRIES,
+    timeout: int = HTTP_TIMEOUT,
+) -> requests.Response:
+    """
+    Perform HTTP request; retry on 429/5xx. Respect Retry-After; otherwise gentle backoff.
+    """
+    tries = 0
+    while True:
+        tries += 1
+        resp = SESSION.request(method, url, params=params, headers=headers, timeout=timeout)
+
+        if resp.status_code in ok_statuses:
+            return resp
+
+        if resp.status_code == 429:
+            retry_after = _parse_retry_after(resp.headers.get("Retry-After", ""))
+            wait_s = retry_after if retry_after is not None else 5.0
+            print(f"429 Too Many Requests – waiting {wait_s:.1f}s (try {tries}/{max_retries})")
+            if tries >= max_retries:
+                resp.raise_for_status()
+            time.sleep(wait_s)
+            continue
+
+        if 500 <= resp.status_code < 600:
+            retry_after = _parse_retry_after(resp.headers.get("Retry-After", "")) or min(10.0, 1.5 ** (tries - 1))
+            print(f"{resp.status_code} Server error – waiting {retry_after:.1f}s (try {tries}/{max_retries})")
+            if tries >= max_retries:
+                resp.raise_for_status()
+            time.sleep(retry_after)
+            continue
+
+        resp.raise_for_status()
+
+def run_sparql(query: str) -> dict:
+    """
+    Run a SPARQL query using the Retry-After-aware HTTP routine.
+    """
+    resp = http_request_with_retry("GET", SPARQL_URL, params={"query": query})
+    return resp.json()
+
+# Label helper
 @lru_cache(None)
 def get_label(qid: str, lang: str = "en") -> str:
     for lg in (lang, "de"):
@@ -47,69 +142,56 @@ def get_label(qid: str, lang: str = "en") -> str:
             FILTER(LANG(?l)="{lg}")
           }} LIMIT 1
         """
-        r = session.get(SPARQL_URL, params={"query": q}, timeout=120)
-        r.raise_for_status()
-        b = r.json()["results"]["bindings"]
+        data = run_sparql(q)
+        b = data["results"]["bindings"]
         if b:
             return b[0]["l"]["value"]
     return qid
 
-def run_sparql(query: str) -> dict:
-    r = session.get(SPARQL_URL, params={"query": query}, timeout=120)
-    r.raise_for_status()
-    return r.json()
+# Graph setup
+def build_graph() -> Graph:
+    g = Graph()
+    for prefix, ns in [
+        ("sappho", sappho),
+        ("ecrm", ecrm),
+        ("crm", crm),
+        ("frbroo", frbroo),
+        ("efrbroo", efrbroo),
+        ("lrmoo", lrmoo),
+        ("intro", intro),
+        ("prov", prov),
+    ]:
+        g.bind(prefix, ns)
+        g.bind("rdfs", RDFS)
+        g.bind("owl", OWL)
 
-# Load QIDS
-with open("work-qids.csv", newline="", encoding="utf-8") as f:
-    reader = csv.reader(f)
-    qids = [row[0] for row in reader if row and row[0].startswith("Q")]
+    # Ontology
+    ontology_uri = URIRef("https://sappho-digital.com/ontology/relations")
+    g.add((ontology_uri, RDF.type, OWL.Ontology))
+    g.add((ontology_uri, OWL.imports, ecrm_uri))
+    g.add((ontology_uri, OWL.imports, lrmoo_uri))
+    g.add((ontology_uri, OWL.imports, intro_uri))
 
-# Graph & Prefixes
-g = Graph()
-for prefix, ns in [
-    ("sappho", sappho),
-    ("ecrm", ecrm),
-    ("crm", crm),
-    ("frbroo", frbroo),
-    ("efrbroo", efrbroo),
-    ("lrmoo", lrmoo),
-    ("intro", intro),
-    ("prov", prov),
-]:
-    g.bind(prefix, ns)
-    g.bind("rdfs", RDFS)
-    g.bind("owl", OWL)
+    # ID-Type
+    ID_TYPE = URIRef(sappho + "id_type/wikidata")
+    g.add((ID_TYPE, RDF.type, ecrm.E55_Type))
+    g.add((ID_TYPE, RDFS.label, Literal("Wikidata ID", lang="en")))
+    g.add((ID_TYPE, OWL.sameAs, URIRef(WD_ENTITY + "Q43649390")))
+    return g
 
-# Ontology
-
-ontology_uri = URIRef("https://sappho-digital.com/ontology/relations")
-
-g.add((ontology_uri, RDF.type, OWL.Ontology))
-
-g.add((ontology_uri, OWL.imports, ecrm_uri))
-g.add((ontology_uri, OWL.imports, lrmoo_uri))
-g.add((ontology_uri, OWL.imports, intro_uri))
-
-# ID-Type
-ID_TYPE = URIRef(sappho + "id_type/wikidata")
-g.add((ID_TYPE, RDF.type, ecrm.E55_Type))
-g.add((ID_TYPE, RDFS.label, Literal("Wikidata ID", lang="en")))
-g.add((ID_TYPE, OWL.sameAs, URIRef(WD_ENTITY + "Q43649390")))
-
-# Wikidata IDs
-def add_identifier(entity: URIRef, qid: str):
+# Helper functions
+def add_identifier(g: Graph, entity: URIRef, qid: str):
     uri = URIRef(f"{sappho}identifier/{qid}")
     pure = qid.split("_")[-1]
     g.add((uri, RDF.type, ecrm.E42_Identifier))
     g.add((uri, RDFS.label, Literal(pure, lang="en")))
-    g.add((uri, ecrm.P2_has_type, ID_TYPE))
-    g.add((ID_TYPE, ecrm.P2i_is_type_of, uri))
+    g.add((uri, ecrm.P2_has_type, URIRef(sappho + "id_type/wikidata")))
+    g.add((URIRef(sappho + "id_type/wikidata"), ecrm.P2i_is_type_of, uri))
     g.add((uri, prov.wasDerivedFrom, URIRef(f"{WD_ENTITY}{pure}")))
     g.add((entity, ecrm.P1_is_identified_by, uri))
     g.add((uri, ecrm.P1i_identifies, entity))
 
-# Expressions
-def ensure_expression(qid: str, label: str = None) -> URIRef:
+def ensure_expression(g: Graph, qid: str, label: str = None) -> URIRef:
     uri = URIRef(f"{sappho}expression/{qid}")
     if (uri, RDF.type, lrmoo.F2_Expression) in g:
         return uri
@@ -118,8 +200,8 @@ def ensure_expression(qid: str, label: str = None) -> URIRef:
     g.add((uri, OWL.sameAs, URIRef(WD_ENTITY + qid)))
     return uri
 
-# Features
 def ensure_feature(
+    g: Graph,
     qid: str,
     cls: URIRef,
     label: str,
@@ -130,17 +212,17 @@ def ensure_feature(
          g.add((uri, RDF.type, cls))
          g.add((uri, RDFS.label, Literal(label, lang="en")))
          g.add((uri, OWL.sameAs, URIRef(WD_ENTITY + qid)))
-         add_identifier(uri, qid)
+         add_identifier(g, uri, qid)
      return uri
 
-# Interpretations
 def add_interpretation(
+    g: Graph,
     target: URIRef,
     label: str,
     derived_from: Union[URIRef, Iterable[URIRef]]
 ) -> Tuple[URIRef, URIRef]:
 
-    tid      = target.split("/")[-1]
+    tid      = str(target).split("/")[-1]
     feat_uri = URIRef(f"{sappho}feature/interpretation/{tid}")
     if (feat_uri, None, None) not in g:
         g.add((feat_uri, RDF.type, intro.INT_Interpretation))
@@ -153,7 +235,7 @@ def add_interpretation(
 
         sources = [derived_from] if isinstance(derived_from, URIRef) else list(derived_from)
         for src in sources:
-            qid = src.split("/")[-1]
+            qid = str(src).split("/")[-1]
             g.add((act_uri, prov.wasDerivedFrom, URIRef(WD_ENTITY + qid)))
 
         g.add((feat_uri, intro.R17i_featureIsActualizedIn, act_uri))
@@ -164,14 +246,13 @@ def add_interpretation(
 
     return feat_uri, act_uri
 
-# Actualizations
-def add_actualization(feature: URIRef, expression: URIRef, label: str, relation: URIRef):
+def add_actualization(g: Graph, feature: URIRef, expression: URIRef, label: str, relation: URIRef):
     parts = str(feature).rstrip("/").split("/")
     parts = [p for p in parts if p != "feature"]
     typ = parts[-2]
     qid = parts[-1]
     fid = f"{typ}/{qid}"
-    eid = expression.split("/")[-1]
+    eid = str(expression).split("/")[-1]
     act = URIRef(f"{sappho}actualization/{fid}_{eid}")
     if any(g.triples((act, None, None))):
         return act
@@ -186,17 +267,17 @@ def add_actualization(feature: URIRef, expression: URIRef, label: str, relation:
     g.add((expression, intro.R24i_isRelatedEntity, relation))
     g.add((relation, intro.R24_hasRelatedEntity, expression))
     feat_intp, act_intp = add_interpretation(
+        g,
         act,
         f"Interpretation of {label}",
         URIRef(WD_ENTITY + eid)
     )
     return act
 
-# Interrelations
-def get_or_create_int31_relation(expr1: URIRef, expr2: URIRef) -> URIRef:
+def get_or_create_int31_relation(g: Graph, expr1: URIRef, expr2: URIRef) -> Optional[URIRef]:
     if expr1 == expr2:
         return None
-    w1, w2 = expr1.split("/")[-1], expr2.split("/")[-1]
+    w1, w2 = str(expr1).split("/")[-1], str(expr2).split("/")[-1]
 
     if w1 < w2:
         rel_uri = URIRef(f"{sappho}relation/{w1}_{w2}")
@@ -209,6 +290,7 @@ def get_or_create_int31_relation(expr1: URIRef, expr2: URIRef) -> URIRef:
                Literal(f"Intertextual relation between {get_label(w1)} and {get_label(w2)}", lang="en")))
 
         feat_intp, act_intp = add_interpretation(
+            g,
             rel_uri,
             f"Interpretation of intertextual relation between {get_label(w1)} and {get_label(w2)}",
             [expr1, expr2]
@@ -216,9 +298,8 @@ def get_or_create_int31_relation(expr1: URIRef, expr2: URIRef) -> URIRef:
         
     return rel_uri
 
-# Other Relations
-def process_int31(qids):
-    
+# Processors
+def process_int31(g: Graph, qids: List[str]):
     vals = " ".join(f"wd:{q}" for q in qids)
 
     sparql_fwd = f"""
@@ -282,8 +363,7 @@ SELECT DISTINCT ?w1 ?w2 ?p WHERE {{
             g.add((rel, RDFS.label,
                    Literal(f"Intertextual relation ({p}) between {get_label(w1)} and {get_label(w2)}", lang="en")))
 
-# Plots
-def process_plots(qids):
+def process_plots(g: Graph, qids: List[str]):
     vals = " ".join(f"wd:{q}" for q in qids)
 
     query = f"""
@@ -311,7 +391,7 @@ SELECT ?wrk ?tgt WHERE {{
 """
     res = run_sparql(query)["results"]["bindings"]
 
-    mp = {}
+    mp: Dict[str, List[str]] = {}
     for b in res:
         w   = b["wrk"]["value"].rsplit("/",1)[-1]
         tgt = b["tgt"]["value"].rsplit("/",1)[-1]
@@ -320,12 +400,12 @@ SELECT ?wrk ?tgt WHERE {{
     for tgt, works in mp.items():
         raw_lbl = get_label(tgt)
         feat_lbl = f"{raw_lbl} (plot)"
-        feat = ensure_feature(tgt, intro.INT_Plot, feat_lbl, path="feature/plot")
+        feat = ensure_feature(g, tgt, intro.INT_Plot, feat_lbl, path="feature/plot")
 
         for w1, w2 in combinations(works, 2):
-            expr1 = ensure_expression(w1, get_label(w1))
-            expr2 = ensure_expression(w2, get_label(w2))
-            rel   = get_or_create_int31_relation(expr1, expr2)
+            expr1 = ensure_expression(g, w1, get_label(w1))
+            expr2 = ensure_expression(g, w2, get_label(w2))
+            rel   = get_or_create_int31_relation(g, expr1, expr2)
             if rel is None:
                 continue
 
@@ -333,11 +413,10 @@ SELECT ?wrk ?tgt WHERE {{
                 g.add((feat, intro.R22_providesSimilarityForRelation, rel))
                 g.add((rel, intro.R22i_relationIsBasedOnSimilarity, feat))
 
-            add_actualization(feat, expr1, f"{raw_lbl} in {get_label(w1)}", rel)
-            add_actualization(feat, expr2, f"{raw_lbl} in {get_label(w2)}", rel)
+            add_actualization(g, feat, expr1, f"{raw_lbl} in {get_label(w1)}", rel)
+            add_actualization(g, feat, expr2, f"{raw_lbl} in {get_label(w2)}", rel)
 
-# Topics
-def process_topics(qids):
+def process_topics(g: Graph, qids: List[str]):
     vals = " ".join(f"wd:{q}" for q in qids)
 
     query = f"""
@@ -364,7 +443,7 @@ SELECT ?wrk ?tgt WHERE {{
 """
     res = run_sparql(query)["results"]["bindings"]
 
-    mp = {}
+    mp: Dict[str, List[str]] = {}
     for b in res:
         w = b["wrk"]["value"].rsplit("/",1)[-1]
         t = b["tgt"]["value"].rsplit("/",1)[-1]
@@ -373,13 +452,13 @@ SELECT ?wrk ?tgt WHERE {{
     for tgt, works in mp.items():
             raw_lbl = get_label(tgt)
             feat_lbl = f"{raw_lbl} (topic)"
-            feat = ensure_feature(tgt, intro.INT_Topic, feat_lbl, path="feature/topic")
+            feat = ensure_feature(g, tgt, intro.INT_Topic, feat_lbl, path="feature/topic")
 
             for w1, w2 in combinations(works, 2):
-                expr1 = ensure_expression(w1, get_label(w1))
-                expr2 = ensure_expression(w2, get_label(w2))
+                expr1 = ensure_expression(g, w1, get_label(w1))
+                expr2 = ensure_expression(g, w2, get_label(w2))
 
-                rel = get_or_create_int31_relation(expr1, expr2)
+                rel = get_or_create_int31_relation(g, expr1, expr2)
                 if rel is None:
                     continue
 
@@ -387,11 +466,10 @@ SELECT ?wrk ?tgt WHERE {{
                     g.add((feat, intro.R22_providesSimilarityForRelation, rel))
                     g.add((rel, intro.R22i_relationIsBasedOnSimilarity, feat))
 
-                add_actualization(feat, expr1, f"{raw_lbl} in {get_label(w1)}", rel)
-                add_actualization(feat, expr2, f"{raw_lbl} in {get_label(w2)}", rel)
+                add_actualization(g, feat, expr1, f"{raw_lbl} in {get_label(w1)}", rel)
+                add_actualization(g, feat, expr2, f"{raw_lbl} in {get_label(w2)}", rel)
 
-# Motifs
-def process_motifs(qids):
+def process_motifs(g: Graph, qids: List[str]):
     vals = " ".join(f"wd:{q}" for q in qids)
     query = f"""
 PREFIX wdt: <http://www.wikidata.org/prop/direct/>
@@ -416,7 +494,7 @@ SELECT ?wrk ?motif WHERE {{
 """
     res = run_sparql(query)["results"]["bindings"]
 
-    mp = {}
+    mp: Dict[str, List[str]] = {}
     for b in res:
         w = b["wrk"]["value"].rsplit("/",1)[-1]
         m = b["motif"]["value"].rsplit("/",1)[-1]
@@ -425,13 +503,13 @@ SELECT ?wrk ?motif WHERE {{
     for motif, works in mp.items():
         raw_lbl = get_label(motif)
         feat_lbl = f"{raw_lbl} (motif)"
-        feat = ensure_feature(motif, intro.INT_Motif, feat_lbl, path="feature/motif")
+        feat = ensure_feature(g, motif, intro.INT_Motif, feat_lbl, path="feature/motif")
 
         for w1, w2 in combinations(works, 2):
-            expr1 = ensure_expression(w1, get_label(w1))
-            expr2 = ensure_expression(w2, get_label(w2))
+            expr1 = ensure_expression(g, w1, get_label(w1))
+            expr2 = ensure_expression(g, w2, get_label(w2))
 
-            rel = get_or_create_int31_relation(expr1, expr2)
+            rel = get_or_create_int31_relation(g, expr1, expr2)
             if rel is None:
                 continue
 
@@ -439,11 +517,10 @@ SELECT ?wrk ?motif WHERE {{
                 g.add((feat, intro.R22_providesSimilarityForRelation, rel))
                 g.add((rel, intro.R22i_relationIsBasedOnSimilarity, feat))
 
-            add_actualization(feat, expr1, f"{raw_lbl} in {get_label(w1)}", rel)
-            add_actualization(feat, expr2, f"{raw_lbl} in {get_label(w2)}", rel)
+            add_actualization(g, feat, expr1, f"{raw_lbl} in {get_label(w1)}", rel)
+            add_actualization(g, feat, expr2, f"{raw_lbl} in {get_label(w2)}", rel)
 
-# Person References
-def process_person(qids):
+def process_person(g: Graph, qids: List[str]):
     vals = " ".join(f"wd:{q}" for q in qids)
     q = f"""
 PREFIX wdt: <http://www.wikidata.org/prop/direct/>
@@ -458,7 +535,7 @@ SELECT DISTINCT ?wrk ?pers WHERE {{
   ?pers wdt:P31/wdt:P279* wd:Q5 .
 }}
 """
-    mp = {}
+    mp: Dict[str, set] = {}
     for row in run_sparql(q)["results"]["bindings"]:
         w = row["wrk"]["value"].split("/")[-1]
         p = row["pers"]["value"].split("/")[-1]
@@ -474,7 +551,7 @@ SELECT DISTINCT ?wrk ?pers WHERE {{
         g.add((p_uri, RDF.type, ecrm.E21_Person))
         g.add((p_uri, RDFS.label, Literal(name, lang="en")))
         g.add((p_uri, OWL.sameAs, URIRef(WD_ENTITY + p)))
-        add_identifier(p_uri, p)  
+        add_identifier(g, p_uri, p)  
 
         feat = URIRef(f"{sappho}feature/person_ref/{p}")
         if (feat, None, None) not in g:
@@ -483,10 +560,10 @@ SELECT DISTINCT ?wrk ?pers WHERE {{
                    Literal(f"Reference to {name} (person)", lang="en")))
 
         for w1, w2 in combinations(sorted(works), 2):
-            expr1 = ensure_expression(w1, get_label(w1))
-            expr2 = ensure_expression(w2, get_label(w2))
+            expr1 = ensure_expression(g, w1, get_label(w1))
+            expr2 = ensure_expression(g, w2, get_label(w2))
 
-            rel = get_or_create_int31_relation(expr1, expr2)
+            rel = get_or_create_int31_relation(g, expr1, expr2)
             if rel is None:
                 continue
 
@@ -494,18 +571,17 @@ SELECT DISTINCT ?wrk ?pers WHERE {{
                 g.add((feat, intro.R22_providesSimilarityForRelation, rel))
                 g.add((rel, intro.R22i_relationIsBasedOnSimilarity, feat))
 
-            add_actualization(feat, expr1, f"{name} in {get_label(w1)}", rel)
-            act1 = add_actualization(feat, expr1, f"Reference to {name} in {get_label(w1)}", rel)
+            add_actualization(g, feat, expr1, f"{name} in {get_label(w1)}", rel)
+            act1 = add_actualization(g, feat, expr1, f"Reference to {name} in {get_label(w1)}", rel)
             g.add((act1, ecrm.P67_refers_to, p_uri))
             g.add((p_uri,  ecrm.P67i_is_referred_to_by, act1))
 
-            add_actualization(feat, expr2, f"{name} in {get_label(w2)}", rel)
-            act2 = add_actualization(feat, expr2, f"Reference to {name} in {get_label(w2)}", rel)
+            add_actualization(g, feat, expr2, f"{name} in {get_label(w2)}", rel)
+            act2 = add_actualization(g, feat, expr2, f"Reference to {name} in {get_label(w2)}", rel)
             g.add((act2, ecrm.P67_refers_to, p_uri))
             g.add((p_uri,  ecrm.P67i_is_referred_to_by, act2))
 
-# Place References
-def process_place(qids):
+def process_place(g: Graph, qids: List[str]):
     vals = " ".join(f"wd:{q}" for q in qids)
     q = f"""
 PREFIX wdt: <http://www.wikidata.org/prop/direct/>
@@ -519,7 +595,7 @@ SELECT DISTINCT ?wrk ?place WHERE {{
   ?place wdt:P31/wdt:P279* wd:Q2221906 .
 }}
 """
-    mp = {}
+    mp: Dict[str, set] = {}
     for row in run_sparql(q)["results"]["bindings"]:
         w = row["wrk"]["value"].split("/")[-1]
         p = row["place"]["value"].split("/")[-1]
@@ -534,7 +610,7 @@ SELECT DISTINCT ?wrk ?place WHERE {{
         g.add((p_uri, RDF.type, ecrm.E53_Place))
         g.add((p_uri, RDFS.label, Literal(name, lang="en")))
         g.add((p_uri, OWL.sameAs, URIRef(WD_ENTITY + pl)))
-        add_identifier(p_uri, pl) 
+        add_identifier(g, p_uri, pl) 
 
         feat = URIRef(f"{sappho}feature/place_ref/{pl}")
         if (feat, None, None) not in g:
@@ -543,9 +619,9 @@ SELECT DISTINCT ?wrk ?place WHERE {{
                    Literal(f"Reference to {name} (place)", lang="en")))
 
         for w1, w2 in combinations(sorted(works), 2):
-            expr1 = ensure_expression(w1, get_label(w1))
-            expr2 = ensure_expression(w2, get_label(w2))
-            rel   = get_or_create_int31_relation(expr1, expr2)
+            expr1 = ensure_expression(g, w1, get_label(w1))
+            expr2 = ensure_expression(g, w2, get_label(w2))
+            rel   = get_or_create_int31_relation(g, expr1, expr2)
             if rel is None:
                 continue
             
@@ -553,21 +629,20 @@ SELECT DISTINCT ?wrk ?place WHERE {{
                 g.add((feat, intro.R22_providesSimilarityForRelation, rel))
                 g.add((rel, intro.R22i_relationIsBasedOnSimilarity, feat))
 
-            add_actualization(feat, expr1, f"{name} in {get_label(w1)}", rel)
-            fid = feat.split("/")[-1]
-            eid = expr1.split("/")[-1]
+            add_actualization(g, feat, expr1, f"{name} in {get_label(w1)}", rel)
+            fid = str(feat).split("/")[-1]
+            eid = str(expr1).split("/")[-1]
             act1 = URIRef(f"{sappho}actualization/place_ref/{fid}_{eid}")
             g.add((act1, ecrm.P67_refers_to, p_uri))
             g.add((p_uri,  ecrm.P67i_is_referred_to_by, act1))
 
-            add_actualization(feat, expr2, f"{name} in {get_label(w2)}", rel)
-            eid = expr2.split("/")[-1]
+            add_actualization(g, feat, expr2, f"{name} in {get_label(w2)}", rel)
+            eid = str(expr2).split("/")[-1]
             act2 = URIRef(f"{sappho}actualization/place_ref/{fid}_{eid}")
             g.add((act2, ecrm.P67_refers_to, p_uri))
             g.add((p_uri,  ecrm.P67i_is_referred_to_by, act2))
 
-# Work References
-def process_work_references(qids):
+def process_work_references(g: Graph, qids: List[str]):
     vals = " ".join(f"wd:{q}" for q in qids)
 
     sparql = f"""
@@ -590,7 +665,7 @@ SELECT DISTINCT ?src ?tgt WHERE {{
         if row["src"]["value"].rsplit("/", 1)[-1] in qids
     }
 
-    ref_map: dict[str, set[str]] = {}
+    ref_map: Dict[str, set] = {}
     for row in binds:
         src = row["src"]["value"].rsplit("/", 1)[-1]
         tgt = row["tgt"]["value"].rsplit("/", 1)[-1]
@@ -605,12 +680,12 @@ SELECT DISTINCT ?src ?tgt WHERE {{
             g.add((feat, RDFS.label,
                    Literal(f"Reference to {src_lbl} (expression)", lang="en")))
 
-        expr_src = ensure_expression(src, src_lbl)
+        expr_src = ensure_expression(g, src, src_lbl)
 
         for tgt in sorted(tgts):
             tgt_lbl  = get_label(tgt)
-            expr_tgt = ensure_expression(tgt, tgt_lbl)
-            rel      = get_or_create_int31_relation(expr_src, expr_tgt)
+            expr_tgt = ensure_expression(g, tgt, tgt_lbl)
+            rel      = get_or_create_int31_relation(g, expr_src, expr_tgt)
             if rel is None:
                 continue
 
@@ -619,21 +694,20 @@ SELECT DISTINCT ?src ?tgt WHERE {{
                 g.add((rel, intro.R22i_relationIsBasedOnSimilarity, feat))
 
             add_actualization(
+                g,
                 feat,
                 expr_tgt,
                 f"{src_lbl} in {tgt_lbl}",
                 rel
             )
             
-            fid = feat.split("/")[-1]
-            eid = expr_tgt.split("/")[-1]
+            fid = str(feat).split("/")[-1]
+            eid = str(expr_tgt).split("/")[-1]
             act = URIRef(f"{sappho}actualization/work_ref/{fid}_{eid}")
             g.add((act, ecrm.P67_refers_to, expr_src))
             g.add((expr_src, ecrm.P67i_is_referred_to_by, act))
-            
-# Characters
 
-def ensure_person_reference(char_qid: str):
+def ensure_person_reference(g: Graph, char_qid: str):
     p_uri  = URIRef(f"{sappho}person/{char_qid}")
     feat   = URIRef(f"{sappho}feature/person_ref/{char_qid}")
     name   = get_label(char_qid)
@@ -642,7 +716,7 @@ def ensure_person_reference(char_qid: str):
         g.add((p_uri, RDF.type, ecrm.E21_Person))
         g.add((p_uri, RDFS.label, Literal(name, lang="en")))
         g.add((p_uri, OWL.sameAs, URIRef(WD_ENTITY + char_qid)))
-        add_identifier(p_uri, char_qid)
+        add_identifier(g, p_uri, char_qid)
 
     if (feat, RDF.type, intro.INT18_Reference) not in g:
         g.add((feat, RDF.type, intro.INT18_Reference))
@@ -651,7 +725,7 @@ def ensure_person_reference(char_qid: str):
 
     return p_uri, feat
 
-def process_characters(qids):
+def process_characters(g: Graph, qids: List[str]):
     vals = " ".join(f"wd:{q}" for q in qids)
     sparql = f"""
 PREFIX wdt: <http://www.wikidata.org/prop/direct/>
@@ -677,7 +751,7 @@ SELECT DISTINCT ?wrk ?char WHERE {{
 """
     res = run_sparql(sparql)["results"]["bindings"]
 
-    char_map: dict[str, set[str]] = {}
+    char_map: Dict[str, set] = {}
     for b in res:
         w    = b["wrk"]["value"].rsplit("/",1)[-1]
         char = b["char"]["value"].rsplit("/",1)[-1]
@@ -695,7 +769,7 @@ SELECT DISTINCT ?wrk ?char WHERE {{
           }} LIMIT 1
         """)["results"]["bindings"]
         if is_person:
-            p_node, p_ref = ensure_person_reference(char)
+            p_node, p_ref = ensure_person_reference(g, char)
         else:
             p_node = p_ref = None
 
@@ -704,13 +778,13 @@ SELECT DISTINCT ?wrk ?char WHERE {{
             g.add((feat, RDF.type, intro.INT_Character))
             g.add((feat, RDFS.label, Literal(lbl, lang="en")))
             g.add((feat, OWL.sameAs, URIRef(f"{WD_ENTITY}{char}")))
-            add_identifier(feat, char)
+            add_identifier(g, feat, char)
 
         for w1, w2 in combinations(sorted(works), 2):
-            expr1 = ensure_expression(w1, get_label(w1))
-            expr2 = ensure_expression(w2, get_label(w2))
+            expr1 = ensure_expression(g, w1, get_label(w1))
+            expr2 = ensure_expression(g, w2, get_label(w2))
 
-            rel = get_or_create_int31_relation(expr1, expr2)
+            rel = get_or_create_int31_relation(g, expr1, expr2)
             if rel is None:
                 continue
 
@@ -718,8 +792,8 @@ SELECT DISTINCT ?wrk ?char WHERE {{
                 g.add((feat, intro.R22_providesSimilarityForRelation, rel))
                 g.add((rel, intro.R22i_relationIsBasedOnSimilarity, feat))
 
-            act1 = add_actualization(feat, expr1, f"{lbl} in {get_label(w1)}", rel)
-            act2 = add_actualization(feat, expr2, f"{lbl} in {get_label(w2)}", rel)
+            act1 = add_actualization(g, feat, expr1, f"{lbl} in {get_label(w1)}", rel)
+            act2 = add_actualization(g, feat, expr2, f"{lbl} in {get_label(w2)}", rel)
 
             if p_node is not None:
                 for act in (act1, act2):
@@ -728,13 +802,13 @@ SELECT DISTINCT ?wrk ?char WHERE {{
             
             for act, expr, work in ((act1, expr1, w1), (act2, expr2, w2)):
                 feat_intp, act_intp = add_interpretation(
+                    g,
                     act,
                     f"Interpretation of {lbl} in {get_label(work)}",
-                    URIRef(WD_ENTITY + expr.split('/')[-1])
+                    URIRef(WD_ENTITY + str(expr).split('/')[-1])
                 )
 
-# Citations & Passages
-def process_citations(qids):
+def process_citations(g: Graph, qids: List[str]):
     vals = " ".join(f"wd:{q}" for q in qids)
 
     q1 = f"""
@@ -759,9 +833,9 @@ SELECT DISTINCT ?src ?tgt WHERE {{
         pair_set.add(tuple(sorted((s, t))))
 
     for w1, w2 in pair_set:
-        expr1 = ensure_expression(w1, get_label(w1))
-        expr2 = ensure_expression(w2, get_label(w2))
-        rel   = get_or_create_int31_relation(expr1, expr2)
+        expr1 = ensure_expression(g, w1, get_label(w1))
+        expr2 = ensure_expression(g, w2, get_label(w2))
+        rel   = get_or_create_int31_relation(g, expr1, expr2)
         if rel is None:
             continue
 
@@ -784,8 +858,25 @@ SELECT DISTINCT ?src ?tgt WHERE {{
             g.add((rel, intro.R24_hasRelatedEntity, tp_uri))
             g.add((tp_uri, intro.R24i_isRelatedEntity, rel))
 
-# Main execution
-if __name__ == "__main__":
+# CLI / Entry
+def parse_args(argv=None):
+    p = argparse.ArgumentParser()
+    p.add_argument("--input", default=INPUT_CSV_DEFAULT, help="CSV file with QIDs (default: work-qids.csv)")
+    p.add_argument("--output", default=OUTPUT_TTL_DEFAULT, help="Output TTL file (default: relations.ttl)")
+    return p.parse_args(argv)
+
+def main(argv=None) -> int:
+    args = parse_args(argv)
+
+    # Load QIDs
+    with open(args.input, newline="", encoding="utf-8") as f:
+        reader = csv.reader(f)
+        qids = [row[0] for row in reader if row and row[0].startswith("Q")]
+
+    # Build graph
+    g = build_graph()
+
+    # Processors
     processors = [
         process_int31,
         process_plots,
@@ -798,10 +889,9 @@ if __name__ == "__main__":
     ]
 
     for fn in tqdm(processors, unit="task"):
-        fn(qids)
+        fn(g, qids)
     
     # Mapping
-    
     ecrm_classes = [
         "E21_Person",
         "E42_Identifier",
@@ -826,4 +916,8 @@ if __name__ == "__main__":
     g.add((lrmoo.F2_Expression, OWL.equivalentClass, efrbroo.F2_Expression))
 
     # Serialize
-    g.serialize(destination="relations.ttl", format="turtle")
+    g.serialize(destination=args.output, format="turtle")
+    return 0
+
+if __name__ == "__main__":
+    raise SystemExit(main())
