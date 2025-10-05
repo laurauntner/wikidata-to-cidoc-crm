@@ -7,8 +7,14 @@ and adds new identifiers from DBpedia, GeoNames etc.
 from rdflib import Graph, Namespace, URIRef, BNode, Literal, RDF, RDFS, OWL
 from rdflib.collection import Collection
 import sys
-from SPARQLWrapper import SPARQLWrapper, JSON
 import re
+import time
+from typing import Dict, Any, Iterable, Optional
+import requests
+from requests.adapters import HTTPAdapter
+from urllib3.util.retry import Retry
+from email.utils import parsedate_to_datetime
+from datetime import datetime, timezone
 
 # Namespaces 
 SKOS = Namespace("http://www.w3.org/2004/02/skos/core#")
@@ -39,6 +45,59 @@ ONTOPOETRY_CORE = Namespace("http://postdata.linhd.uned.es/ontology/postdata-cor
 ONTOPOETRY_ANALYSIS = Namespace("http://postdata.linhd.uned.es/ontology/postdata-poeticAnalysis#")
 SCHEMA = Namespace("https://schema.org/")
 
+# HTTP helpers
+SPARQL_URL = "https://query.wikidata.org/sparql"
+USER_AGENT = "SapphoMapAndAlignBot/1.0 (laura.untner@fu-berlin.de)"
+HTTP_TIMEOUT = 120
+MAX_RETRIES = 5
+
+def _parse_retry_after(header_val: str) -> Optional[float]:
+    if not header_val:
+        return None
+    header_val = header_val.strip()
+    if header_val.isdigit():
+        return float(header_val)
+    try:
+        dt = parsedate_to_datetime(header_val)
+        if dt.tzinfo is None:
+            dt = dt.replace(tzinfo=timezone.utc)
+        return max(0.0, (dt - datetime.now(timezone.utc)).total_seconds())
+    except Exception:
+        return None
+
+def _make_session() -> requests.Session:
+    sess = requests.Session()
+    sess.headers.update({"Accept": "application/sparql-results+json", "User-Agent": USER_AGENT})
+    retry = Retry(total=0, respect_retry_after_header=True, backoff_factor=0,
+                  status_forcelist=(429, 500, 502, 503, 504),
+                  allowed_methods=frozenset(["GET"]), raise_on_status=False)
+    adapter = HTTPAdapter(max_retries=retry, pool_connections=10, pool_maxsize=20)
+    sess.mount("https://", adapter); sess.mount("http://", adapter)
+    return sess
+
+_SESSION = _make_session()
+
+def _sparql_query(query: str, *, max_retries: int = MAX_RETRIES) -> Dict[str, Any]:
+    tries = 0
+    while True:
+        tries += 1
+        resp = _SESSION.get(SPARQL_URL, params={"query": query}, timeout=HTTP_TIMEOUT)
+        if resp.status_code == 200:
+            return resp.json()
+        if resp.status_code == 429:
+            ra = _parse_retry_after(resp.headers.get("Retry-After", "")) or 5.0
+            print(f"429 Too Many Requests – waiting {ra:.1f}s (try {tries}/{max_retries})")
+            if tries >= max_retries:
+                resp.raise_for_status()
+            time.sleep(ra); continue
+        if 500 <= resp.status_code < 600:
+            ra = _parse_retry_after(resp.headers.get("Retry-After", "")) or min(10.0, 1.5 ** (tries - 1))
+            print(f"{resp.status_code} Server error – waiting {ra:.1f}s (try {tries}/{max_retries})")
+            if tries >= max_retries:
+                resp.raise_for_status()
+            time.sleep(ra); continue
+        resp.raise_for_status()
+
 # Mapping
 
 def normalize_uri(raw, prefix_map):
@@ -57,8 +116,6 @@ def query_wikidata_batch(qids):
         "dbpedia": "https://dbpedia.org/"
     }
 
-    sparql = SPARQLWrapper("https://query.wikidata.org/sparql")
-    sparql.setReturnFormat(JSON)
     values = " ".join(f"wd:{qid}" for qid in qids)
     query = f"""
     PREFIX wd:  <http://www.wikidata.org/entity/>
@@ -82,8 +139,7 @@ def query_wikidata_batch(qids):
       OPTIONAL {{ ?item wdt:P8383 ?grWork   }}
     }}
     """
-    sparql.setQuery(query)
-    results = sparql.query().convert()
+    results = _sparql_query(query)
 
     batch_ids = {
         qid: { 'schema':[], 'dbpedia':[], 'gnd':[], 'viaf':[], 'geonames':[], 'goodreads':[] }
@@ -623,32 +679,9 @@ def main():
     
     # sappho_prop:about: expressions that actualize a intro:INT_Topic will be also linked to the topic
     
-    if any(g.triples((None, RDF.type, INTRO.INT_Topic))):
-        g.add((SAPPHO_PROP.about, RDF.type, OWL.ObjectProperty))
-        g.add((SAPPHO_PROP.about, RDFS.label,
-            Literal("Link from expression to topic", lang="en")))
-        b_about = BNode()
-        Collection(g, b_about, [
-            INTRO.R18_showsActualization,
-            INTRO.R17_actualizesFeature
-        ])
-        g.add((SAPPHO_PROP.about, OWL.propertyChainAxiom, b_about))
-        g.add((SAPPHO_PROP.about, SKOS.closeMatch, DC.subject))
-        g.add((SAPPHO_PROP.about, SKOS.closeMatch, FOAF.topic))
-        g.add((SAPPHO_PROP.about, SKOS.closeMatch, MIMOTEXT.P36)) # about
-        g.add((SAPPHO_PROP.about, SKOS.closeMatch, SCHEMA.about))
-        g.add((SAPPHO_PROP.about, RDFS.domain, LRMOO.F2_Expression))
-        g.add((SAPPHO_PROP.about, RDFS.range, INTRO.INT_Topic))
-
-        for expr in g.subjects(RDF.type, LRMOO.F2_Expression):
-            for act in g.objects(expr, INTRO.R18_showsActualization):
-                topic = g.value(act, INTRO.R17_actualizesFeature)
-                if topic and (topic, RDF.type, INTRO.INT_Topic) in g:
-                    g.add((expr, SAPPHO_PROP.about, topic))
-
-    # get younger and older expressions and text passages
+    # Gather directions (younger/older) first, needed later as well
     directions = []
-
+    
     for rel in g.subjects(RDF.type, INTRO.INT31_IntertextualRelation):
         tp_expr = []
         for tp in g.objects(rel, INTRO.R24_hasRelatedEntity):
@@ -679,12 +712,30 @@ def main():
             older_tp,    younger_tp    = tp2,    tp1
 
         directions.append((younger_expr, older_expr, younger_tp, older_tp))
-        
-        g.add((rel, INTRO.R13_hasReferringEntity, younger_expr))
-        g.add((younger_expr, INTRO.R13i_isReferringEntity, rel))
-        g.add((rel, INTRO.R12_hasReferredToEntity, older_expr))
-        g.add((older_expr, INTRO.R12i_isReferredToEntity, rel))
-    
+
+    if any(g.triples((None, RDF.type, INTRO.INT_Topic))):
+        g.add((SAPPHO_PROP.about, RDF.type, OWL.ObjectProperty))
+        g.add((SAPPHO_PROP.about, RDFS.label,
+            Literal("Link from expression to topic", lang="en")))
+        b_about = BNode()
+        Collection(g, b_about, [
+            INTRO.R18_showsActualization,
+            INTRO.R17_actualizesFeature
+        ])
+        g.add((SAPPHO_PROP.about, OWL.propertyChainAxiom, b_about))
+        g.add((SAPPHO_PROP.about, SKOS.closeMatch, DC.subject))
+        g.add((SAPPHO_PROP.about, SKOS.closeMatch, FOAF.topic))
+        g.add((SAPPHO_PROP.about, SKOS.closeMatch, MIMOTEXT.P36)) # about
+        g.add((SAPPHO_PROP.about, SKOS.closeMatch, SCHEMA.about))
+        g.add((SAPPHO_PROP.about, RDFS.domain, LRMOO.F2_Expression))
+        g.add((SAPPHO_PROP.about, RDFS.range, INTRO.INT_Topic))
+
+        for expr in g.subjects(RDF.type, LRMOO.F2_Expression):
+            for act in g.objects(expr, INTRO.R18_showsActualization):
+                topic = g.value(act, INTRO.R17_actualizesFeature)
+                if topic and (topic, RDF.type, INTRO.INT_Topic) in g:
+                    g.add((expr, SAPPHO_PROP.about, topic))
+
     # sappho_prop:expr_relation: expressions that are linked via intro:INT31 will be linked via this property
     if any(g.triples((None, RDF.type, INTRO.INT31_IntertextualRelation))):
         g.add((SAPPHO_PROP.expr_relation, RDF.type, OWL.ObjectProperty))
@@ -707,7 +758,8 @@ def main():
         g.add((SAPPHO_PROP.expr_relation, SKOS.closeMatch, MIMOTEXT.P34))  # relation
         g.add((SAPPHO_PROP.expr_relation, RDFS.domain, LRMOO.F2_Expression))
         g.add((SAPPHO_PROP.expr_relation, RDFS.range,  LRMOO.F2_Expression))
-
+        
+        # add directions to intro:INT31_IntertextualRelation
         for rel in g.subjects(RDF.type, INTRO.INT31_IntertextualRelation):
             acts = list(g.objects(rel, INTRO.R24_hasRelatedEntity))
             exprs = {
@@ -720,7 +772,14 @@ def main():
                     if e1 != e2:
                         g.add((e1, SAPPHO_PROP.expr_relation, e2))
                         g.add((e2, SAPPHO_PROP.expr_relation, e1))
-                
+
+        # Also materialize younger/older hints if computed
+        for younger_expr, older_expr, younger_tp, older_tp in directions:
+            g.add((URIRef(str(rel)), INTRO.R13_hasReferringEntity, younger_expr))
+            g.add((younger_expr, INTRO.R13i_isReferringEntity, URIRef(str(rel))))
+            g.add((URIRef(str(rel)), INTRO.R12_hasReferredToEntity, older_expr))
+            g.add((older_expr, INTRO.R12i_isReferredToEntity, URIRef(str(rel))))
+
     # sappho_prop:expr_possibly_cites / sappho_prop:expr_possibly_cited_by
     # if two expressions have intro:INT21_TextPassages that are part of their intro:INT31, 
     # it is possible (but not necessary) that the younger text cites the older text. 
