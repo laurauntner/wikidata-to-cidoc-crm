@@ -17,6 +17,7 @@ from datetime import datetime, timezone
 from typing import Optional, Dict, Any, Iterable, List
 from pathlib import Path
 import argparse
+from pyshacl import validate
 
 from rdflib import Graph, Literal, RDF, RDFS, Namespace, URIRef
 from rdflib.namespace import RDF, RDFS, OWL, XSD
@@ -571,22 +572,49 @@ def parse_args(argv=None) -> argparse.Namespace:
     p = argparse.ArgumentParser()
     p.add_argument("--input", type=Path, default=INPUT_CSV_DEFAULT, help="CSV file with QIDs (default: work-qids.csv)")
     p.add_argument("--output", type=Path, default=OUTPUT_TTL_DEFAULT, help="Output TTL file (default: works.ttl)")
+    p.add_argument("--log-level", default="INFO", help="Logging level (default: INFO)")
     return p.parse_args(argv)
 
 def main(argv=None) -> int:
     args = parse_args(argv)
+    logging.basicConfig(level=getattr(logging, args.log_level.upper(), logging.INFO),
+                        format="%(levelname)s:%(name)s:%(message)s")
 
-    # Create graph and reproduce ontology setup
+    # Create graph
     g = create_graph()
 
     # Load QIDs
-    qids = load_qids(args.input)
+    all_qids = load_qids(args.input)
 
-    # Run processing
-    process(g, qids)
+    # Process and enrich graph
+    process(g, all_qids)
 
     # Serialize to Turtle
-    g.serialize(str(args.output), format="turtle")
+    g.serialize(destination=str(args.output), format="turtle")
+    print(f"✅ RDF graph written to {args.output}")
+
+    # Validate the output graph using pySHACL
+    shapes_path = Path("work-shapes.ttl")
+    shapes_graph = Graph().parse(str(shapes_path), format="turtle")
+
+    conforms, report_graph, report_text = validate(
+        g,
+        shacl_graph=shapes_graph,
+        inference="rdfs",
+        meta_shacl=True,
+        advanced=True,
+        abort_on_first=False,
+        debug=False,
+    )
+
+    print("\n🔎 SHACL Validation Report:")
+    print(report_text)
+
+    if not conforms:
+        print("❌ Validation failed.")
+    else:
+        print("✅ Data conforms to SHACL shapes.")
+
     return 0
 
 if __name__ == "__main__":

@@ -1,0 +1,591 @@
+@prefix sh:    <http://www.w3.org/ns/shacl#> .
+@prefix xsd:   <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdf:   <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs:  <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl:   <http://www.w3.org/2002/07/owl#> .
+@prefix prov:  <http://www.w3.org/ns/prov#> .
+@prefix ecrm:  <http://erlangen-crm.org/current/> .
+@prefix lrmoo: <http://iflastandards.info/ns/lrm/lrmoo/> .
+@prefix frbroo: <http://iflastandards.info/ns/fr/frbr/frbroo/> .
+@prefix efrbroo: <http://erlangen-crm.org/efrbroo/> .
+@prefix wd:    <http://www.wikidata.org/entity/> .
+@prefix sappho: <https://sappho-digital.com/> .
+
+#################################################################
+# Helper node shapes used across the model
+#################################################################
+
+# Time-span year nodes (your script writes E52 with rdfs:label^^xsd:gYear)
+sappho:YearTimeSpanShape
+  a sh:NodeShape ;
+  sh:targetClass ecrm:E52_Time-Span ;
+  sh:property [
+    sh:path rdfs:label ;
+    sh:datatype xsd:gYear ;
+    sh:minCount 1 ;
+    sh:maxCount 1 ;
+  ] .
+
+# Places need owl:sameAs to a Wikidata Q-IRI; optional English label
+sappho:PlaceShape
+  a sh:NodeShape ;
+  sh:targetClass ecrm:E53_Place ;
+  sh:property [
+    sh:path owl:sameAs ;
+    sh:nodeKind sh:IRI ;
+    sh:minCount 1 ;
+  ] ;
+  sh:sparql [
+    sh:message "ecrm:E53_Place owl:sameAs must point to a Wikidata entity (Q…)." ;
+    sh:prefixes [
+        sh:declare [
+            sh:prefix "wd" ;
+            sh:namespace "http://www.wikidata.org/entity/"^^xsd:anyURI
+        ]
+        ] ;
+    sh:select """
+      SELECT ?this WHERE {
+        ?this owl:sameAs ?wd .
+        FILTER ( !STRSTARTS(STR(?wd), STR(wd:Q)) )
+      }
+    """ ;
+  ] ;
+  sh:property [
+    sh:path rdfs:label ;
+    sh:languageIn ("en") ;
+    sh:maxCount 1 ;
+  ] .
+
+# Minimal person references (author/editor) as E21 with owl:sameAs
+# Note: your script does not enforce label @lang for these; keep it liberal.
+sappho:PersonRefShape
+  a sh:NodeShape ;
+  sh:targetClass ecrm:E21_Person ;
+  sh:property [
+    sh:path owl:sameAs ;
+    sh:nodeKind sh:IRI ;
+    sh:minCount 1 ;
+  ] ;
+  sh:sparql [
+    sh:message "Person owl:sameAs must point to a Wikidata entity (Q…)." ;
+    sh:prefixes [
+        sh:declare [
+            sh:prefix "wd" ;
+            sh:namespace "http://www.wikidata.org/entity/"^^xsd:anyURI
+        ]
+        ] ;
+    sh:select """
+      SELECT ?this WHERE {
+        ?this owl:sameAs ?wd .
+        FILTER ( !STRSTARTS(STR(?wd), STR(wd:Q)) )
+      }
+    """ ;
+  ] .
+
+# Identifier nodes used on Expressions (E42_Identifier with QID label and fixed type)
+sappho:IdentifierShape
+  a sh:NodeShape ;
+  sh:targetClass ecrm:E42_Identifier ;
+  sh:property [
+    sh:path rdfs:label ;
+    sh:pattern "^Q[0-9]+$" ;
+    sh:minCount 1 ;
+    sh:maxCount 1 ;
+  ] ;
+  sh:property [
+    sh:path ecrm:P2_has_type ;
+    sh:hasValue <https://sappho-digital.com/id_type/wikidata> ;
+    sh:minCount 1 ;
+    sh:maxCount 1 ;
+  ] .
+
+# Concrete node for the identifier type itself
+sappho:IdentifierTypeNodeShape
+  a sh:NodeShape ;
+  sh:targetNode <https://sappho-digital.com/id_type/wikidata> ;
+  sh:property [
+    sh:path rdf:type ;
+    sh:hasValue ecrm:E55_Type ;
+    sh:minCount 1 ;
+  ] ;
+  sh:property [
+    sh:path rdfs:label ;
+    sh:languageIn ("en") ;
+    sh:hasValue "Wikidata ID"@en ;
+    sh:minCount 1 ;
+    sh:maxCount 1 ;
+  ] .
+
+# Genre nodes (E55_Type) with owl:sameAs wd:Q… and typed by /genre_type/wikidata
+sappho:GenreNodeShape
+  a sh:NodeShape ;
+  sh:target [
+    a sh:SPARQLTarget ;
+    sh:select """
+      SELECT ?this WHERE {
+        FILTER (STRSTARTS(STR(?this), "https://sappho-digital.com/genre/"))
+      }
+    """
+  ] ;
+  sh:property [
+    sh:path rdf:type ;
+    sh:hasValue ecrm:E55_Type ;
+    sh:minCount 1 ;
+  ] ;
+  sh:property [
+    sh:path rdfs:label ;
+    sh:languageIn ("en") ;
+    sh:minCount 1 ;
+    sh:maxCount 1 ;
+  ] ;
+  sh:property [
+    sh:path owl:sameAs ;
+    sh:nodeKind sh:IRI ;
+    sh:minCount 1 ;
+  ] ;
+  sh:sparql [
+    sh:message "Genre owl:sameAs must point to a Wikidata entity (Q…)." ;
+    sh:prefixes [
+        sh:declare [
+            sh:prefix "wd" ;
+            sh:namespace "http://www.wikidata.org/entity/"^^xsd:anyURI
+        ]
+        ] ;
+    sh:select """
+      SELECT ?this WHERE {
+        ?this owl:sameAs ?wd .
+        FILTER ( !STRSTARTS(STR(?wd), STR(wd:Q)) )
+      }
+    """ ;
+  ] ;
+  sh:property [
+    sh:path ecrm:P2_has_type ;
+    sh:hasValue <https://sappho-digital.com/genre_type/wikidata> ;
+    sh:minCount 1 ;
+    sh:maxCount 1 ;
+  ] .
+
+# Concrete node for genre type
+sappho:GenreTypeNodeShape
+  a sh:NodeShape ;
+  sh:targetNode <https://sappho-digital.com/genre_type/wikidata> ;
+  sh:property [
+    sh:path rdf:type ;
+    sh:hasValue ecrm:E55_Type ;
+    sh:minCount 1 ;
+  ] ;
+  sh:property [
+    sh:path rdfs:label ;
+    sh:languageIn ("en") ;
+    sh:hasValue "Wikidata Genre"@en ;
+    sh:minCount 1 ;
+    sh:maxCount 1 ;
+  ] .
+
+# Publishers are Legal Bodies with owl:sameAs wd:Q…
+sappho:PublisherShape
+  a sh:NodeShape ;
+  sh:targetClass ecrm:E40_Legal_Body ;
+  sh:property [
+    sh:path owl:sameAs ;
+    sh:nodeKind sh:IRI ;
+    sh:minCount 1 ;
+  ] ;
+  sh:sparql [
+    sh:message "Publisher owl:sameAs must point to a Wikidata entity (Q…)." ;
+    sh:prefixes [
+        sh:declare [
+            sh:prefix "wd" ;
+            sh:namespace "http://www.wikidata.org/entity/"^^xsd:anyURI
+        ]
+        ] ;
+    sh:select """
+      SELECT ?this WHERE {
+        ?this owl:sameAs ?wd .
+        FILTER ( !STRSTARTS(STR(?wd), STR(wd:Q)) )
+      }
+    """ ;
+  ] ;
+  sh:property [
+    sh:path rdfs:label ;
+    sh:languageIn ("en") ;
+    sh:minCount 1 ;
+    sh:maxCount 1 ;
+  ] .
+
+#################################################################
+# Title nodes for Expression and Manifestation
+#################################################################
+
+# E35_Title with symbolic content node (E62_String)
+sappho:TitleShape
+  a sh:NodeShape ;
+  sh:targetClass ecrm:E35_Title ;
+  sh:property [
+    sh:path ecrm:P190_has_symbolic_content ;
+    sh:node sappho:TitleStringShape ;
+    sh:minCount 1 ;
+    sh:maxCount 1 ;
+  ] ;
+  sh:property [
+    sh:path [ sh:inversePath ecrm:P102_has_title ] ;
+    sh:minCount 1 ;
+  ] .
+
+# String node; your script may write @en or @de depending on source
+sappho:TitleStringShape
+  a sh:NodeShape ;
+  sh:targetClass ecrm:E62_String ;
+  sh:property [
+    sh:path rdfs:label ;
+    sh:languageIn ("en" "de") ;
+    sh:minCount 1 ;
+    sh:maxCount 1 ;
+  ] ;
+  sh:property [
+    sh:path [ sh:inversePath ecrm:P190_has_symbolic_content ] ;
+    sh:minCount 1 ;
+  ] .
+
+#################################################################
+# Core bibliographic entities and events
+#################################################################
+
+# F1 Work
+sappho:WorkShape
+  a sh:NodeShape ;
+  sh:targetClass lrmoo:F1_Work ;
+  sh:property [
+    sh:path rdfs:label ;
+    sh:languageIn ("en") ;
+    sh:minCount 1 ;
+    sh:maxCount 1 ;
+  ] ;
+  # Work → Expression (realised in)
+  sh:property [
+    sh:path lrmoo:R3_is_realised_in ;
+    sh:node sappho:ExpressionShape ;
+    sh:minCount 1 ;
+    sh:maxCount 1 ;
+  ] ;
+  # Work was created by an F27 event
+  sh:property [
+    sh:path lrmoo:R16i_was_created_by ;
+    sh:node sappho:WorkCreationShape ;
+    sh:minCount 1 ;
+    sh:maxCount 1 ;
+  ] .
+
+# F27 Work Creation (may have author performer, optional)
+sappho:WorkCreationShape
+  a sh:NodeShape ;
+  sh:targetClass lrmoo:F27_Work_Creation ;
+  sh:property [
+    sh:path rdfs:label ;
+    sh:languageIn ("en") ;
+    sh:minCount 1 ;
+    sh:maxCount 1 ;
+  ] ;
+  sh:property [
+    sh:path lrmoo:R16_created ;
+    sh:class lrmoo:F1_Work ;
+    sh:minCount 1 ;
+  ] ;
+  sh:property [
+    sh:path prov:wasDerivedFrom ;
+    sh:nodeKind sh:IRI ;
+    sh:minCount 1 ;
+  ] ;
+  # Optional: carried out by Person (author)
+  sh:property [
+    sh:path ecrm:P14_carried_out_by ;
+    sh:node sappho:PersonRefShape ;
+    sh:minCount 0 ;
+  ] .
+
+# F2 Expression
+sappho:ExpressionShape
+  a sh:NodeShape ;
+  sh:targetClass lrmoo:F2_Expression ;
+  sh:property [
+    sh:path rdfs:label ;
+    sh:languageIn ("en") ;
+    sh:minCount 1 ;
+    sh:maxCount 1 ;
+  ] ;
+  # Identifier (E42) with QID pattern + fixed type
+  sh:property [
+    sh:path ecrm:P1_is_identified_by ;
+    sh:node sappho:IdentifierShape ;
+    sh:minCount 1 ;
+    sh:maxCount 1 ;
+  ] ;
+  # Title (E35/E62)
+  sh:property [
+    sh:path ecrm:P102_has_title ;
+    sh:node sappho:TitleShape ;
+    sh:minCount 1 ;
+    sh:maxCount 1 ;
+  ] ;
+  # Optional genres (E55 type nodes)
+  sh:property [
+    sh:path ecrm:P2_has_type ;
+    sh:node sappho:GenreNodeShape ;
+    sh:minCount 0 ;
+  ] ;
+  # Must be linked to a Work (inverse is asserted by script too)
+  sh:property [
+    sh:path lrmoo:R3i_realises ;
+    sh:class lrmoo:F1_Work ;
+    sh:minCount 1 ;
+  ] ;
+  # Must have owl:sameAs to Wikidata Q… and provenance
+  sh:property [
+    sh:path owl:sameAs ;
+    sh:nodeKind sh:IRI ;
+    sh:minCount 1 ;
+    sh:maxCount 1 ;
+  ] ;
+  sh:sparql [
+    sh:message "Expression owl:sameAs must point to a Wikidata entity (Q…)." ;
+    sh:prefixes [
+        sh:declare [
+            sh:prefix "wd" ;
+            sh:namespace "http://www.wikidata.org/entity/"^^xsd:anyURI
+        ]
+        ] ;
+    sh:select """
+      SELECT ?this WHERE {
+        ?this owl:sameAs ?wd .
+        FILTER ( !STRSTARTS(STR(?wd), STR(wd:Q)) )
+      }
+    """ ;
+  ] ;
+  sh:property [
+    sh:path prov:wasDerivedFrom ;
+    sh:nodeKind sh:IRI ;
+    sh:minCount 1 ;
+  ] ;
+  # Expression creation event (F28)
+  sh:property [
+    sh:path lrmoo:R17i_was_created_by ;
+    sh:node sappho:ExpressionCreationShape ;
+    sh:minCount 1 ;
+    sh:maxCount 1 ;
+  ] ;
+  # Optional: digital representation attached to Expression
+  sh:property [
+    sh:path ecrm:P138i_has_representation ;
+    sh:node sappho:DigitalCopyShape ;
+    sh:minCount 0 ;
+    sh:maxCount 1 ;
+  ] .
+
+# F28 Expression Creation
+sappho:ExpressionCreationShape
+  a sh:NodeShape ;
+  sh:targetClass lrmoo:F28_Expression_Creation ;
+  sh:property [
+    sh:path rdfs:label ;
+    sh:languageIn ("en") ;
+    sh:minCount 1 ;
+    sh:maxCount 1 ;
+  ] ;
+  sh:property [
+    sh:path lrmoo:R17_created ;
+    sh:class lrmoo:F2_Expression ;
+    sh:minCount 1 ;
+  ] ;
+  sh:property [
+    sh:path lrmoo:R19_created_a_realisation_of ;
+    sh:class lrmoo:F1_Work ;
+    sh:minCount 1 ;
+  ] ;
+  sh:property [
+    sh:path prov:wasDerivedFrom ;
+    sh:nodeKind sh:IRI ;
+    sh:minCount 1 ;
+  ] ;
+  # Optional: author performer
+  sh:property [
+    sh:path ecrm:P14_carried_out_by ;
+    sh:node sappho:PersonRefShape ;
+    sh:minCount 0 ;
+  ] ;
+  # Optional: creation year (E52 Time-Span with gYear)
+  sh:property [
+    sh:path ecrm:P4_has_time-span ;
+    sh:node sappho:YearTimeSpanShape ;
+    sh:minCount 0 ;
+    sh:maxCount 1 ;
+  ] .
+
+# F3 Manifestation
+sappho:ManifestationShape
+  a sh:NodeShape ;
+  sh:targetClass lrmoo:F3_Manifestation ;
+  sh:property [
+    sh:path rdfs:label ;
+    sh:languageIn ("en") ;
+    sh:minCount 1 ;
+    sh:maxCount 1 ;
+  ] ;
+  sh:property [
+    sh:path lrmoo:R4_embodies ;
+    sh:node sappho:ExpressionShape ;
+    sh:minCount 1 ;
+    sh:maxCount 1 ;
+  ] ;
+  # Title for manifestation
+  sh:property [
+    sh:path ecrm:P102_has_title ;
+    sh:node sappho:TitleShape ;
+    sh:minCount 1 ;
+    sh:maxCount 1 ;
+  ] ;
+  # Manifestation creation event (F30)
+  sh:property [
+    sh:path lrmoo:R24i_was_created_through ;
+    sh:node sappho:ManifestationCreationShape ;
+    sh:minCount 1 ;
+    sh:maxCount 1 ;
+  ] ;
+  # Optional: exemplified by Items (inverse asserted on Item too)
+  sh:property [
+    sh:path lrmoo:R7i_is_exemplified_by ;
+    sh:class lrmoo:F5_Item ;
+    sh:minCount 0 ;
+  ] .
+
+# F30 Manifestation Creation
+sappho:ManifestationCreationShape
+  a sh:NodeShape ;
+  sh:targetClass lrmoo:F30_Manifestation_Creation ;
+  sh:property [
+    sh:path rdfs:label ;
+    sh:languageIn ("en") ;
+    sh:minCount 1 ;
+    sh:maxCount 1 ;
+  ] ;
+  sh:property [
+    sh:path lrmoo:R24_created ;
+    sh:class lrmoo:F3_Manifestation ;
+    sh:minCount 1 ;
+  ] ;
+  sh:property [
+    sh:path prov:wasDerivedFrom ;
+    sh:nodeKind sh:IRI ;
+    sh:minCount 1 ;
+  ] ;
+  # Optional performers: author and/or publisher
+  sh:property [
+    sh:path ecrm:P14_carried_out_by ;
+    sh:nodeOr [ sh:node sappho:PersonRefShape ; sh:node sappho:PublisherShape ] ;
+    sh:minCount 0 ;
+  ] ;
+  # Optional publication year and place
+  sh:property [
+    sh:path ecrm:P4_has_time-span ;
+    sh:node sappho:YearTimeSpanShape ;
+    sh:minCount 0 ;
+    sh:maxCount 1 ;
+  ] ;
+  sh:property [
+    sh:path ecrm:P7_took_place_at ;
+    sh:node sappho:PlaceShape ;
+    sh:minCount 0 ;
+    sh:maxCount 1 ;
+  ] .
+
+# F32 Item Production Event (always present)
+sappho:ItemProductionShape
+  a sh:NodeShape ;
+  sh:targetClass lrmoo:F32_Item_Production_Event ;
+  sh:property [
+    sh:path rdfs:label ;
+    sh:languageIn ("en") ;
+    sh:minCount 1 ;
+    sh:maxCount 1 ;
+  ] ;
+  sh:property [
+    sh:path lrmoo:R27_materialized ;
+    sh:class lrmoo:F3_Manifestation ;
+    sh:minCount 1 ;
+    sh:maxCount 1 ;
+  ] ;
+  sh:property [
+    sh:path lrmoo:R28_produced ;
+    sh:class lrmoo:F5_Item ;
+    sh:minCount 1 ;
+    sh:maxCount 1 ;
+  ] .
+
+# F5 Item (always present)
+sappho:ItemShape
+  a sh:NodeShape ;
+  sh:targetClass lrmoo:F5_Item ;
+  sh:property [
+    sh:path rdfs:label ;
+    sh:languageIn ("en") ;
+    sh:minCount 1 ;
+    sh:maxCount 1 ;
+  ] ;
+  sh:property [
+    sh:path lrmoo:R7_exemplifies ;
+    sh:class lrmoo:F3_Manifestation ;
+    sh:minCount 1 ;
+    sh:maxCount 1 ;
+  ] ;
+  sh:property [
+    sh:path lrmoo:R28i_was_produced_by ;
+    sh:class lrmoo:F32_Item_Production_Event ;
+    sh:minCount 1 ;
+  ] .
+
+#################################################################
+# Digital copy attached to Expression
+#################################################################
+
+sappho:DigitalCopyShape
+  a sh:NodeShape ;
+  sh:targetClass ecrm:E73_Information_Object ;
+  sh:property [
+    sh:path rdfs:label ;
+    sh:languageIn ("en") ;
+    sh:minCount 1 ;
+    sh:maxCount 1 ;
+  ] ;
+  sh:property [
+    sh:path ecrm:P138_represents ;
+    sh:class lrmoo:F2_Expression ;
+    sh:minCount 1 ;
+  ] ;
+  sh:property [
+    sh:path rdfs:seeAlso ;
+    sh:nodeKind sh:IRI ;
+    sh:minCount 1 ;
+    sh:maxCount 1 ;
+  ] .
+
+#################################################################
+# Ontology node
+#################################################################
+
+sappho:OntologyNodeShape
+  a sh:NodeShape ;
+  sh:targetNode <https://sappho-digital.com/ontology/works> ;
+  sh:property [
+    sh:path rdf:type ;
+    sh:hasValue owl:Ontology ;
+    sh:minCount 1 ;
+  ] ;
+  sh:property [
+    sh:path owl:imports ;
+    sh:hasValue <http://erlangen-crm.org/current/> ;
+    sh:minCount 1 ;
+  ] ;
+  sh:property [
+    sh:path owl:imports ;
+    sh:hasValue <https://cidoc-crm.org/extensions/lrmoo/owl/1.0/LRMoo_v1.0.owl> ;
+    sh:minCount 1 ;
+  ] .
