@@ -1,4 +1,7 @@
+@prefix crm: <http://www.cidoc-crm.org/cidoc-crm/> .
 @prefix ecrm: <http://erlangen-crm.org/current/> .
+@prefix efrbroo: <http://erlangen-crm.org/efrbroo/> .
+@prefix frbroo: <http://iflastandards.info/ns/fr/frbr/frbroo/> .
 @prefix intro: <https://w3id.org/lso/intro/currentbeta#> .
 @prefix lrmoo: <http://iflastandards.info/ns/lrm/lrmoo/> .
 @prefix owl: <http://www.w3.org/2002/07/owl#> .
@@ -9,6 +12,30 @@
     owl:imports ecrm:,
         <https://cidoc-crm.org/extensions/lrmoo/owl/1.0/LRMoo_v1.0.owl>,
         intro: .
+
+ecrm:E21_Person owl:equivalentClass crm:E21_Person .
+
+ecrm:E53_Place owl:equivalentClass crm:E53_Place .
+
+ecrm:E55_Type owl:equivalentClass crm:E55_Type .
+
+ecrm:P1_is_identified_by owl:equivalentProperty crm:P1_is_identified_by ;
+    owl:inverseOf ecrm:P1i_identifies .
+
+ecrm:P1i_identifies owl:equivalentProperty crm:P1i_identifies ;
+    owl:inverseOf ecrm:P1_is_identified_by .
+
+ecrm:P2_has_type owl:equivalentProperty crm:P2_has_type ;
+    owl:inverseOf ecrm:P2i_is_type_of .
+
+ecrm:P2i_is_type_of owl:equivalentProperty crm:P2i_is_type_of ;
+    owl:inverseOf ecrm:P2_has_type .
+
+ecrm:P67_refers_to owl:equivalentProperty crm:P67_refers_to ;
+    owl:inverseOf ecrm:P67i_is_referred_to_by .
+
+ecrm:P67i_is_referred_to_by owl:equivalentProperty crm:P67i_is_referred_to_by ;
+    owl:inverseOf ecrm:P67_refers_to .
 
 <https://sappho-digital.com/feature/interpretation/Q10737_Q119292643> a intro:INT_Interpretation ;
     rdfs:label "Interpretation of suicide in Sappho. Eine Novelle"@en ;
@@ -243,6 +270,9 @@
         <https://sappho-digital.com/actualization/place_ref/Q128087_Q19179765> ;
     owl:sameAs <http://www.wikidata.org/entity/Q128087> .
 
+lrmoo:F2_Expression owl:equivalentClass efrbroo:F2_Expression,
+        frbroo:F2_Expression .
+
 <https://sappho-digital.com/actualization/motif/Q165_Q119292643> a intro:INT2_ActualizationOfFeature ;
     rdfs:label "sea in Sappho. Eine Novelle"@en ;
     intro:R17_actualizesFeature <https://sappho-digital.com/feature/motif/Q165> ;
@@ -316,6 +346,8 @@
     intro:R17i_featureIsActualizedIn <https://sappho-digital.com/actualization/topic/Q10737_Q119292643>,
         <https://sappho-digital.com/actualization/topic/Q10737_Q1242002> ;
     intro:R22_providesSimilarityForRelation <https://sappho-digital.com/relation/Q119292643_Q1242002> .
+
+ecrm:E42_Identifier owl:equivalentClass crm:E42_Identifier .
 
 <https://sappho-digital.com/actualization/character/Q17892_Q120199245> a intro:INT2_ActualizationOfFeature ;
     rdfs:label "Sappho in Die moderne Sappho"@en ;
@@ -456,4 +488,3 @@
         <https://sappho-digital.com/expression/Q1242002>,
         <https://sappho-digital.com/textpassage/Q119292643_Q1242002>,
         <https://sappho-digital.com/textpassage/Q1242002_Q119292643> .
-
