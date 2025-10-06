@@ -18,10 +18,6 @@ The mappings and alignments are done separately so that the script can hopefully
 
 ![Overview](https://github.com/laurauntner/wikidata-to-cidoc-crm/blob/main/workflow_overview.png?raw=true)
 
-📌 **Still to do:**
-- SHACL Shapes
-- Python package for better reuse
-
 ---
 
 - 🪄 **Reality check**: These scripts are not magical. Data that is not available in Wikidata cannot appear in the triples.
