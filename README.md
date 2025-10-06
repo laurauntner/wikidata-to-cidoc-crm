@@ -52,13 +52,35 @@ Each script has a small settings section at the top where you can change default
 You can run all scripts with their defaults; adjust the constants at the top if your files live elsewhere.
 
 ### Run
+
+After cloning the repository, run:
+
 ```
-python3 authors.py
-python3 works.py
-python3 relations.py
-python3 merge.py
-python3 map-and-align.py
+python3 authors/authors.py
+python3 works/works.py
+python3 relations/relations.py
+python3 merge/merge.py
+python3 map-and-align/map-and-align.py
 ```
+
+---
+
+## Validation
+
+There are SHACL shapes for the authors, works, and relations modules.
+Validation of the corresponding Turtle files is performed within the Python scripts.
+
+If you want to manually validate the Turtle files, you can use pySHACL:
+
+`pip install pyshacl`
+
+Then run the following command:
+
+`pyshacl -s {SHACL file}.ttl -d {file you want to validate}.ttl --advanced --metashacl -f table`
+
+This will produce a report indicating whether the Turtle file is valid according to the provided SHACL shapes.
+
+Note: The SHACL shapes make use of the Sappho Digital namespace. Please adapt this to your own namespace if necessary.
 
 ---
 
