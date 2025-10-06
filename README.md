@@ -12,7 +12,7 @@ The first three modules model basic biographical, bibliographical, and intertext
 
 The `merge` module can be used to merge the outputted Turtle files. 
 
-The `map-and-align` module looks for more identifiers from [Schema.org](https://schema.org/), [DBpedia](https://www.dbpedia.org/), [GND](https://www.dnb.de/DE/Professionell/Standardisierung/GND/gnd_node.html), [VIAF](https://viaf.org/), [GeoNames](http://www.geonames.org/) and [Goodreads](https://www.goodreads.com/) and adds more ontology alignments mainly using [SKOS](http://www.w3.org/2004/02/skos/core#). The aligned ontologies are: [BIBO](http://purl.org/ontology/bibo/), [CiTO](http://purl.org/spar/cito/), [DC](http://purl.org/dc/terms/), [DoCo](http://purl.org/spar/doco/), [DraCor](http://dracor.org/ontology#), [FaBiO](http://purl.org/spar/fabio/), [FOAF](http://xmlns.com/foaf/0.1/), [FRBRoo](https://www.iflastandards.info/fr/frbr/frbroo), [GOLEM](https://ontology.golemlab.eu/), [Intertextuality Ontology](https://github.com/intertextor/intertextuality-ontology), [MiMoText](https://data.mimotext.uni-trier.de/wiki/Main_Page) and [OntoPoetry](https://postdata.linhd.uned.es/results/ontopoetry-v2-0/). 
+The `map_and_align` module looks for more identifiers from [Schema.org](https://schema.org/), [DBpedia](https://www.dbpedia.org/), [GND](https://www.dnb.de/DE/Professionell/Standardisierung/GND/gnd_node.html), [VIAF](https://viaf.org/), [GeoNames](http://www.geonames.org/) and [Goodreads](https://www.goodreads.com/) and adds more ontology alignments mainly using [SKOS](http://www.w3.org/2004/02/skos/core#). The aligned ontologies are: [BIBO](http://purl.org/ontology/bibo/), [CiTO](http://purl.org/spar/cito/), [DC](http://purl.org/dc/terms/), [DoCo](http://purl.org/spar/doco/), [DraCor](http://dracor.org/ontology#), [FaBiO](http://purl.org/spar/fabio/), [FOAF](http://xmlns.com/foaf/0.1/), [FRBRoo](https://www.iflastandards.info/fr/frbr/frbroo), [GOLEM](https://ontology.golemlab.eu/), [Intertextuality Ontology](https://github.com/intertextor/intertextuality-ontology), [MiMoText](https://data.mimotext.uni-trier.de/wiki/Main_Page) and [OntoPoetry](https://postdata.linhd.uned.es/results/ontopoetry-v2-0/). 
 
 The mappings and alignments are done separately so that the script can hopefully be more easily updated. It focuses specifically on those classes and properties that are important for the relations module.
 
@@ -40,7 +40,7 @@ pip install rdflib requests tqdm
 
 ### Inputs & defaults
 
-Each script has a small settings section at the top where you can change default paths. `map-and-align.py` is the exception: on start it asks which Turtle file to map/align and writes `*_mapped-and-aligned.ttl`. 
+Each script has a small settings section at the top where you can change default paths. `map_and_align.py` is the exception: on start it asks which Turtle file to map/align and writes `*_mapped-and-aligned.ttl`. 
 
 `authors.py` writes `authors.ttl`, `works.py` writes `works.ttl`, `relations.py` writes `relations.ttl` and `merge.py` writes `all.ttl`. `merge.py` also accepts CLI flags.
 
@@ -56,7 +56,7 @@ python3 authors/authors.py
 python3 works/works.py
 python3 relations/relations.py
 python3 merge/merge.py
-python3 map-and-align/map-and-align.py
+python3 map_and_align/map_and_align.py
 ```
 
 ---
@@ -953,7 +953,7 @@ Alignments with:
 - [OntoPoetry](https://postdata.linhd.uned.es/results/ontopoetry-v2-0/)
 - [Schema.org](https://schema.org/)
 
-The full alignment table can be found [here](https://github.com/laurauntner/wikidata-to-cidoc-crm/blob/main/map-and-align/alignment_full.pdf).
+The full alignment table can be found [here](https://github.com/laurauntner/wikidata-to-cidoc-crm/blob/main/map_and_align/alignment_full.pdf).
 
 Despite overlaps in content, various ontologies were not considered because they are hardly used, not publicly accessible, or outdated. These include: DanteSources, Hypermedia Dante Network, HyperHamlet, SAWS. Also, the alignments focus specifically on those classes and properties that are important for the relations module.
 
