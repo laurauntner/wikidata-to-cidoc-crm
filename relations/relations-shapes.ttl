@@ -1,0 +1,303 @@
+@prefix sh:     <http://www.w3.org/ns/shacl#> .
+@prefix xsd:    <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdf:    <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs:   <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl:    <http://www.w3.org/2002/07/owl#> .
+@prefix prov:   <http://www.w3.org/ns/prov#> .
+@prefix ecrm:   <http://erlangen-crm.org/current/> .
+@prefix lrmoo:  <http://iflastandards.info/ns/lrm/lrmoo/> .
+@prefix frbroo: <http://iflastandards.info/ns/fr/frbr/frbroo/> .
+@prefix efrbroo:<http://erlangen-crm.org/efrbroo/> .
+@prefix intro:  <https://w3id.org/lso/intro/currentbeta#> .
+@prefix sappho: <https://sappho-digital.com/> .
+
+#################################################################
+# Helper: Identifier nodes and fixed type node
+#################################################################
+
+# E42_Identifier nodes added via add_identifier()
+sappho:IdentifierShape
+  a sh:NodeShape ;
+  sh:targetClass ecrm:E42_Identifier ;
+  sh:property [
+    sh:path rdfs:label ;          # label is the QID text, tagged @en
+    sh:languageIn ("en") ;
+    sh:pattern "^Q[0-9]+$" ;
+    sh:minCount 1 ; sh:maxCount 1 ;
+  ] ;
+  sh:property [
+    sh:path ecrm:P2_has_type ;
+    sh:hasValue <https://sappho-digital.com/id_type/wikidata> ;
+    sh:minCount 1 ; sh:maxCount 1 ;
+  ] ;
+  sh:property [
+    sh:path prov:wasDerivedFrom ; # wd:Q… for the pure id
+    sh:nodeKind sh:IRI ;
+    sh:minCount 1 ;
+  ] .
+
+# The concrete identifier-type node baked into the graph
+sappho:IdentifierTypeNodeShape
+  a sh:NodeShape ;
+  sh:targetNode <https://sappho-digital.com/id_type/wikidata> ;
+  sh:property [ sh:path rdf:type ;  sh:hasValue ecrm:E55_Type ; sh:minCount 1 ] ;
+  sh:property [ sh:path rdfs:label ; sh:languageIn ("en") ; sh:hasValue "Wikidata ID"@en ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [
+    sh:path owl:sameAs ;
+    sh:nodeKind sh:IRI ;
+    sh:minCount 1 ;
+  ] ;
+  sh:sparql [
+    sh:message "id_type/wikidata owl:sameAs must be a Wikidata entity IRI (Q…)." ;
+    sh:select """
+      SELECT ?this WHERE {
+        ?this owl:sameAs ?wd .
+        FILTER( !STRSTARTS(STR(?wd), "http://www.wikidata.org/entity/Q") )
+      }
+    """ ;
+  ] .
+
+#################################################################
+# Person & Place nodes 
+#################################################################
+
+sappho:PersonNodeShape
+  a sh:NodeShape ;
+  sh:targetClass ecrm:E21_Person ;
+  sh:property [ sh:path rdfs:label ; sh:languageIn ("en") ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path owl:sameAs ; sh:nodeKind sh:IRI ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:sparql [
+    sh:message "Person owl:sameAs must point to Wikidata (Q…)." ;
+    sh:select """
+      SELECT ?this WHERE {
+        ?this owl:sameAs ?wd .
+        FILTER( !STRSTARTS(STR(?wd), "http://www.wikidata.org/entity/Q") )
+      }
+    """ ;
+  ] ;
+  sh:property [ sh:path ecrm:P1_is_identified_by ; sh:node sappho:IdentifierShape ; sh:minCount 1 ] .
+
+sappho:PlaceNodeShape
+  a sh:NodeShape ;
+  sh:targetClass ecrm:E53_Place ;
+  sh:property [ sh:path rdfs:label ; sh:languageIn ("en") ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path owl:sameAs ; sh:nodeKind sh:IRI ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:sparql [
+    sh:message "Place owl:sameAs must point to Wikidata (Q…)." ;
+    sh:select """
+      SELECT ?this WHERE {
+        ?this owl:sameAs ?wd .
+        FILTER( !STRSTARTS(STR(?wd), "http://www.wikidata.org/entity/Q") )
+      }
+    """ ;
+  ] ;
+  sh:property [ sh:path ecrm:P1_is_identified_by ; sh:node sappho:IdentifierShape ; sh:minCount 1 ] .
+
+#################################################################
+# Expressions
+#################################################################
+
+sappho:ExpressionShape
+  a sh:NodeShape ;
+  sh:targetClass lrmoo:F2_Expression ;
+  sh:property [ sh:path rdfs:label ; sh:languageIn ("en") ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path owl:sameAs ; sh:nodeKind sh:IRI ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:sparql [
+    sh:message "Expression owl:sameAs must point to Wikidata (Q…)." ;
+    sh:select """
+      SELECT ?this WHERE {
+        ?this owl:sameAs ?wd .
+        FILTER( !STRSTARTS(STR(?wd), "http://www.wikidata.org/entity/Q") )
+      }
+    """ ;
+  ] ;
+  # Optional: expression may show actualizations and be linked as related entity in relations
+  sh:property [ sh:path intro:R18_showsActualization ; sh:class intro:INT2_ActualizationOfFeature ; sh:minCount 0 ] ;
+  sh:property [ sh:path [ sh:inversePath intro:R24_hasRelatedEntity ] ; sh:class intro:INT31_IntertextualRelation ; sh:minCount 0 ] .
+
+#################################################################
+# Features
+# - Plots, Topics, Motifs (with wd:sameAs + Identifier)
+# - Characters (wd:sameAs + Identifier)
+# - Generic References (INT18_Reference) for person/place/work refs
+#################################################################
+
+# Common constraint used in each wd:sameAs check
+sappho:_WikidataSameAsCheck
+  a sh:SPARQLConstraint ;
+  sh:message "owl:sameAs must be a Wikidata entity IRI (Q…)." ;
+  sh:select """
+    SELECT ?this WHERE {
+      ?this owl:sameAs ?wd .
+      FILTER( !STRSTARTS(STR(?wd), "http://www.wikidata.org/entity/Q") )
+    }
+  """ .
+
+# Plot feature
+sappho:PlotFeatureShape
+  a sh:NodeShape ;
+  sh:targetClass intro:INT_Plot ;
+  sh:property [ sh:path rdfs:label ; sh:languageIn ("en") ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path owl:sameAs ; sh:nodeKind sh:IRI ; sh:minCount 1 ] ;
+  sh:sparql sappho:_WikidataSameAsCheck ;
+  sh:property [ sh:path ecrm:P1_is_identified_by ; sh:node sappho:IdentifierShape ; sh:minCount 1 ] ;
+  # Similarity links to relations (script adds them when used)
+  sh:property [ sh:path intro:R22_providesSimilarityForRelation ; sh:class intro:INT31_IntertextualRelation ; sh:minCount 0 ] .
+
+# Topic feature
+sappho:TopicFeatureShape
+  a sh:NodeShape ;
+  sh:targetClass intro:INT_Topic ;
+  sh:property [ sh:path rdfs:label ; sh:languageIn ("en") ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path owl:sameAs ; sh:nodeKind sh:IRI ; sh:minCount 1 ] ;
+  sh:sparql sappho:_WikidataSameAsCheck ;
+  sh:property [ sh:path ecrm:P1_is_identified_by ; sh:node sappho:IdentifierShape ; sh:minCount 1 ] ;
+  sh:property [ sh:path intro:R22_providesSimilarityForRelation ; sh:class intro:INT31_IntertextualRelation ; sh:minCount 0 ] .
+
+# Motif feature
+sappho:MotifFeatureShape
+  a sh:NodeShape ;
+  sh:targetClass intro:INT_Motif ;
+  sh:property [ sh:path rdfs:label ; sh:languageIn ("en") ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path owl:sameAs ; sh:nodeKind sh:IRI ; sh:minCount 1 ] ;
+  sh:sparql sappho:_WikidataSameAsCheck ;
+  sh:property [ sh:path ecrm:P1_is_identified_by ; sh:node sappho:IdentifierShape ; sh:minCount 1 ] ;
+  sh:property [ sh:path intro:R22_providesSimilarityForRelation ; sh:class intro:INT31_IntertextualRelation ; sh:minCount 0 ] .
+
+# Character feature
+sappho:CharacterFeatureShape
+  a sh:NodeShape ;
+  sh:targetClass intro:INT_Character ;
+  sh:property [ sh:path rdfs:label ; sh:languageIn ("en") ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path owl:sameAs ; sh:nodeKind sh:IRI ; sh:minCount 1 ] ;
+  sh:sparql sappho:_WikidataSameAsCheck ;
+  sh:property [ sh:path ecrm:P1_is_identified_by ; sh:node sappho:IdentifierShape ; sh:minCount 1 ] ;
+  sh:property [ sh:path intro:R22_providesSimilarityForRelation ; sh:class intro:INT31_IntertextualRelation ; sh:minCount 0 ] .
+
+# Reference features (person/place/work references) – no owl:sameAs, but used to ground relations
+sappho:ReferenceFeatureShape
+  a sh:NodeShape ;
+  sh:targetClass intro:INT18_Reference ;
+  sh:property [ sh:path rdfs:label ; sh:languageIn ("en") ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  # They connect similarity to at least one relation in practice; keep flexible:
+  sh:property [ sh:path intro:R22_providesSimilarityForRelation ; sh:class intro:INT31_IntertextualRelation ; sh:minCount 0 ] .
+
+#################################################################
+# Interpretation features and actualizations
+#################################################################
+
+# The feature node of an interpretation
+sappho:InterpretationFeatureShape
+  a sh:NodeShape ;
+  sh:targetClass intro:INT_Interpretation ;
+  sh:property [ sh:path rdfs:label ; sh:languageIn ("en") ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  # Must have at least one actualization linked via R17i
+  sh:property [ sh:path intro:R17i_featureIsActualizedIn ; sh:class intro:INT2_ActualizationOfFeature ; sh:minCount 1 ] .
+
+# Union of feature classes that an actualization may actualize
+sappho:_ActualizesOneOfFeatures
+  a sh:NodeShape ;
+  sh:or (
+    [ sh:class intro:INT_Plot ]
+    [ sh:class intro:INT_Topic ]
+    [ sh:class intro:INT_Motif ]
+    [ sh:class intro:INT_Character ]
+    [ sh:class intro:INT18_Reference ]
+    [ sh:class intro:INT_Interpretation ]
+  ) .
+
+# INT2_ActualizationOfFeature nodes
+sappho:ActualizationShape
+  a sh:NodeShape ;
+  sh:targetClass intro:INT2_ActualizationOfFeature ;
+  sh:property [ sh:path rdfs:label ; sh:languageIn ("en") ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  # Must actualize one of the known feature classes
+  sh:property [
+    sh:path intro:R17_actualizesFeature ;
+    sh:node sappho:_ActualizesOneOfFeatures ;
+    sh:minCount 1 ;
+  ] ;
+  # Optional: found on an Expression
+  sh:property [ sh:path intro:R18i_actualizationFoundOn ; sh:class lrmoo:F2_Expression ; sh:minCount 0 ; sh:maxCount 1 ] ;
+  # Optional: related (via R24i) to the intertextual relation
+  sh:property [ sh:path intro:R24i_isRelatedEntity ; sh:class intro:INT31_IntertextualRelation ; sh:minCount 0 ] ;
+  # Optional: may identify one or more related entities (relation and/or other actualizations)
+  sh:property [
+    sh:path intro:R21_identifies ;
+    sh:or ( [ sh:class intro:INT2_ActualizationOfFeature ]
+            [ sh:class intro:INT31_IntertextualRelation ] ) ;
+    sh:minCount 0 ;
+  ] ;
+  # Optional: provenance links
+  sh:property [ sh:path prov:wasDerivedFrom ; sh:nodeKind sh:IRI ; sh:minCount 0 ] ;
+  # Optional: in person/place refs, the actualization may refer to Person/Place/Expression
+  sh:property [
+    sh:path ecrm:P67_refers_to ;
+    sh:or ( [ sh:class ecrm:E21_Person ]
+            [ sh:class ecrm:E53_Place ]
+            [ sh:class lrmoo:F2_Expression ] ) ;
+    sh:minCount 0 ;
+  ] .
+
+#################################################################
+# Intertextual relations and related entities
+#################################################################
+
+# Entities allowed as related to a relation: Expressions, Actualizations, TextPassages
+sappho:RelatedEntityShape
+  a sh:NodeShape ;
+  sh:or (
+    [ sh:class lrmoo:F2_Expression ]
+    [ sh:class intro:INT2_ActualizationOfFeature ]
+    [ sh:class intro:INT21_TextPassage ]
+  ) .
+
+# The Intertextual relation itself
+sappho:IntertextualRelationShape
+  a sh:NodeShape ;
+  sh:targetClass intro:INT31_IntertextualRelation ;
+  sh:property [ sh:path rdfs:label ; sh:languageIn ("en") ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  # Must relate at least two entities (script adds expr + actualizations and/or text passages)
+  sh:property [
+    sh:path intro:R24_hasRelatedEntity ;
+    sh:node sappho:RelatedEntityShape ;
+    sh:minCount 2 ;
+  ] ;
+  # Has at least one identifying actualization (created by add_interpretation)
+  sh:property [
+    sh:path [ sh:inversePath intro:R21_identifies ] ;
+    sh:class intro:INT2_ActualizationOfFeature ;
+    sh:minCount 1 ;
+  ] ;
+  # Optional: similarity-providing feature(s)
+  sh:property [
+    sh:path intro:R22i_relationIsBasedOnSimilarity ;
+    sh:or ( [ sh:class intro:INT_Plot ]
+            [ sh:class intro:INT_Topic ]
+            [ sh:class intro:INT_Motif ]
+            [ sh:class intro:INT_Character ]
+            [ sh:class intro:INT18_Reference ] ) ;
+    sh:minCount 0 ;
+  ] .
+
+# Text passages used in citation processor
+sappho:TextPassageShape
+  a sh:NodeShape ;
+  sh:targetClass intro:INT21_TextPassage ;
+  sh:property [ sh:path rdfs:label ; sh:languageIn ("en") ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path prov:wasDerivedFrom ; sh:nodeKind sh:IRI ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  # Must be attached to an Expression and linked to a relation
+  sh:property [ sh:path [ sh:inversePath intro:R30_hasTextPassage ] ; sh:class lrmoo:F2_Expression ; sh:minCount 1 ] ;
+  sh:property [ sh:path [ sh:inversePath intro:R24_hasRelatedEntity ] ; sh:class intro:INT31_IntertextualRelation ; sh:minCount 1 ] .
+
+#################################################################
+# Ontology node
+#################################################################
+
+sappho:OntologyNodeShape
+  a sh:NodeShape ;
+  sh:targetNode <https://sappho-digital.com/ontology/relations> ;
+  sh:property [ sh:path rdf:type ; sh:hasValue owl:Ontology ; sh:minCount 1 ] ;
+  sh:property [ sh:path owl:imports ; sh:hasValue <http://erlangen-crm.org/current/> ; sh:minCount 1 ] ;
+  sh:property [ sh:path owl:imports ; sh:hasValue <https://cidoc-crm.org/extensions/lrmoo/owl/1.0/LRMoo_v1.0.owl> ; sh:minCount 1 ] ;
+  sh:property [ sh:path owl:imports ; sh:hasValue <https://w3id.org/lso/intro/currentbeta#> ; sh:minCount 1 ] .

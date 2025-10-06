@@ -8,9 +8,11 @@ The output is serialized as Turtle and written to 'relations.ttl'.
 import csv
 import time
 import argparse
+from pathlib import Path
 from functools import lru_cache
 from itertools import combinations
 from typing import Union, Iterable, Tuple, List, Dict, Any, Optional
+from pyshacl import validate
 
 import requests
 from requests.adapters import HTTPAdapter
@@ -822,10 +824,16 @@ def parse_args(argv=None):
     p = argparse.ArgumentParser()
     p.add_argument("--input", default=INPUT_CSV_DEFAULT, help="CSV file with QIDs (default: work-qids.csv)")
     p.add_argument("--output", default=OUTPUT_TTL_DEFAULT, help="Output TTL file (default: relations.ttl)")
+    p.add_argument("--log-level", default="INFO", help="Logging level (default: INFO)")
     return p.parse_args(argv)
 
 def main(argv=None) -> int:
     args = parse_args(argv)
+
+    # Logging
+    import logging
+    logging.basicConfig(level=getattr(logging, args.log_level.upper(), logging.INFO),
+                        format="%(levelname)s:%(name)s:%(message)s")
 
     # Load QIDs
     with open(args.input, newline="", encoding="utf-8") as f:
@@ -842,42 +850,41 @@ def main(argv=None) -> int:
         process_citations,
         process_topics,
         process_motifs,
-        process_person, 
+        process_person,
         process_place,
         process_characters,
         process_work_references,
     ]
-
     for fn in tqdm(processors, unit="task"):
         fn(g, qids)
 
-    # Mapping ECRM ↔ CRM + inverses
-    ecrm_classes = [
-        "E21_Person",
-        "E42_Identifier",
-        "E53_Place",
-        "E55_Type",
-    ]
-    for cls in ecrm_classes:
-        g.add((ecrm[cls], OWL.equivalentClass, crm[cls]))
-
-    ecrm_props = [
-        ("P1_is_identified_by",  "P1i_identifies"),
-        ("P2_has_type",          "P2i_is_type_of"),
-        ("P67_refers_to",        "P67i_is_referred_to_by"),
-    ]
-    for direct, inverse in ecrm_props:
-        g.add((ecrm[direct],  OWL.equivalentProperty, crm[direct]))
-        g.add((ecrm[inverse], OWL.equivalentProperty, crm[inverse]))
-        g.add((ecrm[direct],  OWL.inverseOf, ecrm[inverse]))
-        g.add((ecrm[inverse], OWL.inverseOf, ecrm[direct]))
-
-    # FRBRoo/eFRBRoo mapping for Expressions (wie in deinen Sets)
-    g.add((lrmoo.F2_Expression, OWL.equivalentClass, frbroo.F2_Expression))
-    g.add((lrmoo.F2_Expression, OWL.equivalentClass, efrbroo.F2_Expression))
-
     # Serialize
     g.serialize(destination=args.output, format="turtle")
+    print(f"✅ RDF graph written to {args.output}")
+
+    # SHACL validation
+    from rdflib import Graph as RDFGraph
+    shapes_path = Path("relations-shapes.ttl")
+    shapes_graph = RDFGraph().parse(str(shapes_path), format="turtle")
+
+    conforms, report_graph, report_text = validate(
+        g,
+        shacl_graph=shapes_graph,
+        inference="rdfs",
+        meta_shacl=True,
+        advanced=True,
+        abort_on_first=False,
+        debug=False,
+    )
+
+    print("\n🔎 SHACL Validation Report:")
+    print(report_text)
+
+    if not conforms:
+        print("❌ Validation failed.")
+    else:
+        print("✅ Data conforms to SHACL shapes.")
+
     return 0
 
 if __name__ == "__main__":
