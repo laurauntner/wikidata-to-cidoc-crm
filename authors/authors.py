@@ -20,6 +20,7 @@ from typing import Optional, Dict, Any, Iterable, List
 from pathlib import Path
 from tqdm import tqdm
 import argparse
+from pyshacl import validate
 
 # Settings
 INPUT_CSV_DEFAULT = Path("author-qids.csv")
@@ -395,6 +396,30 @@ def main(argv=None) -> int:
 
     # Serialize to Turtle
     g.serialize(destination=str(args.output), format="turtle")
+    print(f"✅ RDF graph written to {args.output}")
+
+    # Validate the output graph using pySHACL
+    shapes_path = Path("author-shapes.ttl")
+    shapes_graph = Graph().parse(str(shapes_path), format="turtle")
+
+    conforms, report_graph, report_text = validate(
+        g,
+        shacl_graph=shapes_graph,
+        inference="rdfs",
+        meta_shacl=True,
+        advanced=True,
+        abort_on_first=False,
+        debug=False,
+    )
+
+    print("\n🔎 SHACL Validation Report:")
+    print(report_text)
+
+    if not conforms:
+        print("❌ Validation failed.")
+    else:
+        print("✅ Data conforms to SHACL shapes.")
+
     return 0
 
 if __name__ == "__main__":

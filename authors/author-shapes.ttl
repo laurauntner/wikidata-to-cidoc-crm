@@ -1,0 +1,382 @@
+@prefix sh:    <http://www.w3.org/ns/shacl#> .
+@prefix xsd:   <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdf:   <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs:  <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl:   <http://www.w3.org/2002/07/owl#> .
+@prefix prov:  <http://www.w3.org/ns/prov#> .
+@prefix ecrm:  <http://erlangen-crm.org/current/> .
+@prefix crm:   <http://www.cidoc-crm.org/cidoc-crm/> .
+@prefix sappho: <https://sappho-digital.com/> .
+
+#################################################################
+# Helper Shapes (used by other node shapes)
+#################################################################
+
+# Time-Span: created as ecrm:E52_Time-Span with rdfs:label^^xsd:date
+sappho:TimeSpanShape
+  a sh:NodeShape ;
+  sh:targetClass ecrm:E52_Time-Span ;
+  sh:property [
+    sh:path rdfs:label ;
+    sh:datatype xsd:date ;
+    sh:minCount 1 ;
+    sh:maxCount 1 ;
+  ] .
+
+# Place: ecrm:E53_Place with owl:sameAs to a Wikidata entity (Q...)
+sappho:PlaceShape
+  a sh:NodeShape ;
+  sh:targetClass ecrm:E53_Place ;
+  sh:property [
+    sh:path owl:sameAs ;
+    sh:minCount 1 ;
+    sh:nodeKind sh:IRI ;
+  ] ;
+  # SPARQL validation for Wikidata IRI pattern (starts with wd:Q)
+  sh:sparql [
+    sh:message "ecrm:E53_Place owl:sameAs must point to a Wikidata entity (Q...).";
+    sh:prefixes [ sh:declare [ sh:prefix "wd" ; sh:namespace "http://www.wikidata.org/entity/"^^xsd:anyURI ] ] ;
+    sh:select """
+      SELECT ?this WHERE {
+        ?this owl:sameAs ?wd .
+        FILTER (!STRSTARTS(STR(?wd), STR(wd:Q)))
+      }
+    """ ;
+  ] ;
+  sh:property [
+    sh:path rdfs:label ;
+    sh:languageIn ("en") ;
+    sh:maxCount 1 ;
+  ] .
+
+# Actor Appellation (name) for a Person
+sappho:AppellationShape
+  a sh:NodeShape ;
+  sh:targetClass ecrm:E82_Actor_Appellation ;
+  sh:property [
+    sh:path rdfs:label ;
+    sh:languageIn ("en") ;
+    sh:minCount 1 ;
+    sh:maxCount 1 ;
+  ] ;
+  sh:property [
+    sh:path prov:wasDerivedFrom ;
+    sh:nodeKind sh:IRI ;
+    sh:minCount 1 ;
+  ] ;
+  # The name identifies a Person (FORWARD edge, not inverse)
+  sh:property [
+    sh:path ecrm:P131i_identifies ;
+    sh:class ecrm:E21_Person ;
+    sh:minCount 1 ;
+  ] .
+
+# Identifier node (E42_Identifier) with QID label and fixed type
+sappho:IdentifierShape
+  a sh:NodeShape ;
+  sh:targetClass ecrm:E42_Identifier ;
+  sh:property [
+    sh:path rdfs:label ;
+    sh:pattern "^Q[0-9]+$" ;
+    sh:minCount 1 ;
+    sh:maxCount 1 ;
+  ] ;
+  sh:property [
+    sh:path ecrm:P2_has_type ;
+    sh:hasValue <https://sappho-digital.com/id_type/wikidata> ;
+    sh:minCount 1 ;
+    sh:maxCount 1 ;
+  ] .
+
+# Type node for identifiers (<https://sappho-digital.com/id_type/wikidata>)
+sappho:IdentifierTypeNodeShape
+  a sh:NodeShape ;
+  sh:targetNode <https://sappho-digital.com/id_type/wikidata> ;
+  sh:property [
+    sh:path rdf:type ;
+    sh:hasValue ecrm:E55_Type ;
+    sh:minCount 1 ;
+  ] ;
+  sh:property [
+    sh:path rdfs:label ;
+    sh:languageIn ("en") ;
+    sh:hasValue "Wikidata ID"@en ;
+    sh:minCount 1 ;
+    sh:maxCount 1 ;
+  ] .
+
+# Gender type node (/gender/...), created by script from Wikidata gender
+sappho:GenderNodeShape
+  a sh:NodeShape ;
+  sh:target [
+    a sh:SPARQLTarget ;
+    sh:select """
+      SELECT ?this WHERE {
+        FILTER (STRSTARTS(STR(?this), "https://sappho-digital.com/gender/"))
+      }
+    """
+  ] ;
+  sh:property [
+    sh:path rdf:type ;
+    sh:hasValue ecrm:E55_Type ;
+    sh:minCount 1 ;
+  ] ;
+  sh:property [
+    sh:path rdfs:label ;
+    sh:languageIn ("en") ;
+    sh:minCount 1 ;
+    sh:maxCount 1 ;
+  ] ;
+  sh:property [
+    sh:path owl:sameAs ;
+    sh:nodeKind sh:IRI ;
+    sh:minCount 1 ;
+  ] ;
+  sh:property [
+    sh:path ecrm:P2_has_type ;
+    sh:hasValue <https://sappho-digital.com/gender_type/wikidata> ;
+    sh:minCount 1 ;
+    sh:maxCount 1 ;
+  ] .
+
+# Type node for genders (<https://sappho-digital.com/gender_type/wikidata>)
+sappho:GenderTypeNodeShape
+  a sh:NodeShape ;
+  sh:targetNode <https://sappho-digital.com/gender_type/wikidata> ;
+  sh:property [
+    sh:path rdf:type ;
+    sh:hasValue ecrm:E55_Type ;
+    sh:minCount 1 ;
+  ] ;
+  sh:property [
+    sh:path rdfs:label ;
+    sh:languageIn ("en") ;
+    sh:hasValue "Wikidata Gender"@en ;
+    sh:minCount 1 ;
+    sh:maxCount 1 ;
+  ] .
+
+#################################################################
+# Event shapes (birth/death) with conditional logic
+#################################################################
+
+# Birth event (E67_Birth)
+sappho:BirthEventShape
+  a sh:NodeShape ;
+  sh:targetClass ecrm:E67_Birth ;
+  sh:property [
+    sh:path rdfs:label ;
+    sh:languageIn ("en") ;
+    sh:minCount 1 ;
+    sh:maxCount 1 ;
+  ] ;
+  sh:property [
+    sh:path prov:wasDerivedFrom ;
+    sh:nodeKind sh:IRI ;
+    sh:minCount 1 ;
+  ] ;
+  # Direct and inverse link to a person
+  sh:property [
+    sh:path ecrm:P98_brought_into_life ;
+    sh:class ecrm:E21_Person ;
+    sh:minCount 1 ;
+  ] ;
+  sh:property [
+    sh:path [ sh:inversePath ecrm:P98i_was_born ] ;
+    sh:minCount 1 ;
+  ] ;
+  # If time-span exists, it must match TimeSpanShape
+  sh:property [
+    sh:path ecrm:P4_has_time-span ;
+    sh:node sappho:TimeSpanShape ;
+    sh:maxCount 1 ;
+  ] ;
+  # If place exists, it must match PlaceShape
+  sh:property [
+    sh:path ecrm:P7_took_place_at ;
+    sh:node sappho:PlaceShape ;
+    sh:maxCount 1 ;
+  ] .
+
+# Death event (E69_Death)
+sappho:DeathEventShape
+  a sh:NodeShape ;
+  sh:targetClass ecrm:E69_Death ;
+  sh:property [
+    sh:path rdfs:label ;
+    sh:languageIn ("en") ;
+    sh:minCount 1 ;
+    sh:maxCount 1 ;
+  ] ;
+  sh:property [
+    sh:path prov:wasDerivedFrom ;
+    sh:nodeKind sh:IRI ;
+    sh:minCount 1 ;
+  ] ;
+  sh:property [
+    sh:path ecrm:P100_was_death_of ;
+    sh:class ecrm:E21_Person ;
+    sh:minCount 1 ;
+  ] ;
+  sh:property [
+    sh:path [ sh:inversePath ecrm:P100i_died_in ] ;
+    sh:minCount 1 ;
+  ] ;
+  sh:property [
+    sh:path ecrm:P4_has_time-span ;
+    sh:node sappho:TimeSpanShape ;
+    sh:maxCount 1 ;
+  ] ;
+  sh:property [
+    sh:path ecrm:P7_took_place_at ;
+    sh:node sappho:PlaceShape ;
+    sh:maxCount 1 ;
+  ] .
+
+#################################################################
+# Visual item and image (used when person has an image)
+#################################################################
+
+# Visual item representing a person (E36_Visual_Item)
+sappho:VisualItemShape
+  a sh:NodeShape ;
+  sh:targetClass ecrm:E36_Visual_Item ;
+  sh:property [
+    sh:path rdfs:label ;
+    sh:languageIn ("en") ;
+    sh:minCount 1 ;
+    sh:maxCount 1 ;
+  ] ;
+  sh:property [
+    sh:path ecrm:P138_represents ;
+    sh:class ecrm:E21_Person ;
+    sh:minCount 1 ;
+  ] ;
+  sh:property [
+    sh:path [ sh:inversePath ecrm:P138i_has_representation ] ;
+    sh:minCount 1 ;
+  ] .
+
+# Image node (E38_Image)
+sappho:ImageShape
+  a sh:NodeShape ;
+  sh:targetClass ecrm:E38_Image ;
+  sh:property [
+    sh:path ecrm:P65_shows_visual_item ;
+    sh:node sappho:VisualItemShape ;
+    sh:minCount 1 ;
+    sh:maxCount 1 ;
+  ] ;
+  sh:property [
+    sh:path [ sh:inversePath ecrm:P65i_is_shown_by ] ;
+    sh:minCount 1 ;
+  ] ;
+  sh:property [
+    sh:path rdfs:seeAlso ;
+    sh:nodeKind sh:IRI ;
+    sh:minCount 1 ;
+    sh:maxCount 1 ;
+  ] ;
+  sh:property [
+    sh:path prov:wasDerivedFrom ;
+    sh:nodeKind sh:IRI ;
+    sh:minCount 1 ;
+  ] .
+
+#################################################################
+# Main Person Shape (matches what the Python script generates)
+#################################################################
+
+sappho:PersonShape
+  a sh:NodeShape ;
+  sh:targetClass ecrm:E21_Person ;
+
+  # English label from Wikidata label
+  sh:property [
+    sh:path rdfs:label ;
+    sh:languageIn ("en") ;
+    sh:minCount 1 ;
+    sh:maxCount 1 ;
+  ] ;
+
+  # owl:sameAs to Wikidata entity
+  sh:property [
+    sh:path owl:sameAs ;
+    sh:nodeKind sh:IRI ;
+    sh:minCount 1 ;
+    sh:maxCount 1 ;
+  ] ;
+  # SPARQL validation: must point to Wikidata Q-ID
+  sh:sparql [
+    sh:message "owl:sameAs of person must point to a Wikidata entity (Q...).";
+    sh:prefixes [ sh:declare [ sh:prefix "wd" ; sh:namespace "http://www.wikidata.org/entity/"^^xsd:anyURI ] ] ;
+    sh:select """
+      SELECT ?this WHERE {
+        ?this owl:sameAs ?wd .
+        FILTER (!STRSTARTS(STR(?wd), STR(wd:Q)))
+      }
+    """ ;
+  ] ;
+
+  # P131_is_identified_by → Appellation node (name)
+  sh:property [
+    sh:path ecrm:P131_is_identified_by ;
+    sh:node sappho:AppellationShape ;
+    sh:minCount 1 ;
+    sh:maxCount 1 ;
+  ] ;
+
+  # P1_is_identified_by → Identifier node (QID)
+  sh:property [
+    sh:path ecrm:P1_is_identified_by ;
+    sh:node sappho:IdentifierShape ;
+    sh:minCount 1 ;
+    sh:maxCount 1 ;
+  ] ;
+
+  # Optional: gender type, if present must match GenderNodeShape
+  sh:property [
+    sh:path ecrm:P2_has_type ;
+    sh:node sappho:GenderNodeShape ;
+    sh:minCount 0 ;
+  ] ;
+
+  # Optional: birth and death events
+  sh:property [
+    sh:path ecrm:P98i_was_born ;
+    sh:node sappho:BirthEventShape ;
+    sh:minCount 0 ;
+    sh:maxCount 1 ;
+  ] ;
+  sh:property [
+    sh:path ecrm:P100i_died_in ;
+    sh:node sappho:DeathEventShape ;
+    sh:minCount 0 ;
+    sh:maxCount 1 ;
+  ] ;
+
+  # Optional: visual item (representation)
+  sh:property [
+    sh:path ecrm:P138i_has_representation ;
+    sh:node sappho:VisualItemShape ;
+    sh:minCount 0 ;
+    sh:maxCount 1 ;
+  ] .
+
+#################################################################
+# Ontology node generated by the script (imports eCRM)
+#################################################################
+
+sappho:OntologyNodeShape
+  a sh:NodeShape ;
+  sh:targetNode <https://sappho-digital.com/ontology/authors> ;
+  sh:property [
+    sh:path rdf:type ;
+    sh:hasValue owl:Ontology ;
+    sh:minCount 1 ;
+  ] ;
+  sh:property [
+    sh:path owl:imports ;
+    sh:hasValue <http://erlangen-crm.org/current/> ;
+    sh:minCount 1 ;
+  ] .
