@@ -488,3 +488,4 @@ ecrm:E42_Identifier owl:equivalentClass crm:E42_Identifier .
         <https://sappho-digital.com/expression/Q1242002>,
         <https://sappho-digital.com/textpassage/Q119292643_Q1242002>,
         <https://sappho-digital.com/textpassage/Q1242002_Q119292643> .
+

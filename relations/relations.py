@@ -832,7 +832,7 @@ def main(argv=None) -> int:
 
     # Logging
     import logging
-    logging.basicConfig(level=getattr(logging, args.log_level.upper(), logging.INFO),
+    logging.basicConfig(level=getattr(logging, getattr(args, "log_level", "INFO").upper(), logging.INFO),
                         format="%(levelname)s:%(name)s:%(message)s")
 
     # Load QIDs
@@ -840,10 +840,10 @@ def main(argv=None) -> int:
         reader = csv.reader(f)
         qids = [row[0] for row in reader if row and row[0].startswith("Q")]
 
-    # Build graph
+    # Build Graph
     g = build_graph()
 
-    # Processors
+    # Process
     processors = [
         process_int31,
         process_plots,
@@ -858,14 +858,38 @@ def main(argv=None) -> int:
     for fn in tqdm(processors, unit="task"):
         fn(g, qids)
 
+    # Ontology Alignments
+    ecrm_classes = [
+        "E21_Person",
+        "E42_Identifier",
+        "E53_Place",
+        "E55_Type",
+    ]
+    for cls in ecrm_classes:
+        g.add((ecrm[cls], OWL.equivalentClass, crm[cls]))
+
+    ecrm_props = [
+        ("P1_is_identified_by",  "P1i_identifies"),
+        ("P2_has_type",          "P2i_is_type_of"),
+        ("P67_refers_to",        "P67i_is_referred_to_by"),
+    ]
+    for direct, inverse in ecrm_props:
+        g.add((ecrm[direct],  OWL.equivalentProperty, crm[direct]))
+        g.add((ecrm[inverse], OWL.equivalentProperty, crm[inverse]))
+        g.add((ecrm[direct],  OWL.inverseOf, ecrm[inverse]))
+        g.add((ecrm[inverse], OWL.inverseOf, ecrm[direct]))
+
+    # FRBRoo/eFRBRoo Mapping
+    g.add((lrmoo.F2_Expression, OWL.equivalentClass, frbroo.F2_Expression))
+    g.add((lrmoo.F2_Expression, OWL.equivalentClass, efrbroo.F2_Expression))
+
     # Serialize
     g.serialize(destination=args.output, format="turtle")
     print(f"✅ RDF graph written to {args.output}")
 
-    # SHACL validation
-    from rdflib import Graph as RDFGraph
+    # SHACL Validation
     shapes_path = Path("relations-shapes.ttl")
-    shapes_graph = RDFGraph().parse(str(shapes_path), format="turtle")
+    shapes_graph = Graph().parse(str(shapes_path), format="turtle")
 
     conforms, report_graph, report_text = validate(
         g,
