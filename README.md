@@ -68,11 +68,11 @@ Validation of the corresponding Turtle files is performed within the Python scri
 
 If you want to manually validate the Turtle files, you can use pySHACL:
 
-`pip install pyshacl`
+```pip install pyshacl```
 
 Then run the following command:
 
-`pyshacl -s {SHACL file}.ttl -d {file you want to validate}.ttl --advanced --metashacl -f table`
+```pyshacl -s {SHACL file}.ttl -d {file you want to validate}.ttl --advanced --metashacl -f table```
 
 This will produce a report indicating whether the Turtle file is valid according to the provided SHACL shapes.
 
