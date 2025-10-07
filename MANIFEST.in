@@ -1,0 +1,4 @@
+include README.md
+include LICENSE
+recursive-include docs *.png *.jpg *.jpeg *.gif *.pdf
+recursive-include examples *.ttl *.csv *.txt

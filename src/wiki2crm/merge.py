@@ -11,12 +11,6 @@ from collections import defaultdict
 from pathlib import Path
 from rdflib import Graph, Namespace, RDF, RDFS, OWL, URIRef
 
-# Settings
-INPUT_AUTHORS_DEFAULT   = Path("../authors/authors.ttl")
-INPUT_WORKS_DEFAULT     = Path("../works/works.ttl")
-INPUT_RELATIONS_DEFAULT = Path("../relations/relations.ttl")
-OUTPUT_TTL_DEFAULT      = Path("all.ttl")
-
 # Namespaces
 sappho   = Namespace("https://sappho-digital.com/")
 ecrm     = Namespace("http://erlangen-crm.org/current/")
@@ -94,22 +88,57 @@ def bind_namespaces(g: Graph) -> None:
     g.bind("prov", prov)
 
 def parse_args(argv=None) -> argparse.Namespace:
-    p = argparse.ArgumentParser()
-    p.add_argument("--authors", type=Path, default=INPUT_AUTHORS_DEFAULT, help="Path to authors.ttl")
-    p.add_argument("--works", type=Path, default=INPUT_WORKS_DEFAULT, help="Path to works.ttl")
-    p.add_argument("--relations", type=Path, default=INPUT_RELATIONS_DEFAULT, help="Path to relations.ttl")
-    p.add_argument("--output", type=Path, default=OUTPUT_TTL_DEFAULT, help="Output TTL file (default: all.ttl)")
+    p = argparse.ArgumentParser(
+        description="Merge authors.ttl, works.ttl, relations.ttl into one graph (de-duplicated labels)"
+    )
+    p.add_argument("--authors",   type=Path, help="Path to authors.ttl (e.g. examples/outputs/authors.ttl)")
+    p.add_argument("--works",     type=Path, help="Path to works.ttl (e.g. examples/outputs/works.ttl)")
+    p.add_argument("--relations", type=Path, help="Path to relations.ttl (e.g. examples/outputs/relations.ttl)")
+    p.add_argument("--output",    type=Path, help="Output TTL (e.g. examples/outputs/all.ttl)")
+    p.add_argument("--log-level", default="INFO", help="Logging level (default: INFO)")
     return p.parse_args(argv)
 
 def main(argv=None) -> int:
     args = parse_args(argv)
 
+    import logging
+    logging.basicConfig(level=getattr(logging, args.log_level.upper(), logging.INFO),
+                        format="%(levelname)s:%(name)s:%(message)s")
+
+    if args.authors is None:
+        cand = Path("examples/outputs/authors.ttl")
+        if cand.exists(): args.authors = cand
+        else: raise SystemExit("--authors is required (no examples/outputs/authors.ttl found)")
+
+    if args.works is None:
+        cand = Path("examples/outputs/works.ttl")
+        if cand.exists(): args.works = cand
+        else: raise SystemExit("--works is required (no examples/outputs/works.ttl found)")
+
+    if args.relations is None:
+        cand = Path("examples/outputs/relations.ttl")
+        if cand.exists(): args.relations = cand
+        else: raise SystemExit("--relations is required (no examples/outputs/relations.ttl found)")
+
+    if args.output is None:
+        outdir = Path("examples/outputs")
+        args.output = (outdir / "all.ttl") if outdir.exists() else Path("all.ttl")
+
+    args.output.parent.mkdir(parents=True, exist_ok=True)
+
+    for name, p in (("authors", args.authors), ("works", args.works), ("relations", args.relations)):
+        if not p.exists():
+            raise SystemExit(f"--{name} not found: {p}")
+
+    # Merge
     g_authors, g_works, g_relations = load_graphs(args.authors, args.works, args.relations)
     g_all = merge_graphs([g_authors, g_works, g_relations])
     cleaned = cleanup_duplicate_labels(g_all)
     cleaned = cleanup_ontology(cleaned)
     bind_namespaces(cleaned)
+
     cleaned.serialize(destination=str(args.output), format="turtle")
+    print(f"✅ merged TTL written to {args.output}")
     return 0
 
 if __name__ == "__main__":

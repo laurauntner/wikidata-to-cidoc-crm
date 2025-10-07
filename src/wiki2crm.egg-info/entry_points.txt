@@ -1,0 +1,2 @@
+[console_scripts]
+wiki2crm = wiki2crm.cli:main

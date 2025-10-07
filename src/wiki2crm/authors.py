@@ -9,7 +9,7 @@ import csv
 import time
 import logging
 import rdflib
-from rdflib import Graph, Literal, RDF, RDFS, Namespace, URIRef
+from rdflib import Graph, Literal, Namespace, URIRef
 from rdflib.namespace import RDF, RDFS, OWL, XSD
 import requests
 from requests.adapters import HTTPAdapter
@@ -21,11 +21,9 @@ from pathlib import Path
 from tqdm import tqdm
 import argparse
 from pyshacl import validate
+from wiki2crm import resources
 
 # Settings
-INPUT_CSV_DEFAULT = Path("author-qids.csv")
-OUTPUT_TTL_DEFAULT = Path("authors.ttl")
-
 SPARQL_ENDPOINT = "https://query.wikidata.org/sparql"
 USER_AGENT = "SapphoDataIntegrationBot/1.0 (laura.untner@fu-berlin.de)"
 HTTP_TIMEOUT = 90
@@ -374,16 +372,38 @@ def process_authors(g: Graph, all_qids: List[str]) -> None:
                 g.add((image_instance_uri, PROV.wasDerivedFrom, URIRef(uri)))
 
 def parse_args(argv=None) -> argparse.Namespace:
-    p = argparse.ArgumentParser()
-    p.add_argument("--input", type=Path, default=INPUT_CSV_DEFAULT, help="CSV file with QIDs (default: author-qids.csv)")
-    p.add_argument("--output", type=Path, default=OUTPUT_TTL_DEFAULT, help="Output TTL file (default: authors.ttl)")
+    p = argparse.ArgumentParser(
+        description="Retrieve person data from Wikidata and emit CIDOC CRM TTL"
+    )
+    p.add_argument("--input",  type=Path, help="CSV with QIDs (e.g. examples/inputs/author-qids.csv)")
+    p.add_argument("--output", type=Path, help="Output Turtle (e.g. examples/outputs/authors.ttl)")
+    p.add_argument(
+        "--shapes",
+        type=Path,
+        default=resources.shapes_path("author-shapes.ttl"),
+        help="Path to SHACL shapes (default: package-installed author-shapes.ttl)",
+    )
     p.add_argument("--log-level", default="INFO", help="Logging level (default: INFO)")
     return p.parse_args(argv)
 
 def main(argv=None) -> int:
     args = parse_args(argv)
+
     logging.basicConfig(level=getattr(logging, args.log_level.upper(), logging.INFO),
                         format="%(levelname)s:%(name)s:%(message)s")
+
+    if args.input is None:
+        repo_input = Path("examples/inputs/author-qids.csv")
+        if repo_input.exists():
+            args.input = repo_input
+        else:
+            raise SystemExit("--input is required (no examples/inputs/author-qids.csv found)")
+
+    if args.output is None:
+        repo_outdir = Path("examples/outputs")
+        args.output = (repo_outdir / "authors.ttl") if repo_outdir.exists() else Path("authors.ttl")
+
+    args.output.parent.mkdir(parents=True, exist_ok=True)
 
     # Create graph
     g = create_graph()
@@ -399,8 +419,7 @@ def main(argv=None) -> int:
     print(f"✅ RDF graph written to {args.output}")
 
     # Validate the output graph using pySHACL
-    shapes_path = Path("author-shapes.ttl")
-    shapes_graph = Graph().parse(str(shapes_path), format="turtle")
+    shapes_graph = Graph().parse(str(args.shapes), format="turtle")
 
     conforms, report_graph, report_text = validate(
         g,

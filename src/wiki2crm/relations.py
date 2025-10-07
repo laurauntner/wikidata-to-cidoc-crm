@@ -13,6 +13,7 @@ from functools import lru_cache
 from itertools import combinations
 from typing import Union, Iterable, Tuple, List, Dict, Any, Optional
 from pyshacl import validate
+from wiki2crm import resources
 
 import requests
 from requests.adapters import HTTPAdapter
@@ -20,14 +21,11 @@ from urllib3.util.retry import Retry
 from email.utils import parsedate_to_datetime
 from datetime import datetime, timezone
 
-from rdflib import Graph, Namespace, URIRef, Literal
+from rdflib import Graph, Literal, Namespace, URIRef
 from rdflib.namespace import RDF, RDFS, OWL
 from tqdm import tqdm
 
 # Settings
-INPUT_CSV_DEFAULT = "work-qids.csv"
-OUTPUT_TTL_DEFAULT = "relations.ttl"
-
 SPARQL_URL = "https://query.wikidata.org/sparql"
 USER_AGENT = "SapphoIntertextualRelationsBot/1.0 (laura.untner@fu-berlin.de)"
 HTTP_TIMEOUT = 120
@@ -821,19 +819,39 @@ SELECT DISTINCT ?src ?tgt WHERE {{
 
 # CLI / Entry
 def parse_args(argv=None):
-    p = argparse.ArgumentParser()
-    p.add_argument("--input", default=INPUT_CSV_DEFAULT, help="CSV file with QIDs (default: work-qids.csv)")
-    p.add_argument("--output", default=OUTPUT_TTL_DEFAULT, help="Output TTL file (default: relations.ttl)")
+    p = argparse.ArgumentParser(
+        description="Build intertextual relations (INTRO + LRMoo/FRBRoo + CIDOC CRM) from a CSV of QIDs"
+    )
+    p.add_argument("--input",  type=Path, help="CSV with QIDs (e.g. examples/inputs/work-qids.csv)")
+    p.add_argument("--output", type=Path, help="Output Turtle (e.g. examples/outputs/relations.ttl)")
+    p.add_argument(
+        "--shapes",
+        type=Path,
+        default=resources.shapes_path("relations-shapes.ttl"),
+        help="Path to SHACL shapes (default: package-installed relations-shapes.ttl)",
+    )
     p.add_argument("--log-level", default="INFO", help="Logging level (default: INFO)")
     return p.parse_args(argv)
 
 def main(argv=None) -> int:
     args = parse_args(argv)
 
-    # Logging
     import logging
-    logging.basicConfig(level=getattr(logging, getattr(args, "log_level", "INFO").upper(), logging.INFO),
+    logging.basicConfig(level=getattr(logging, args.log_level.upper(), logging.INFO),
                         format="%(levelname)s:%(name)s:%(message)s")
+
+    if args.input is None:
+        repo_input = Path("examples/inputs/work-qids.csv")
+        if repo_input.exists():
+            args.input = repo_input
+        else:
+            raise SystemExit("--input is required (no examples/inputs/work-qids.csv found)")
+
+    if args.output is None:
+        repo_outdir = Path("examples/outputs")
+        args.output = (repo_outdir / "relations.ttl") if repo_outdir.exists() else Path("relations.ttl")
+
+    args.output.parent.mkdir(parents=True, exist_ok=True)
 
     # Load QIDs
     with open(args.input, newline="", encoding="utf-8") as f:
@@ -888,8 +906,7 @@ def main(argv=None) -> int:
     print(f"✅ RDF graph written to {args.output}")
 
     # SHACL Validation
-    shapes_path = Path("relations-shapes.ttl")
-    shapes_graph = Graph().parse(str(shapes_path), format="turtle")
+    shapes_graph = Graph().parse(str(args.shapes), format="turtle")
 
     conforms, report_graph, report_text = validate(
         g,

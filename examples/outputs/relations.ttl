@@ -1,0 +1,47 @@
+@prefix crm: <http://www.cidoc-crm.org/cidoc-crm/> .
+@prefix ecrm: <http://erlangen-crm.org/current/> .
+@prefix efrbroo: <http://erlangen-crm.org/efrbroo/> .
+@prefix frbroo: <http://iflastandards.info/ns/fr/frbr/frbroo/> .
+@prefix intro: <https://w3id.org/lso/intro/currentbeta#> .
+@prefix lrmoo: <http://iflastandards.info/ns/lrm/lrmoo/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+
+ecrm:E21_Person owl:equivalentClass crm:E21_Person .
+
+ecrm:E42_Identifier owl:equivalentClass crm:E42_Identifier .
+
+ecrm:E53_Place owl:equivalentClass crm:E53_Place .
+
+lrmoo:F2_Expression owl:equivalentClass efrbroo:F2_Expression,
+        frbroo:F2_Expression .
+
+<https://sappho-digital.com/id_type/wikidata> a ecrm:E55_Type ;
+    rdfs:label "Wikidata ID"@en ;
+    owl:sameAs <http://www.wikidata.org/entity/Q43649390> .
+
+<https://sappho-digital.com/ontology/relations> a owl:Ontology ;
+    owl:imports ecrm:,
+        <https://cidoc-crm.org/extensions/lrmoo/owl/1.0/LRMoo_v1.0.owl>,
+        intro: .
+
+ecrm:E55_Type owl:equivalentClass crm:E55_Type .
+
+ecrm:P1_is_identified_by owl:equivalentProperty crm:P1_is_identified_by ;
+    owl:inverseOf ecrm:P1i_identifies .
+
+ecrm:P1i_identifies owl:equivalentProperty crm:P1i_identifies ;
+    owl:inverseOf ecrm:P1_is_identified_by .
+
+ecrm:P2_has_type owl:equivalentProperty crm:P2_has_type ;
+    owl:inverseOf ecrm:P2i_is_type_of .
+
+ecrm:P2i_is_type_of owl:equivalentProperty crm:P2i_is_type_of ;
+    owl:inverseOf ecrm:P2_has_type .
+
+ecrm:P67_refers_to owl:equivalentProperty crm:P67_refers_to ;
+    owl:inverseOf ecrm:P67i_is_referred_to_by .
+
+ecrm:P67i_is_referred_to_by owl:equivalentProperty crm:P67i_is_referred_to_by ;
+    owl:inverseOf ecrm:P67_refers_to .
+

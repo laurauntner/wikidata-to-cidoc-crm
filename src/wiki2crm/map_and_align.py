@@ -4,7 +4,8 @@ and adds new identifiers from DBpedia, GeoNames etc.
 
 """
 
-from rdflib import Graph, Namespace, URIRef, BNode, Literal, RDF, RDFS, OWL
+from rdflib import Graph, Namespace, URIRef, BNode, Literal
+from rdflib.namespace import RDF, RDFS, OWL
 from rdflib.collection import Collection
 import sys
 import re
@@ -15,6 +16,8 @@ from requests.adapters import HTTPAdapter
 from urllib3.util.retry import Retry
 from email.utils import parsedate_to_datetime
 from datetime import datetime, timezone
+import argparse
+from pathlib import Path
 
 # Namespaces 
 SKOS = Namespace("http://www.w3.org/2004/02/skos/core#")
@@ -172,20 +175,6 @@ def query_wikidata_batch(qids):
 
     return batch_ids
 
-# Define Turtle file
-def choose_file():
-    options = {
-        "1": "../authors/authors.ttl",
-        "2": "../works/works.ttl",
-        "3": "../relations/relations.ttl",
-        "4": "../merge/all.ttl"
-    }
-    print("Which Turtle file would you like to load?")
-    for key, path in options.items():
-        print(f"  {key}) {path}")
-    choice = input("Your choice (1–4): ").strip()
-    return options.get(choice, None)
-
 # Get creation year
 def extract_year(label_lit):
     return int(str(label_lit))
@@ -202,15 +191,46 @@ def get_creation_year(g, expr):
                 return extract_year(g.value(ts, RDFS.label))
     return None
 
+# Arguments
+def parse_args(argv=None):
+    p = argparse.ArgumentParser(
+        description="Add ontology alignments and external identifiers (DBpedia, GeoNames, …) to a TTL file."
+    )
+    p.add_argument("--input",  type=Path, help="Input TTL (e.g. examples/outputs/all.ttl)")
+    p.add_argument("--output", type=Path, help="Output TTL (default: <input>_mapped-and-aligned.ttl)")
+    p.add_argument("--log-level", default="INFO", help="Logging level (default: INFO)")
+    return p.parse_args(argv)
+
 # Run script
-def main():
-    ttl_file = choose_file()
-    if not ttl_file:
-        sys.exit("Invalid selection.")
+def main(argv=None):
+    args = parse_args(argv)
+
+    import logging
+    logging.basicConfig(level=getattr(logging, args.log_level.upper(), logging.INFO),
+                        format="%(levelname)s:%(name)s:%(message)s")
+
+    if args.input is None:
+        candidates = [
+            Path("examples/outputs/all.ttl"),
+            Path("examples/outputs/authors.ttl"),
+            Path("examples/outputs/works.ttl"),
+            Path("examples/outputs/relations.ttl"),
+        ]
+        for c in candidates:
+            if c.exists():
+                args.input = c
+                break
+        if args.input is None:
+            raise SystemExit("--input is required (no default TTL found in examples/outputs)")
+
+    if args.output is None:
+        args.output = args.input.with_name(args.input.stem + "_mapped-and-aligned.ttl")
+
+    args.output.parent.mkdir(parents=True, exist_ok=True)
 
     g = Graph()
-    g.parse(ttl_file, format="turtle")
-    print(f"Loaded {ttl_file}.")
+    g.parse(str(args.input), format="turtle")
+    print(f"✅ Loaded {args.input}.")
 
     # Mapping
     
@@ -935,7 +955,7 @@ def main():
         g.add((ONTOPOETRY_CORE.mentions, SKOS.broadMatch, SAPPHO_PROP.expr_references))
         g.add((ONTOPOETRY_CORE.isMentionedIn, OWL.inverseOf, ONTOPOETRY_CORE.mentions))
         
-        g.add((SCHEMA.mentions, SKOS.broadMatch, SAPPHO.expr_references))
+        g.add((SCHEMA.mentions, SKOS.broadMatch, SAPPHO_PROP.expr_references))
         
     # sappho_prop:references_person / sappho_prop:person_referenced_by
     
@@ -1026,24 +1046,19 @@ def main():
         g.add((ONTOPOETRY_CORE.hasCharacter, SKOS.closeMatch, SAPPHO_PROP.has_character))
         g.add((SCHEMA.character, SKOS.closeMatch, SAPPHO_PROP.has_character))
     
-# Serialize
-    
-    out_file = ttl_file.replace(".ttl", "_mapped-and-aligned.ttl")   
-    g.serialize(destination=out_file, format="turtle")
-    
-# Remove DBpedia prefixes 
+    # Serialize
+    g.serialize(destination=str(args.output), format="turtle")
 
-    with open(out_file, 'r', encoding='utf-8') as f:
-        ttl = f.read()
+    # Remove DBpedia prefixes in-place
+    ttl_path = Path(args.output)
+    text = ttl_path.read_text(encoding="utf-8")
 
-    ttl = re.sub(r'^@prefix dbpedia:.*\n', '', ttl, flags=re.MULTILINE)
+    text = re.sub(r'^@prefix\s+dbpedia:\s*<[^>]+>\s*\.\s*\n', '', text, flags=re.MULTILINE)
 
-    ttl = re.sub(r'\bdbpedia:([A-Za-z0-9_/]+)\b', r'<https://dbpedia.org/\1>', ttl)
+    text = re.sub(r'\bdbpedia:([A-Za-z0-9_/]+)\b', r'<https://dbpedia.org/\1>', text)
 
-    with open(out_file, 'w', encoding='utf-8') as f:
-        f.write(ttl)
-    
-    print(f"File saved as {out_file}.")
+    ttl_path.write_text(text, encoding="utf-8")
+    print(f"✅ File saved as {args.output}")
 
 if __name__ == "__main__":
     main()
