@@ -2,7 +2,7 @@
 
 This repository contains Python scripts that transform structured data from [Wikidata](https://www.wikidata.org/) into RDF using [CIDOC CRM](https://cidoc-crm.org/) (OWL version, [eCRM](https://erlangen-crm.org/docs/ecrm/current/)) and models based on CIDOC CRM: [LRMoo](https://repository.ifla.org/handle/20.500.14598/3677) and [INTRO](https://github.com/BOberreither/INTRO). 
 
-You can use the Python scripts in `src/wiki2crm` individually or with the provided Python package `wiki2crm`.
+You can use the Python scripts in `src/wiki2crm` individually or with the provided Python package [wiki2crm](https://pypi.org/project/wiki2crm/).
 
 The goal is to enable CIDOC CRM-based semantic enrichment from Wikidata and other linked data sources. The scripts also use [PROV-O](https://www.w3.org/TR/prov-o/) (`prov:wasDerivedFrom`) to link data back to Wikidata.
 
