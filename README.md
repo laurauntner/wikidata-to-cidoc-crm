@@ -24,7 +24,7 @@ The mappings and alignments are done separately so that the script can hopefully
 
 - 🪄 **Reality check**: These scripts are not magical. Data that is not available in Wikidata cannot appear in the triples.
 - ⚠️ **Base URI:** All URIs currently use the `https://sappho-digital.com/` base. Please adapt this to your own environment as needed.
-- 💡 **Reuse is encouraged**. The scripts are open for reuse. They are developed in the context of the project [Sappho Digital](https://sappho-digital.com/) by [Laura Untner](https://orcid.org/0000-0002-9649-0870). A reference to the project would be appreciated if you use or build on the scripts.
+- 💡 **Reuse is encouraged**. The scripts are open for reuse. They are developed in the context of the project [Sappho Digital](https://sappho-digital.com/) by [Laura Untner](https://orcid.org/0000-0002-9649-0870). A reference to the project would be appreciated if you use or build on the scripts. You can also use the DOI provided by Zenodo: [https://doi.org/10.5281/zenodo.17396141](https://doi.org/10.5281/zenodo.17396141).
 
 ---
 
