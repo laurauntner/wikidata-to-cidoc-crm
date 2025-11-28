@@ -1,6 +1,6 @@
 # Wikidata to CIDOC CRM (wiki2crm)
 
-💾 **Zenodo dump: [https://doi.org/10.5281/zenodo.17396141](https://doi.org/10.5281/zenodo.17396141)**
+💾 **Zenodo dump: [https://doi.org/10.5281/zenodo.17751731](https://doi.org/10.5281/zenodo.17751731)**
 
 This repository contains Python scripts that transform structured data from [Wikidata](https://www.wikidata.org/) into RDF using [CIDOC CRM](https://cidoc-crm.org/) (OWL version, [eCRM](https://erlangen-crm.org/docs/ecrm/current/)) and models based on CIDOC CRM: [LRMoo](https://repository.ifla.org/handle/20.500.14598/3677) and [INTRO](https://github.com/BOberreither/INTRO). 
 
