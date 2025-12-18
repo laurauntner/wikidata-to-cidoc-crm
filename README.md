@@ -2,6 +2,8 @@
 
 💾 **Zenodo dump: [https://doi.org/10.5281/zenodo.17751731](https://doi.org/10.5281/zenodo.17751731)**
 
+🧐 **Read more: Laura Untner: From Wikidata to CIDOC CRM: A Use Case Scenario for Digital Comparative Literary Studies. In: Journal of Open Humanities Data 11 (2025), pp. 1–15, DOI: [10.5334/johd.421](https://doi.org/10.5334/johd.421).**
+
 This repository contains Python scripts that transform structured data from [Wikidata](https://www.wikidata.org/) into RDF using [CIDOC CRM](https://cidoc-crm.org/) (OWL version, [eCRM](https://erlangen-crm.org/docs/ecrm/current/)) and models based on CIDOC CRM: [LRMoo](https://repository.ifla.org/handle/20.500.14598/3677) and [INTRO](https://github.com/BOberreither/INTRO). 
 
 You can use the Python scripts in `src/wiki2crm` individually or with the provided Python package [wiki2crm](https://pypi.org/project/wiki2crm/).
@@ -26,7 +28,7 @@ The mappings and alignments are done separately so that the script can hopefully
 
 - 🪄 **Reality check**: These scripts are not magical. Data that is not available in Wikidata cannot appear in the triples.
 - ⚠️ **Base URI:** All URIs currently use the `https://sappho-digital.com/` base. Please adapt this to your own environment as needed.
-- 💡 **Reuse is encouraged**. The scripts are open for reuse. They are developed in the context of the project [Sappho Digital](https://sappho-digital.com/) by [Laura Untner](https://orcid.org/0000-0002-9649-0870). A reference to the project would be appreciated if you use or build on the scripts. You can also use the DOI provided by Zenodo: [https://doi.org/10.5281/zenodo.17396141](https://doi.org/10.5281/zenodo.17396141).
+- 💡 **Reuse is encouraged**. The scripts are open for reuse. They are developed in the context of the project [Sappho Digital](https://sappho-digital.com/) by [Laura Untner](https://orcid.org/0000-0002-9649-0870). A reference to the project would be appreciated if you use or build on the scripts. You can also refer to »Laura Untner: From Wikidata to CIDOC CRM: A Use Case Scenario for Digital Comparative Literary Studies. In: Journal of Open Humanities Data 11 (2025), pp. 1–15, DOI: [10.5334/johd.421](https://doi.org/10.5334/johd.421)«, and use the DOI provided by Zenodo: [https://doi.org/10.5281/zenodo.17396141](https://doi.org/10.5281/zenodo.17396141). 
 
 ---
 
