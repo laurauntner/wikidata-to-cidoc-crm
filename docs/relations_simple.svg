@@ -462,9 +462,6 @@
       <path fill="none" d="M949.0036 345.1908 L949.0036 365.6908 L1304.6802 365.6908 L1304.6802 412.0354" clip-path="url(#clipPath2)"/>
       <path d="M1304.6802 420.0354 L1309.6802 408.0354 L1304.6802 411.0354 L1299.6802 408.0354 Z" clip-path="url(#clipPath2)" stroke="none"/>
       <text x="1063.6821" xml:space="preserve" y="411.0043" clip-path="url(#clipPath2)" font-family="sans-serif" stroke="none">intro:R22 provides Similarity For Relation</text>
-      <path fill="none" d="M1434.3427 507.8059 L1434.3427 586.0257 L2001.1692 586.0257 L2001.1692 662.4007" clip-path="url(#clipPath2)"/>
-      <path d="M2001.1692 670.4007 L2006.1692 658.4007 L2001.1692 661.4007 L1996.1692 658.4007 Z" clip-path="url(#clipPath2)" stroke="none"/>
-      <text x="1661.9611" xml:space="preserve" y="576.4944" clip-path="url(#clipPath2)" font-family="sans-serif" stroke="none">intro:R24 has Related Entity</text>
       <path fill="none" d="M1323.2034 507.8059 L1323.2034 570.306 L1230.245 570.306 L1230.245 661.4772" clip-path="url(#clipPath2)"/>
       <path d="M1230.245 669.4772 L1235.245 657.4772 L1230.245 660.4772 L1225.245 657.4772 Z" clip-path="url(#clipPath2)" stroke="none"/>
       <text x="1149.4501" xml:space="preserve" y="599.6461" clip-path="url(#clipPath2)" font-family="sans-serif" stroke="none">intro:R24 has Related Entity</text>
@@ -474,9 +471,6 @@
       <path fill="none" d="M1278.7477 507.8059 L1278.7477 528.306 L957.3369 528.306 L957.3369 819.7959" clip-path="url(#clipPath2)"/>
       <path d="M957.3369 827.7959 L962.3369 815.7959 L957.3369 818.7959 L952.3369 815.7959 Z" clip-path="url(#clipPath2)" stroke="none"/>
       <text x="959.3369" xml:space="preserve" y="607.7227" clip-path="url(#clipPath2)" font-family="sans-serif" stroke="none">intro:R24 has Related Entity</text>
-      <path fill="none" d="M1345.4313 507.8059 L1345.4312 661.4862" clip-path="url(#clipPath2)"/>
-      <path d="M1345.4312 669.4862 L1350.4312 657.4862 L1345.4312 660.4862 L1340.4312 657.4862 Z" clip-path="url(#clipPath2)" stroke="none"/>
-      <text x="1246.3774" xml:space="preserve" y="535.5027" clip-path="url(#clipPath2)" font-family="sans-serif" stroke="none">intro:R24 has Related Entity</text>
       <path fill="none" d="M1456.5706 507.8059 L1456.5706 565.0257 L2066.363 565.0257 L2066.363 662.4162" clip-path="url(#clipPath2)"/>
       <path d="M2066.363 670.4162 L2071.363 658.4162 L2066.363 661.4162 L2061.363 658.4162 Z" clip-path="url(#clipPath2)" stroke="none"/>
       <text x="1528.2238" xml:space="preserve" y="560.4944" clip-path="url(#clipPath2)" font-family="sans-serif" stroke="none">intro:R24 has Related Entity</text>
