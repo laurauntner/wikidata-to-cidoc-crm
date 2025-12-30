@@ -352,7 +352,7 @@ def main(argv=None):
     
     # lrmoo:F1_Work
     if any(g.triples((None, RDF.type, LRMOO.F1_Work))):
-        g.add((FABIO.Work, SKOS.broadMatch, LRMOO.F1_Work))
+        g.add((FABIO.Work, SKOS.closeMatch, LRMOO.F1_Work))
         g.add((FABIO.LiteraryArtisticWork, SKOS.broadMatch, LRMOO.F1_Work))
         g.add((ONTOPOETRY_CORE.Work, SKOS.closeMatch, LRMOO.F1_Work))
         g.add((ONTOPOETRY_CORE.PoeticWork, SKOS.broadMatch, LRMOO.F1_Work))
@@ -360,10 +360,10 @@ def main(argv=None):
     
     # lrmoo:F2_Expression
     if any(g.triples((None, RDF.type, LRMOO.F2_Expression))):
-        g.add((LRMOO.F2_Expression, SKOS.broadMatch, FOAF.Document))
+        g.add((FOAF.Document, SKOS.broadMatch, LRMOO.F2_Expression))
         g.add((BIBO.Manuscript, SKOS.broadMatch, LRMOO.F2_Expression))
         g.add((DRACOR.play, SKOS.broadMatch, LRMOO.F2_Expression))
-        g.add((FABIO.Expression, SKOS.broadMatch, LRMOO.F2_Expression))
+        g.add((FABIO.Expression, SKOS.closeMatch, LRMOO.F2_Expression))
         g.add((INTERTEXT_TX.Text, SKOS.broadMatch, LRMOO.F2_Expression))
         g.add((INTERTEXT_TX.SingleText, SKOS.broadMatch, LRMOO.F2_Expression))
         g.add((INTERTEXT_AF.Work, SKOS.broadMatch, LRMOO.F2_Expression))
@@ -380,14 +380,14 @@ def main(argv=None):
     if any(g.triples((None, RDF.type, LRMOO.F3_Manifestation))):
         g.add((BIBO.Book, SKOS.broadMatch, LRMOO.F3_Manifestation))
         g.add((DC.BibliographicResource, SKOS.broadMatch, LRMOO.F3_Manifestation))
-        g.add((FABIO.Manifestation, SKOS.broadMatch, LRMOO.F3_Manifestation))
-        g.add((LRMOO.F3_Manifestation, SKOS.broadMatch, FOAF.Document))
+        g.add((FABIO.Manifestation, SKOS.closeMatch, LRMOO.F3_Manifestation))
+        g.add((FOAF.Document, SKOS.broadMatch, LRMOO.F3_Manifestation))
         g.add((URB.Manifestation, SKOS.closeMatch, LRMOO.F3_Manifestation))
 
     # lrmoo:F5_Item
     if any(g.triples((None, RDF.type, LRMOO.F5_Item))):
-        g.add((FABIO.Item, SKOS.broadMatch, LRMOO.F5_Item))     
-        g.add((LRMOO.F5_Item, SKOS.broadMatch, FOAF.Document)) 
+        g.add((FABIO.Item, SKOS.closeMatch, LRMOO.F5_Item))
+        g.add((FOAF.Document, SKOS.narrowMatch, LRMOO.F5_Item))
     
     # lrmoo:F27_Work_Creation
     if any(g.triples((None, RDF.type, LRMOO.F27_Work_Creation))):
@@ -473,22 +473,23 @@ def main(argv=None):
     
     # ecrm:P1_is_identified_by
     if any(g.triples((None, ECRM.P1_is_identified_by, None))):
-        g.add((DC.identifier, SKOS.broadMatch, ECRM.P1_is_identified_by))
+        g.add((DC.identifier, SKOS.closeMatch, ECRM.P1_is_identified_by))
         g.add((URW.hasIdentifier, SKOS.closeMatch, ECRM.P1_is_identified_by))
 
     # ecrm:P2_has_type
     if any(g.triples((None, ECRM.P2_has_type, None))):
-        g.add((DC.type, SKOS.broadMatch, ECRM.P2_has_type))
+        g.add((DC.type, SKOS.closeMatch, ECRM.P2_has_type))
         g.add((DRACOR.has_genre, SKOS.broadMatch, ECRM.P2_has_type))
         g.add((FOAF.gender, SKOS.broadMatch, ECRM.P2_has_type))
         g.add((MIMOTEXT.P12, SKOS.broadMatch, ECRM.P2_has_type)) # genre
         g.add((ONTOPOETRY_CORE.gender, SKOS.broadMatch, ECRM.P2_has_type))
         g.add((ONTOPOETRY_CORE.genre, SKOS.broadMatch, ECRM.P2_has_type))
         g.add((SCHEMA.genre, SKOS.broadMatch, ECRM.P2_has_type))
+        g.add((URW.gender, SKOS.broadMatch, ECRM.P2_has_type))
     
     # ecrm:P4_has_time-span
     if any(g.triples((None, ECRM["P4_has_time-span"], None))):
-        g.add((DC.date, SKOS.broadMatch, ECRM["P4_has_time-span"]))
+        g.add((DC.date, SKOS.closeMatch, ECRM["P4_has_time-span"]))
         g.add((DC.created, SKOS.broadMatch, ECRM["P4_has_time-span"]))
         g.add((DC.dateCopyrighted, SKOS.broadMatch, ECRM["P4_has_time-span"]))
         g.add((DRACOR.printYear, SKOS.broadMatch, ECRM["P4_has_time-span"]))
@@ -551,13 +552,13 @@ def main(argv=None):
         
     # ecrm:P102_has_title
     if any(g.triples((None, ECRM.P102_has_title, None))):
-        g.add((DC.title, SKOS.broadMatch, ECRM.P102_has_title))
-        g.add((MIMOTEXT.P4, SKOS.broadMatch, ECRM.P102_has_title)) # title
+        g.add((DC.title, SKOS.closeMatch, ECRM.P102_has_title))
+        g.add((MIMOTEXT.P4, SKOS.closeMatch, ECRM.P102_has_title))  # title
     
     # ecrm:P131_is_identified_by
     if any(g.triples((None, ECRM.P131_is_identified_by, None))):
-        g.add((FOAF.name, SKOS.broadMatch, ECRM.P131_is_identified_by))
-        g.add((MIMOTEXT.P8, SKOS.broadMatch, ECRM.P131_is_identified_by)) # name
+        g.add((FOAF.name, SKOS.closeMatch, ECRM.P131_is_identified_by))
+        g.add((MIMOTEXT.P8, SKOS.closeMatch, ECRM.P131_is_identified_by))  # name
     
     # ecrm:P138i_has_representation
     if any(g.triples((None, ECRM.P138i_has_representation, None))):
@@ -570,7 +571,6 @@ def main(argv=None):
 
     # lrmoo:R3_is_realised_in
     if any(g.triples((None, LRMOO.R3_is_realised_in, None))):
-        g.add((FABIO.realization, SKOS.closeMatch, LRMOO.R3_is_realised_in))
         g.add((URB.realizationOf, SKOS.closeMatch, LRMOO.R3_is_realised_in))
     
     # lrmoo:R4_embodies
@@ -579,12 +579,7 @@ def main(argv=None):
 
     # lrmoo:R4i_is_embodied_in
     if any(g.triples((None, LRMOO.R4i_is_embodied_in, None))):
-        g.add((FABIO.embodiment, SKOS.closeMatch, LRMOO.R4i_is_embodied_in))
         g.add((URB.embodiment, SKOS.closeMatch, LRMOO.R4i_is_embodied_in))
-    
-    # lrmoo:R7i_is_exemplified_by
-    if any(g.triples((None, LRMOO.R7i_is_exemplified_by, None))):
-        g.add((FABIO.exemplar, SKOS.closeMatch, LRMOO.R7i_is_exemplified_by))
     
     # lrmoo:R16_created
     if any(g.triples((None, LRMOO.R16_created, None))):
@@ -778,7 +773,6 @@ def main(argv=None):
         g.add((SAPPHO_PROP.about, SKOS.closeMatch, FOAF.topic))
         g.add((SAPPHO_PROP.about, SKOS.closeMatch, MIMOTEXT.P36)) # about
         g.add((SAPPHO_PROP.about, SKOS.closeMatch, SCHEMA.about))
-        g.add((SAPPHO_PROP.about, SKOS.closeMatch, URW.hasSubject))
         g.add((SAPPHO_PROP.about, RDFS.domain, LRMOO.F2_Expression))
         g.add((SAPPHO_PROP.about, RDFS.range, INTRO.INT_Topic))
 
