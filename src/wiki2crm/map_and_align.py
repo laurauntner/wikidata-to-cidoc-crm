@@ -47,6 +47,8 @@ MIMOTEXT = Namespace("http://data.mimotext.uni-trier.de/entity/")
 ONTOPOETRY_CORE = Namespace("http://postdata.linhd.uned.es/ontology/postdata-core#")
 ONTOPOETRY_ANALYSIS = Namespace("http://postdata.linhd.uned.es/ontology/postdata-poeticAnalysis#")
 SCHEMA = Namespace("https://schema.org/")
+URW = Namespace("https://purl.archive.org/urwriters#")
+URB = Namespace("https://purl.archive.org/urbooks#")
 
 # HTTP helpers
 SPARQL_URL = "https://query.wikidata.org/sparql"
@@ -286,6 +288,8 @@ def main(argv=None):
     g.bind("ontopoetry_core", ONTOPOETRY_CORE)
     g.bind("ontopoetry_analysis", ONTOPOETRY_ANALYSIS)
     g.bind("schema", SCHEMA)
+    g.bind("urw", URW, override=True)
+    g.bind("urb", URB, override=True)
 
     ## Classes ##
     
@@ -296,6 +300,8 @@ def main(argv=None):
         g.add((MIMOTEXT.Q11, SKOS.broadMatch, ECRM.E21_Person)) # author
         g.add((MIMOTEXT.Q10, SKOS.closeMatch, ECRM.E21_Person)) # person
         g.add((ONTOPOETRY_CORE.Person, SKOS.closeMatch, ECRM.E21_Person)) 
+        g.add((URW.Agent, SKOS.narrowMatch, ECRM.E21_Person))
+        g.add((URW.Person, SKOS.closeMatch, ECRM.E21_Person))
     
     # ecrm:E35_Title
     if any(g.triples((None, RDF.type, ECRM.E35_Title))):
@@ -310,7 +316,9 @@ def main(argv=None):
     if any(g.triples((None, RDF.type, ECRM.E40_Legal_Body))):
         g.add((ECRM.E40_Legal_Body, SKOS.broadMatch, FOAF.Agent))
         g.add((ONTOPOETRY_CORE.Organisation, SKOS.broadMatch, ECRM.E40_Legal_Body))
-    
+        g.add((URW.Organization, SKOS.broadMatch, ECRM.E40_Legal_Body))
+        g.add((URW.Publisher, SKOS.broadMatch, ECRM.E40_Legal_Body))
+
     # ecrm:E52_Time-Span
     if any(g.triples((None, RDF.type, ECRM["E52_Time-Span"]))):
         g.add((DC.PeriodOfTime, SKOS.closeMatch, ECRM["E52_Time-Span"]))
@@ -321,7 +329,9 @@ def main(argv=None):
         g.add((DC.Location, SKOS.closeMatch, ECRM.E53_Place))
         g.add((MIMOTEXT.Q26, SKOS.closeMatch, ECRM.E53_Place)) # spatial concept
         g.add((ONTOPOETRY_CORE.Place, SKOS.closeMatch, ECRM.E53_Place))
-        
+        g.add((ONTOPOETRY_CORE.Place, SKOS.closeMatch, ECRM.E53_Place))
+        g.add((URW.Place, SKOS.closeMatch, ECRM.E53_Place))
+
     # ecrm:E55_Type
     if any(g.triples((None, RDF.type, ECRM.E55_Type))):
         g.add((DRACOR.genre, SKOS.broadMatch, ECRM.E55_Type))
@@ -346,6 +356,7 @@ def main(argv=None):
         g.add((FABIO.LiteraryArtisticWork, SKOS.broadMatch, LRMOO.F1_Work))
         g.add((ONTOPOETRY_CORE.Work, SKOS.closeMatch, LRMOO.F1_Work))
         g.add((ONTOPOETRY_CORE.PoeticWork, SKOS.broadMatch, LRMOO.F1_Work))
+        g.add((URB.Work, SKOS.closeMatch, LRMOO.F1_Work))
     
     # lrmoo:F2_Expression
     if any(g.triples((None, RDF.type, LRMOO.F2_Expression))):
@@ -363,14 +374,16 @@ def main(argv=None):
         g.add((ONTOPOETRY_ANALYSIS.Source, SKOS.broadMatch, LRMOO.F2_Expression))
         g.add((ONTOPOETRY_ANALYSIS.Redaction, SKOS.broadMatch, LRMOO.F2_Expression))
         g.add((ONTOPOETRY_ANALYSIS.Excerpt, SKOS.broadMatch, LRMOO.F2_Expression))
-    
+        g.add((URB.Expression, SKOS.closeMatch, LRMOO.F2_Expression))
+
     # lrmoo:F3_Manifestation
     if any(g.triples((None, RDF.type, LRMOO.F3_Manifestation))):
         g.add((BIBO.Book, SKOS.broadMatch, LRMOO.F3_Manifestation))
         g.add((DC.BibliographicResource, SKOS.broadMatch, LRMOO.F3_Manifestation))
         g.add((FABIO.Manifestation, SKOS.broadMatch, LRMOO.F3_Manifestation))
         g.add((LRMOO.F3_Manifestation, SKOS.broadMatch, FOAF.Document))
-    
+        g.add((URB.Manifestation, SKOS.closeMatch, LRMOO.F3_Manifestation))
+
     # lrmoo:F5_Item
     if any(g.triples((None, RDF.type, LRMOO.F5_Item))):
         g.add((FABIO.Item, SKOS.broadMatch, LRMOO.F5_Item))     
@@ -433,7 +446,9 @@ def main(argv=None):
     # intro:INT31_IntertextualRelation
     if any(g.triples((None, RDF.type, INTRO.INT31_IntertextualRelation))):
         g.add((INTERTEXT_AB.IntertexualRelation, SKOS.closeMatch, INTRO.INT31_IntertextualRelation))
-    
+        g.add((URW.EntityInfluence, SKOS.narrowMatch, INTRO.INT31_IntertextualRelation))
+        g.add((URB.Reception, SKOS.narrowMatch, INTRO.INT31_IntertextualRelation))
+
     # intro:INT_Character
     if any(g.triples((None, RDF.type, INTRO.INT_Character))):
         g.add((GOLEM["G0_Character-Stoff"], SKOS.closeMatch, INTRO.INT_Character))
@@ -459,7 +474,8 @@ def main(argv=None):
     # ecrm:P1_is_identified_by
     if any(g.triples((None, ECRM.P1_is_identified_by, None))):
         g.add((DC.identifier, SKOS.broadMatch, ECRM.P1_is_identified_by))
-    
+        g.add((URW.hasIdentifier, SKOS.closeMatch, ECRM.P1_is_identified_by))
+
     # ecrm:P2_has_type
     if any(g.triples((None, ECRM.P2_has_type, None))):
         g.add((DC.type, SKOS.broadMatch, ECRM.P2_has_type))
@@ -481,6 +497,8 @@ def main(argv=None):
         g.add((ONTOPOETRY_CORE.hasTimeSpan, SKOS.closeMatch, ECRM["P4_has_time-span"]))
         g.add((SCHEMA.dateCreated, SKOS.broadMatch, ECRM["P4_has_time-span"]))
         g.add((SCHEMA.datePublished, SKOS.broadMatch, ECRM["P4_has_time-span"]))
+        g.add((URW.wasPublishedWhen, SKOS.broadMatch, ECRM["P4_has_time-span"]))
+        g.add((URB.date, SKOS.closeMatch, ECRM["P4_has_time-span"]))
     
     # ecrm:P4i_is_time-span_of
     if any(g.triples((None, ECRM["P4i_is_time-span_of"], None))):
@@ -492,6 +510,7 @@ def main(argv=None):
         g.add((MIMOTEXT.P10, SKOS.broadMatch, ECRM.P7_took_place_at)) # publication place
         g.add((ONTOPOETRY_CORE.tookPlaceAt, SKOS.closeMatch, ECRM.P7_took_place_at))
         g.add((SCHEMA.locationCreated, SKOS.broadMatch, ECRM.P7_took_place_at))
+        g.add((URW.wasPublishedWhere, SKOS.broadMatch, ECRM.P7_took_place_at))
     
     # ecrm:P7i_witnessed
     if any(g.triples((None, ECRM.P7i_witnessed, None))):
@@ -505,7 +524,8 @@ def main(argv=None):
         g.add((MIMOTEXT.P5, SKOS.broadMatch, ECRM.P14_carried_out_by)) # has author
         g.add((SCHEMA.author, SKOS.broadMatch, ECRM.P14_carried_out_by))
         g.add((SCHEMA.creator, SKOS.broadMatch, ECRM.P14_carried_out_by))
-    
+        g.add((URW.wasPublishedBy, SKOS.broadMatch, ECRM.P14_carried_out_by))
+
     # ecrm:P14i_performed
     if any(g.triples((None, ECRM.P14i_performed, None))):
         g.add((DC.creator, SKOS.broadMatch, ECRM.P14i_performed))
@@ -544,13 +564,23 @@ def main(argv=None):
         g.add((FOAF.img, SKOS.broadMatch, ECRM.P138i_has_representation))
         g.add((MIMOTEXT.P21, SKOS.broadMatch, ECRM.P138i_has_representation)) # full work available at URL
     
+    # lrmoo:R3_realises
+    if any(g.triples((None, LRMOO.R3_realises, None))):
+        g.add((URB.realization, SKOS.closeMatch, LRMOO.R3_realises))
+
     # lrmoo:R3_is_realised_in
     if any(g.triples((None, LRMOO.R3_is_realised_in, None))):
         g.add((FABIO.realization, SKOS.closeMatch, LRMOO.R3_is_realised_in))
+        g.add((URB.realizationOf, SKOS.closeMatch, LRMOO.R3_is_realised_in))
     
+    # lrmoo:R4_embodies
+    if any(g.triples((None, LRMOO.R4_embodies, None))):
+        g.add((URB.embodimentOf, SKOS.closeMatch, LRMOO.R4_embodies))
+
     # lrmoo:R4i_is_embodied_in
     if any(g.triples((None, LRMOO.R4i_is_embodied_in, None))):
         g.add((FABIO.embodiment, SKOS.closeMatch, LRMOO.R4i_is_embodied_in))
+        g.add((URB.embodiment, SKOS.closeMatch, LRMOO.R4i_is_embodied_in))
     
     # lrmoo:R7i_is_exemplified_by
     if any(g.triples((None, LRMOO.R7i_is_exemplified_by, None))):
@@ -634,6 +664,7 @@ def main(argv=None):
         g.add((SAPPHO_PROP.has_manifestation, RDFS.label, 
             Literal("has manifestation", lang="en")))
         g.add((SAPPHO_PROP.has_manifestation, SKOS.closeMatch, FABIO.hasManifestation))
+        g.add((SAPPHO_PROP.has_manifestation, SKOS.closeMatch, URB.manifestation))
         g.add((SAPPHO_PROP.has_manifestation, RDFS.domain, LRMOO.F1_Work))
         g.add((SAPPHO_PROP.has_manifestation, RDFS.range,  LRMOO.F3_Manifestation))
 
@@ -747,6 +778,7 @@ def main(argv=None):
         g.add((SAPPHO_PROP.about, SKOS.closeMatch, FOAF.topic))
         g.add((SAPPHO_PROP.about, SKOS.closeMatch, MIMOTEXT.P36)) # about
         g.add((SAPPHO_PROP.about, SKOS.closeMatch, SCHEMA.about))
+        g.add((SAPPHO_PROP.about, SKOS.closeMatch, URW.hasSubject))
         g.add((SAPPHO_PROP.about, RDFS.domain, LRMOO.F2_Expression))
         g.add((SAPPHO_PROP.about, RDFS.range, INTRO.INT_Topic))
 
@@ -776,6 +808,8 @@ def main(argv=None):
         g.add((SAPPHO_PROP.expr_relation, RDF.type, OWL.SymmetricProperty))
         g.add((SAPPHO_PROP.expr_relation, SKOS.closeMatch, DC.relation))
         g.add((SAPPHO_PROP.expr_relation, SKOS.closeMatch, MIMOTEXT.P34))  # relation
+        g.add((SAPPHO_PROP.expr_relation, SKOS.narrowMatch, URW.influenced))
+        g.add((SAPPHO_PROP.expr_relation, SKOS.narrowMatch, URW.influencedBy))
         g.add((SAPPHO_PROP.expr_relation, RDFS.domain, LRMOO.F2_Expression))
         g.add((SAPPHO_PROP.expr_relation, RDFS.range,  LRMOO.F2_Expression))
         
