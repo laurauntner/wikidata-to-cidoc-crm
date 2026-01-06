@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "wiki2crm"
-version = "1.0.0"                     
+version = "1.0.1"                     
 description = "Tools to convert Wikidata to CIDOC CRM (eCRM/LRMoo/INTRO)"
 readme = { file = "README.md", content-type = "text/markdown" }
 requires-python = ">=3.9"

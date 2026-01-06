@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: wiki2crm
-Version: 1.0.0
+Version: 1.0.1
 Summary: Tools to convert Wikidata to CIDOC CRM (eCRM/LRMoo/INTRO)
 Author: Laura Untner
 License: MIT License
@@ -37,7 +37,7 @@ Requires-Dist: pyshacl
 
 # Wikidata to CIDOC CRM (wiki2crm)
 
-💾 **Zenodo dump: [https://doi.org/10.5281/zenodo.17751731](https://doi.org/10.5281/zenodo.17751731)**
+💾 **Zenodo dump: [https://doi.org/10.5281/zenodo.17396140](https://doi.org/10.5281/zenodo.17396140)**
 
 🧐 **Read more: Laura Untner: From Wikidata to CIDOC CRM: A Use Case Scenario for Digital Comparative Literary Studies. In: Journal of Open Humanities Data 11 (2025), pp. 1–15, DOI: [10.5334/johd.421](https://doi.org/10.5334/johd.421).**
 
