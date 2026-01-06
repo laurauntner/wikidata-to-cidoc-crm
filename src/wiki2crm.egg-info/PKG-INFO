@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: wiki2crm
-Version: 0.1.3
+Version: 1.0.0
 Summary: Tools to convert Wikidata to CIDOC CRM (eCRM/LRMoo/INTRO)
 Author: Laura Untner
 License: MIT License
@@ -37,9 +37,15 @@ Requires-Dist: pyshacl
 
 # Wikidata to CIDOC CRM (wiki2crm)
 
+💾 **Zenodo dump: [https://doi.org/10.5281/zenodo.17751731](https://doi.org/10.5281/zenodo.17751731)**
+
+🧐 **Read more: Laura Untner: From Wikidata to CIDOC CRM: A Use Case Scenario for Digital Comparative Literary Studies. In: Journal of Open Humanities Data 11 (2025), pp. 1–15, DOI: [10.5334/johd.421](https://doi.org/10.5334/johd.421).**
+
+---
+
 This repository contains Python scripts that transform structured data from [Wikidata](https://www.wikidata.org/) into RDF using [CIDOC CRM](https://cidoc-crm.org/) (OWL version, [eCRM](https://erlangen-crm.org/docs/ecrm/current/)) and models based on CIDOC CRM: [LRMoo](https://repository.ifla.org/handle/20.500.14598/3677) and [INTRO](https://github.com/BOberreither/INTRO). 
 
-You can use the Python scripts in `src/wiki2crm` individually or with the provided Python package `wiki2crm`.
+You can use the Python scripts in `src/wiki2crm` individually or with the provided Python package [wiki2crm](https://pypi.org/project/wiki2crm/).
 
 The goal is to enable CIDOC CRM-based semantic enrichment from Wikidata and other linked data sources. The scripts also use [PROV-O](https://www.w3.org/TR/prov-o/) (`prov:wasDerivedFrom`) to link data back to Wikidata.
 
@@ -49,19 +55,25 @@ To improve inference capabilities, all ECRM classes and properties have been map
 
 The `authors`, `works` and `relations` modules model basic biographical, bibliographical, and intertextual information based on data from Wikidata and can be dynamically extended. The scripts generate—depending on the module—an ontology (`owl:Ontology`) for authors, works, or intertexts. 
 
+| ![Modules overview](https://github.com/laurauntner/wikidata-to-cidoc-crm/blob/main/docs/meta.png?raw=true) |
+|:--:| 
+| Modules overview |
+
 The `merge` module can be used to merge the outputted Turtle files. 
 
-The `map_and_align` module looks for more identifiers from [Schema.org](https://schema.org/), [DBpedia](https://www.dbpedia.org/), [GND](https://www.dnb.de/DE/Professionell/Standardisierung/GND/gnd_node.html), [VIAF](https://viaf.org/), [GeoNames](http://www.geonames.org/) and [Goodreads](https://www.goodreads.com/) and adds more ontology alignments mainly using [SKOS](http://www.w3.org/2004/02/skos/core#). The aligned ontologies are: [BIBO](http://purl.org/ontology/bibo/), [CiTO](http://purl.org/spar/cito/), [DC](http://purl.org/dc/terms/), [DoCo](http://purl.org/spar/doco/), [DraCor](http://dracor.org/ontology#), [FaBiO](http://purl.org/spar/fabio/), [FOAF](http://xmlns.com/foaf/0.1/), [FRBRoo](https://www.iflastandards.info/fr/frbr/frbroo), [GOLEM](https://ontology.golemlab.eu/), [Intertextuality Ontology](https://github.com/intertextor/intertextuality-ontology), [MiMoText](https://data.mimotext.uni-trier.de/wiki/Main_Page) and [OntoPoetry](https://postdata.linhd.uned.es/results/ontopoetry-v2-0/). 
+The `map_and_align` module looks for more identifiers from [Schema.org](https://schema.org/), [DBpedia](https://www.dbpedia.org/), [GND](https://www.dnb.de/DE/Professionell/Standardisierung/GND/gnd_node.html), [VIAF](https://viaf.org/), [GeoNames](http://www.geonames.org/) and [Goodreads](https://www.goodreads.com/) and adds more ontology alignments mainly using [SKOS](http://www.w3.org/2004/02/skos/core#). The aligned ontologies are: [BIBO](http://purl.org/ontology/bibo/), [CiTO](http://purl.org/spar/cito/), [DC](http://purl.org/dc/terms/), [DoCo](http://purl.org/spar/doco/), [DraCor](http://dracor.org/ontology#), [FaBiO](http://purl.org/spar/fabio/), [FOAF](http://xmlns.com/foaf/0.1/), [FRBRoo](https://www.iflastandards.info/fr/frbr/frbroo), [GOLEM](https://ontology.golemlab.eu/), [Intertextuality Ontology](https://github.com/intertextor/intertextuality-ontology), [MiMoText](https://data.mimotext.uni-trier.de/wiki/Main_Page), [OntoPoetry](https://postdata.linhd.uned.es/results/ontopoetry-v2-0/), and the Ontologies of Under-Represented [Writers](https://purl.archive.org/urwriters) and [Books](https://purl.archive.org/urbooks). 
 
 The mappings and alignments are done separately so that the script can hopefully be more easily updated. It focuses specifically on those classes and properties that are important for the relations module.
 
-![Overview](https://github.com/laurauntner/wikidata-to-cidoc-crm/blob/main/docs/workflow_overview.png?raw=true)
+| ![Workflow overview](https://github.com/laurauntner/wikidata-to-cidoc-crm/blob/main/docs/workflow_overview.png?raw=true) |
+|:--:| 
+| Workflow overview |
 
 ---
 
 - 🪄 **Reality check**: These scripts are not magical. Data that is not available in Wikidata cannot appear in the triples.
 - ⚠️ **Base URI:** All URIs currently use the `https://sappho-digital.com/` base. Please adapt this to your own environment as needed.
-- 💡 **Reuse is encouraged**. The scripts are open for reuse. They are developed in the context of the project [Sappho Digital](https://sappho-digital.com/) by [Laura Untner](https://orcid.org/0000-0002-9649-0870). A reference to the project would be appreciated if you use or build on the scripts.
+- 💡 **Reuse is encouraged**. The scripts are open for reuse. They are developed in the context of the project [Sappho Digital](https://sappho-digital.com/) by [Laura Untner](https://orcid.org/0000-0002-9649-0870). A reference to the project would be appreciated if you use or build on the scripts. You can also refer to »Laura Untner: From Wikidata to CIDOC CRM: A Use Case Scenario for Digital Comparative Literary Studies. In: Journal of Open Humanities Data 11 (2025), pp. 1–15, DOI: [10.5334/johd.421](https://doi.org/10.5334/johd.421)«, and use the DOI provided by Zenodo: [https://doi.org/10.5281/zenodo.17396141](https://doi.org/10.5281/zenodo.17396141). 
 
 ---
 
@@ -1056,6 +1068,8 @@ Alignments with:
 - [MiMoText](https://data.mimotext.uni-trier.de/wiki/Main_Page)
 - [OntoPoetry](https://postdata.linhd.uned.es/results/ontopoetry-v2-0/)
 - [Schema.org](https://schema.org/)
+- [Ontology of Under-Represented Writers](https://purl.archive.org/urwriters)
+- [Ontology of Under-Represented Books](https://purl.archive.org/urbooks)
 
 The full alignment table can be found [here](https://github.com/laurauntner/wikidata-to-cidoc-crm/blob/main/docs/alignment_full.pdf).
 

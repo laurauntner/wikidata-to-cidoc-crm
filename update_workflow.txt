@@ -11,11 +11,11 @@ version = "0.1.4"
 
 Clean old build artifacts – from repository root: 
 
-rm -rf dist/ build/ *.egg-info
+rm -rf dist/ build/ wiki2crm.egg-info
 
 Build the package:
 
-python -m build
+python3 -m build
 
 You should now see:
 
@@ -29,11 +29,11 @@ twine check dist/*
 
 Test install locally:
 
-pip install dist/wiki2crm-0.1.4-py3-none-any.whl
+pip install dist/wiki2crm-0.1.5-py3-none-any.whl
 
 Then:
 
-python -c "import wiki2crm; print(wiki2crm.__version__)"
+python3 -c "import wiki2crm; print(wiki2crm.__version__)"
 
 Upload to PyPI:
 
