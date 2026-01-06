@@ -1,6 +1,6 @@
 # Wikidata to CIDOC CRM (wiki2crm)
 
-💾 **Zenodo dump: [https://doi.org/10.5281/zenodo.17751731](https://doi.org/10.5281/zenodo.17751731)**
+💾 **Zenodo dump: [https://doi.org/10.5281/zenodo.17396140](https://doi.org/10.5281/zenodo.17396140)**
 
 🧐 **Read more: Laura Untner: From Wikidata to CIDOC CRM: A Use Case Scenario for Digital Comparative Literary Studies. In: Journal of Open Humanities Data 11 (2025), pp. 1–15, DOI: [10.5334/johd.421](https://doi.org/10.5334/johd.421).**
 
