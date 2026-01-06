@@ -1,0 +1,54 @@
+Make sure you have the tools installed:
+
+pip install --upgrade build twine
+
+Make code changes, edit files only inside src/wiki2crm/, do not edit anything in dist/, build/, or *.egg-info.
+
+Bump the version number in pyproject.toml:
+
+[project]
+version = "0.1.4"
+
+Clean old build artifacts – from repository root: 
+
+rm -rf dist/ build/ *.egg-info
+
+Build the package:
+
+python -m build
+
+You should now see:
+
+dist/
+├── wiki2crm-0.1.4.tar.gz
+└── wiki2crm-0.1.4-py3-none-any.whl
+
+Verify the package:
+
+twine check dist/*
+
+Test install locally:
+
+pip install dist/wiki2crm-0.1.4-py3-none-any.whl
+
+Then:
+
+python -c "import wiki2crm; print(wiki2crm.__version__)"
+
+Upload to PyPI:
+
+Test PyPI:
+
+twine upload --repository testpypi dist/*
+
+Install from Test PyPI:
+
+pip install -i https://test.pypi.org/simple/ wiki2crm
+
+Production PyPI:
+
+twine upload dist/*
+
+You’ll be prompted for your PyPI API token.
+
+Finally: Update release on GitHub and Zenodo.
