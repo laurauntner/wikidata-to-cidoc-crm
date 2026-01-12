@@ -14,8 +14,8 @@
 @prefix intro: <https://w3id.org/lso/intro/currentbeta#> .
 @prefix lrmoo: <http://iflastandards.info/ns/lrm/lrmoo/> .
 @prefix mimotext: <http://data.mimotext.uni-trier.de/entity/> .
-@prefix ontopoetry_analysis: <http://postdata.linhd.uned.es/ontology/postdata-poeticAnalysis#> .
-@prefix ontopoetry_core: <http://postdata.linhd.uned.es/ontology/postdata-core#> .
+@prefix postdata_analysis: <http://postdata.linhd.uned.es/ontology/postdata-poeticAnalysis#> .
+@prefix postdata_core: <http://postdata.linhd.uned.es/ontology/postdata-core#> .
 @prefix owl: <http://www.w3.org/2002/07/owl#> .
 @prefix prov: <http://www.w3.org/ns/prov#> .
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
@@ -67,67 +67,67 @@ dracor:printYear skos:broadMatch ecrm:P4_has_time-span .
 
 dracor:writtenYear skos:broadMatch ecrm:P4_has_time-span .
 
-ontopoetry_core:Birth skos:closeMatch ecrm:E67_Birth .
+postdata_core:Birth skos:closeMatch ecrm:E67_Birth .
 
-ontopoetry_core:Death skos:closeMatch ecrm:E69_Death .
+postdata_core:Death skos:closeMatch ecrm:E69_Death .
 
-ontopoetry_core:Expression skos:closeMatch lrmoo:F2_Expression .
+postdata_core:Expression skos:closeMatch lrmoo:F2_Expression .
 
-ontopoetry_core:ExpressionCreation skos:closeMatch lrmoo:F28_Expression_Creation .
+postdata_core:ExpressionCreation skos:closeMatch lrmoo:F28_Expression_Creation .
 
-ontopoetry_core:Organisation skos:broadMatch ecrm:E40_Legal_Body .
+postdata_core:Organisation skos:broadMatch ecrm:E40_Legal_Body .
 
-ontopoetry_core:Person skos:closeMatch ecrm:E21_Person .
+postdata_core:Person skos:closeMatch ecrm:E21_Person .
 
-ontopoetry_core:Place skos:closeMatch ecrm:E53_Place .
+postdata_core:Place skos:closeMatch ecrm:E53_Place .
 
-ontopoetry_core:PoeticWork skos:broadMatch lrmoo:F1_Work .
+postdata_core:PoeticWork skos:broadMatch lrmoo:F1_Work .
 
-ontopoetry_core:TimeSpan skos:closeMatch ecrm:E52_Time-Span .
+postdata_core:TimeSpan skos:closeMatch ecrm:E52_Time-Span .
 
-ontopoetry_core:Work skos:closeMatch lrmoo:F1_Work .
+postdata_core:Work skos:closeMatch lrmoo:F1_Work .
 
-ontopoetry_core:WorkConception skos:closeMatch lrmoo:F27_Work_Creation .
+postdata_core:WorkConception skos:closeMatch lrmoo:F27_Work_Creation .
 
-ontopoetry_core:broughtIntoLife skos:closeMatch ecrm:P98_brought_into_life .
+postdata_core:broughtIntoLife skos:closeMatch ecrm:P98_brought_into_life .
 
-ontopoetry_core:createdExpressionFromExpressionCreation skos:closeMatch lrmoo:R17_created .
+postdata_core:createdExpressionFromExpressionCreation skos:closeMatch lrmoo:R17_created .
 
-ontopoetry_core:createdWorkByExpressionCreation skos:closeMatch lrmoo:R19_created_a_realisation_of .
+postdata_core:createdWorkByExpressionCreation skos:closeMatch lrmoo:R19_created_a_realisation_of .
 
-ontopoetry_core:diedIn skos:closeMatch ecrm:P100i_died_in .
+postdata_core:diedIn skos:closeMatch ecrm:P100i_died_in .
 
-ontopoetry_core:gender skos:broadMatch ecrm:P2_has_type .
+postdata_core:gender skos:broadMatch ecrm:P2_has_type .
 
-ontopoetry_core:genre skos:broadMatch ecrm:P2_has_type .
+postdata_core:genre skos:broadMatch ecrm:P2_has_type .
 
-ontopoetry_core:hasTimeSpan skos:closeMatch ecrm:P4_has_time-span .
+postdata_core:hasTimeSpan skos:closeMatch ecrm:P4_has_time-span .
 
-ontopoetry_core:initiated skos:closeMatch lrmoo:R16_created .
+postdata_core:initiated skos:closeMatch lrmoo:R16_created .
 
-ontopoetry_core:isTimeSpanOf skos:closeMatch ecrm:P4i_is_time-span_of .
+postdata_core:isTimeSpanOf skos:closeMatch ecrm:P4i_is_time-span_of .
 
-ontopoetry_core:realisedThroughExpressionCreation skos:closeMatch lrmoo:R19i_was_realised_through .
+postdata_core:realisedThroughExpressionCreation skos:closeMatch lrmoo:R19i_was_realised_through .
 
-ontopoetry_core:tookPlaceAt skos:closeMatch ecrm:P7_took_place_at .
+postdata_core:tookPlaceAt skos:closeMatch ecrm:P7_took_place_at .
 
-ontopoetry_core:wasBorn skos:closeMatch ecrm:P98i_was_born .
+postdata_core:wasBorn skos:closeMatch ecrm:P98i_was_born .
 
-ontopoetry_core:wasCreatedByExpressionCreationForExpression skos:closeMatch lrmoo:R17i_was_created_by .
+postdata_core:wasCreatedByExpressionCreationForExpression skos:closeMatch lrmoo:R17i_was_created_by .
 
-ontopoetry_core:wasDeathOf skos:closeMatch ecrm:P100_was_death_of .
+postdata_core:wasDeathOf skos:closeMatch ecrm:P100_was_death_of .
 
-ontopoetry_core:wasInitiatedBy skos:closeMatch lrmoo:R16i_was_created_by .
+postdata_core:wasInitiatedBy skos:closeMatch lrmoo:R16i_was_created_by .
 
-ontopoetry_core:witnessed skos:closeMatch ecrm:P7i_witnessed .
+postdata_core:witnessed skos:closeMatch ecrm:P7i_witnessed .
 
-ontopoetry_analysis:Excerpt skos:broadMatch lrmoo:F2_Expression .
+postdata_analysis:Excerpt skos:broadMatch lrmoo:F2_Expression .
 
-ontopoetry_analysis:Intertextuality skos:broadMatch lrmoo:F2_Expression .
+postdata_analysis:Intertextuality skos:broadMatch lrmoo:F2_Expression .
 
-ontopoetry_analysis:Redaction skos:broadMatch lrmoo:F2_Expression .
+postdata_analysis:Redaction skos:broadMatch lrmoo:F2_Expression .
 
-ontopoetry_analysis:Source skos:broadMatch lrmoo:F2_Expression .
+postdata_analysis:Source skos:broadMatch lrmoo:F2_Expression .
 
 dc1:BibliographicResource skos:broadMatch lrmoo:F3_Manifestation .
 
