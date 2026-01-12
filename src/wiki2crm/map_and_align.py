@@ -322,7 +322,6 @@ def main(argv=None):
     # ecrm:E52_Time-Span
     if any(g.triples((None, RDF.type, ECRM["E52_Time-Span"]))):
         g.add((DC.PeriodOfTime, SKOS.closeMatch, ECRM["E52_Time-Span"]))
-        g.add((POSTDATA_CORE.TimeSpan, SKOS.closeMatch, ECRM["E52_Time-Span"]))
 
     # ecrm:E53_Place
     if any(g.triples((None, RDF.type, ECRM.E53_Place))):
@@ -337,14 +336,6 @@ def main(argv=None):
         g.add((DRACOR.genre, SKOS.broadMatch, ECRM.E55_Type))
         g.add((INTERTEXT_TX.TextGenre, SKOS.broadMatch, ECRM.E55_Type))
         g.add((MIMOTEXT.Q33, SKOS.broadMatch, ECRM.E55_Type)) # genre
-
-    # ecrm:E67_Birth
-    if any(g.triples((None, RDF.type, ECRM.E67_Birth))):
-        g.add((POSTDATA_CORE.Birth, SKOS.closeMatch, ECRM.E67_Birth))
-    
-    # ecrm:E69_Death
-    if any(g.triples((None, RDF.type, ECRM.E69_Death))):
-        g.add((POSTDATA_CORE.Death, SKOS.closeMatch, ECRM.E69_Death))
         
     # ecrm:E73_Information_Object
     if any(g.triples((None, RDF.type, ECRM.E73_Information_Object))):
@@ -369,11 +360,7 @@ def main(argv=None):
         g.add((INTERTEXT_AF.Work, SKOS.broadMatch, LRMOO.F2_Expression))
         g.add((INTERTEXT_AB.Reference, SKOS.broadMatch, LRMOO.F2_Expression))
         g.add((MIMOTEXT.Q2, SKOS.broadMatch, LRMOO.F2_Expression)) # literary work
-        g.add((POSTDATA_CORE.Expression, SKOS.closeMatch, LRMOO.F2_Expression))
         g.add((POSTDATA_ANALYSIS.Intertextuality, SKOS.broadMatch, LRMOO.F2_Expression))
-        g.add((POSTDATA_ANALYSIS.Source, SKOS.broadMatch, LRMOO.F2_Expression))
-        g.add((POSTDATA_ANALYSIS.Redaction, SKOS.broadMatch, LRMOO.F2_Expression))
-        g.add((POSTDATA_ANALYSIS.Excerpt, SKOS.broadMatch, LRMOO.F2_Expression))
         g.add((URB.Expression, SKOS.closeMatch, LRMOO.F2_Expression))
 
     # lrmoo:F3_Manifestation
@@ -382,20 +369,13 @@ def main(argv=None):
         g.add((DC.BibliographicResource, SKOS.broadMatch, LRMOO.F3_Manifestation))
         g.add((FABIO.Manifestation, SKOS.closeMatch, LRMOO.F3_Manifestation))
         g.add((FOAF.Document, SKOS.broadMatch, LRMOO.F3_Manifestation))
+        g.add((POSTDATA_CORE.Redaction, SKOS.broadMatch, LRMOO.F3_Manifestation))
         g.add((URB.Manifestation, SKOS.closeMatch, LRMOO.F3_Manifestation))
 
     # lrmoo:F5_Item
     if any(g.triples((None, RDF.type, LRMOO.F5_Item))):
         g.add((FABIO.Item, SKOS.closeMatch, LRMOO.F5_Item))
         g.add((FOAF.Document, SKOS.narrowMatch, LRMOO.F5_Item))
-    
-    # lrmoo:F27_Work_Creation
-    if any(g.triples((None, RDF.type, LRMOO.F27_Work_Creation))):
-        g.add((POSTDATA_CORE.WorkConception, SKOS.closeMatch, LRMOO.F27_Work_Creation))
-
-    # lrmoo:F28_Expression_Creation
-    if any(g.triples((None, RDF.type, LRMOO.F28_Expression_Creation))):
-        g.add((POSTDATA_CORE.ExpressionCreation, SKOS.closeMatch, LRMOO.F28_Expression_Creation))
     
     # intro:INT1_Segment
     if any(g.triples((None, RDF.type, INTRO.INT1_Segment))):
@@ -408,7 +388,6 @@ def main(argv=None):
         g.add((DRACOR.character, SKOS.broadMatch, INTRO.INT2_ActualizationOfFeature))
         g.add((GOLEM.G1_Character, SKOS.broadMatch, INTRO.INT2_ActualizationOfFeature))
         g.add((GOLEM.G7_Narrative_Sequence, SKOS.broadMatch, INTRO.INT2_ActualizationOfFeature))
-        g.add((POSTDATA_CORE.Character, SKOS.broadMatch, INTRO.INT2_ActualizationOfFeature))
     
     # intro:INT4_Feature
     if any(g.triples((None, RDF.type, INTRO.INT4_Feature))):
@@ -455,7 +434,6 @@ def main(argv=None):
         g.add((FRBROO.F38_Character, SKOS.broadMatch, INTRO.INT_Character))
         g.add((EFRBROO.F38_Character, SKOS.broadMatch, INTRO.INT_Character))
         g.add((DRACOR.character, SKOS.broadMatch, INTRO.INT_Character))
-        g.add((POSTDATA_CORE.Character, SKOS.broadMatch, INTRO.INT_Character))
     
     # intro:INT_Plot
     if any(g.triples((None, RDF.type, INTRO.INT_Plot))):
@@ -495,27 +473,17 @@ def main(argv=None):
         g.add((DRACOR.printYear, SKOS.broadMatch, ECRM["P4_has_time-span"]))
         g.add((DRACOR.writtenYear, SKOS.broadMatch, ECRM["P4_has_time-span"]))
         g.add((MIMOTEXT.P9, SKOS.broadMatch, ECRM["P4_has_time-span"])) # publication date
-        g.add((POSTDATA_CORE.hasTimeSpan, SKOS.closeMatch, ECRM["P4_has_time-span"]))
         g.add((SCHEMA.dateCreated, SKOS.broadMatch, ECRM["P4_has_time-span"]))
         g.add((SCHEMA.datePublished, SKOS.broadMatch, ECRM["P4_has_time-span"]))
         g.add((URW.wasPublishedWhen, SKOS.broadMatch, ECRM["P4_has_time-span"]))
         g.add((URB.date, SKOS.closeMatch, ECRM["P4_has_time-span"]))
     
-    # ecrm:P4i_is_time-span_of
-    if any(g.triples((None, ECRM["P4i_is_time-span_of"], None))):
-        g.add((POSTDATA_CORE.isTimeSpanOf, SKOS.closeMatch, ECRM["P4i_is_time-span_of"]))
-    
     # ecrm:P7_took_place_at
     if any(g.triples((None, ECRM.P7_took_place_at, None))):
         g.add((FABIO.hasPlaceOfPublication, SKOS.broadMatch, ECRM.P7_took_place_at))
         g.add((MIMOTEXT.P10, SKOS.broadMatch, ECRM.P7_took_place_at)) # publication place
-        g.add((POSTDATA_CORE.tookPlaceAt, SKOS.closeMatch, ECRM.P7_took_place_at))
         g.add((SCHEMA.locationCreated, SKOS.broadMatch, ECRM.P7_took_place_at))
         g.add((URW.wasPublishedWhere, SKOS.broadMatch, ECRM.P7_took_place_at))
-    
-    # ecrm:P7i_witnessed
-    if any(g.triples((None, ECRM.P7i_witnessed, None))):
-        g.add((POSTDATA_CORE.witnessed, SKOS.closeMatch, ECRM.P7i_witnessed))
     
     # ecrm:P14_carried_out_by
     if any(g.triples((None, ECRM.P14_carried_out_by, None))):
@@ -533,22 +501,6 @@ def main(argv=None):
         g.add((DC.publisher, SKOS.broadMatch, ECRM.P14i_performed))
         g.add((FOAF.made, SKOS.broadMatch, ECRM.P14i_performed))
         g.add((MIMOTEXT.P7, SKOS.broadMatch, ECRM.P14i_performed)) # author of
-    
-    # ecrm:P98i_was_born
-    if any(g.triples((None, ECRM.P98i_was_born, None))):
-        g.add((POSTDATA_CORE.wasBorn, SKOS.closeMatch, ECRM.P98i_was_born))
-    
-    # ecrm:P98_brought_into_life
-    if any(g.triples((None, ECRM.P98_brought_into_life, None))):
-        g.add((POSTDATA_CORE.broughtIntoLife, SKOS.closeMatch, ECRM.P98_brought_into_life))
-    
-    # ecrm:P100_was_death_of
-    if any(g.triples((None, ECRM.P100_was_death_of, None))):
-        g.add((POSTDATA_CORE.wasDeathOf, SKOS.closeMatch, ECRM.P100_was_death_of))
-    
-    # ecrm:P100i_died_in
-    if any(g.triples((None, ECRM.P100i_died_in, None))):
-        g.add((POSTDATA_CORE.diedIn, SKOS.closeMatch, ECRM.P100i_died_in))
         
     # ecrm:P102_has_title
     if any(g.triples((None, ECRM.P102_has_title, None))):
@@ -581,30 +533,6 @@ def main(argv=None):
     if any(g.triples((None, LRMOO.R4i_is_embodied_in, None))):
         g.add((URB.embodiment, SKOS.closeMatch, LRMOO.R4i_is_embodied_in))
     
-    # lrmoo:R16_created
-    if any(g.triples((None, LRMOO.R16_created, None))):
-        g.add((POSTDATA_CORE.initiated, SKOS.closeMatch, LRMOO.R16_created))
-    
-    # lrmoo:R16i_was_created_by
-    if any(g.triples((None, LRMOO.R16i_was_created_by, None))):
-        g.add((POSTDATA_CORE.wasInitiatedBy, SKOS.closeMatch, LRMOO.R16i_was_created_by))
-    
-    # lrmoo:R17_created
-    if any(g.triples((None, LRMOO.R17_created, None))):
-        g.add((POSTDATA_CORE.createdExpressionFromExpressionCreation, SKOS.closeMatch, LRMOO.R17_created))
-    
-    # lrmoo:R17i_was_created_by
-    if any(g.triples((None, LRMOO.R17i_was_created_by, None))):
-        g.add((POSTDATA_CORE.wasCreatedByExpressionCreationForExpression, SKOS.closeMatch, LRMOO.R17i_was_created_by))
-    
-    # lrmoo:R19_created_a_realisation_of
-    if any(g.triples((None, LRMOO.R19_created_a_realisation_of, None))):
-        g.add((POSTDATA_CORE.createdWorkByExpressionCreation, SKOS.closeMatch, LRMOO.R19_created_a_realisation_of))
-    
-    # lrmoo:R19i_was_realised_through
-    if any(g.triples((None, LRMOO.R19i_was_realised_through, None))):
-        g.add((POSTDATA_CORE.realisedThroughExpressionCreation, SKOS.closeMatch, LRMOO.R19i_was_realised_through))
-    
     # intro:R12i_isReferredToEntity
     if any(g.triples((None, INTRO.R12i_isReferredToEntity, None))):
         g.add((INTRO.R12i_isReferredToEntity, SKOS.closeMatch, INTERTEXT_AB.there))
@@ -612,14 +540,6 @@ def main(argv=None):
     # intro:R13i_isReferringEntity
     if any(g.triples((None, INTRO.R13i_isReferringEntity, None))):
         g.add((INTRO.R13i_isReferringEntity, SKOS.closeMatch, INTERTEXT_AB.here))
-    
-    # intro:R18_showsActualization
-    if any(g.triples((None, INTRO.R18_showsActualization, None))):
-        g.add((POSTDATA_ANALYSIS.presentsIntertextuality, SKOS.broadMatch, INTRO.R18_showsActualization))
-    
-    # intro:R18i_actualizationFoundOn
-    if any(g.triples((None, INTRO.R18i_actualizationFoundOn, None))):
-        g.add((POSTDATA_ANALYSIS.isIntertextualityPresentAt, SKOS.broadMatch, INTRO.R18i_actualizationFoundOn))
 
     # intro:R19i_isTypeOf
     if any(g.triples((None, INTRO.R19i_isTypeOf, None))):
@@ -637,11 +557,6 @@ def main(argv=None):
     # intro:R30_hasTextPassage
     if any(g.triples((None, INTRO.R30_hasTextPassage, None))):
         g.add((INTRO.R30_hasTextPassage, SKOS.broadMatch, DC.hasPart))
-        g.add((POSTDATA_ANALYSIS.presentsIntertextuality, SKOS.broadMatch, INTRO.R30_hasTextPassage))
-    
-    # intro:R30i_isTextPassageOf
-    if any(g.triples((None, INTRO.R30i_isTextPassageOf, None))):
-        g.add((POSTDATA_ANALYSIS.isIntertextualityPresentAt, SKOS.broadMatch, INTRO.R30i_isTextPassageOf))
     
     # prov:wasDerivedFrom
     if any(g.triples((None, PROV.wasDerivedFrom, None))):
@@ -880,16 +795,7 @@ def main(argv=None):
         
         g.add((CITO.cites, SKOS.broadMatch, SAPPHO_PROP.expr_possibly_cites))
         g.add((CITO.isCitedBy, SKOS.broadMatch, SAPPHO_PROP.expr_possibly_cited_by))
-        
-        g.add((POSTDATA_ANALYSIS.usedAsRedaction, SKOS.broadMatch, SAPPHO_PROP.expr_possibly_cites)) # young to old
-        g.add((POSTDATA_ANALYSIS.usedAsSource, SKOS.broadMatch, SAPPHO_PROP.expr_possibly_cites)) # young to old
-        g.add((POSTDATA_ANALYSIS.showsInfluencesOf, SKOS.broadMatch, SAPPHO_PROP.expr_possibly_cites)) # young to old
-        g.add((POSTDATA_ANALYSIS.isDerivativeOf, SKOS.broadMatch, SAPPHO_PROP.expr_possibly_cites)) # young to old
-        g.add((POSTDATA_ANALYSIS.isUsedRedactionIn, SKOS.broadMatch, SAPPHO_PROP.expr_possibly_cited_by)) # old to young
-        g.add((POSTDATA_ANALYSIS.isUsedSourceIn, SKOS.broadMatch, SAPPHO_PROP.expr_possibly_cited_by)) # old to young
-        g.add((POSTDATA_ANALYSIS.influencesAreFoundOn, SKOS.broadMatch, SAPPHO_PROP.expr_possibly_cited_by)) # old to young
-        g.add((POSTDATA_ANALYSIS.hasDerivative, SKOS.broadMatch, SAPPHO_PROP.expr_possibly_cited_by)) # old to young
-        
+                
         g.add((SCHEMA.citation, SKOS.broadMatch, SAPPHO_PROP.expr_possibly_cites))
         
         # sappho_prop:tp_possibly_cites / sappho_prop:tp_possibly_cited_by
@@ -967,12 +873,6 @@ def main(argv=None):
             for act in g.objects(expr, INTRO.R18_showsActualization):
                 for target in g.objects(act, ECRM.P67_refers_to):
                     g.add((expr, SAPPHO_PROP.expr_references, target))
-                    if (target, RDF.type, ECRM.E21_Person) in g:
-                        g.add((expr, SAPPHO_PROP.references_person, target))
-                    elif (target, RDF.type, ECRM.E53_Place) in g:
-                        g.add((expr, SAPPHO_PROP.references_place, target))
-                    elif (target, RDF.type, LRMOO.F2_Expression) in g:
-                        pass
         
         g.add((SAPPHO_PROP.expr_references, SKOS.closeMatch, DC.references))
         g.add((DC.isReferencedBy, OWL.inverseOf, DC.references))
@@ -984,62 +884,6 @@ def main(argv=None):
         g.add((POSTDATA_CORE.isMentionedIn, OWL.inverseOf, POSTDATA_CORE.mentions))
         
         g.add((SCHEMA.mentions, SKOS.broadMatch, SAPPHO_PROP.expr_references))
-        
-    # sappho_prop:references_person / sappho_prop:person_referenced_by
-    
-    if any(g.triples((None, ECRM.P67_refers_to, ECRM.E21_Person))):
-        g.add((SAPPHO_PROP.references_person, RDF.type, OWL.ObjectProperty))
-        g.add((SAPPHO_PROP.references_person, RDFS.label,
-            Literal("Reference to person", lang="en")))
-        chain_bnode = BNode()
-        Collection(g, chain_bnode, [
-            INTRO.R18_showsActualization,
-            ECRM.P67_refers_to
-        ])
-        g.add((SAPPHO_PROP.references_person, OWL.propertyChainAxiom, chain_bnode))
-        
-        g.add((SAPPHO_PROP.references_person, RDFS.domain, LRMOO.F2_Expression))
-        g.add((SAPPHO_PROP.references_person, RDFS.range, ECRM.E21_Person))
-        g.add((SAPPHO_PROP.references_person, RDFS.subPropertyOf, ECRM.P67_refers_to))
-
-        g.add((SAPPHO_PROP.person_referenced_by, RDF.type, OWL.ObjectProperty))
-        g.add((SAPPHO_PROP.person_referenced_by, RDFS.label,
-            Literal("Person referenced by expression", lang="en")))
-        g.add((SAPPHO_PROP.person_referenced_by, OWL.inverseOf, SAPPHO_PROP.references_person))
-        g.add((SAPPHO_PROP.person_referenced_by, RDFS.domain, LRMOO.F2_Expression))
-        g.add((SAPPHO_PROP.person_referenced_by, RDFS.range,  ECRM.E21_Person))
-        g.add((SAPPHO_PROP.person_referenced_by, RDFS.subPropertyOf, ECRM.P67i_is_referred_to_by))
-            
-        g.add((POSTDATA_CORE.mentionsAgent, SKOS.broadMatch, SAPPHO_PROP.references_person))
-        g.add((POSTDATA_CORE.isAgentMentionedIn, OWL.inverseOf, POSTDATA_CORE.mentionsAgent))
-    
-    # sappho_prop:references_place / sappho_prop:place_referenced_by
-    
-    if any(g.triples((None, ECRM.P67_refers_to, ECRM.E53_Place))):
-        g.add((SAPPHO_PROP.references_place, RDF.type, OWL.ObjectProperty))
-        g.add((SAPPHO_PROP.references_place, RDFS.label,
-            Literal("Reference to place", lang="en")))
-        chain_bnode = BNode()
-        Collection(g, chain_bnode, [
-            INTRO.R18_showsActualization,
-            ECRM.P67_refers_to
-        ])
-        g.add((SAPPHO_PROP.references_place, OWL.propertyChainAxiom, chain_bnode))
-        
-        g.add((SAPPHO_PROP.references_place, RDFS.domain, LRMOO.F2_Expression))
-        g.add((SAPPHO_PROP.references_place, RDFS.range, ECRM.E53_Place))
-        g.add((SAPPHO_PROP.references_place, RDFS.subPropertyOf, ECRM.P67_refers_to))
-        
-        g.add((SAPPHO_PROP.place_referenced_by, RDF.type, OWL.ObjectProperty))
-        g.add((SAPPHO_PROP.place_referenced_by, RDFS.label,
-            Literal("Place referenced by expression", lang="en")))
-        g.add((SAPPHO_PROP.place_referenced_by, OWL.inverseOf, SAPPHO_PROP.references_place))
-        g.add((SAPPHO_PROP.place_referenced_by, RDFS.domain, LRMOO.F2_Expression))
-        g.add((SAPPHO_PROP.place_referenced_by, RDFS.range,  ECRM.E53_Place))
-        g.add((SAPPHO_PROP.place_referenced_by, RDFS.subPropertyOf, ECRM.P67i_is_referred_to_by))
-        
-        g.add((POSTDATA_CORE.mentionsPlace, SKOS.broadMatch, SAPPHO_PROP.references_place))
-        g.add((POSTDATA_CORE.isPlaceMentionedIn, OWL.inverseOf, POSTDATA_CORE.mentionsPlace))
 
     # sappho_prop:has_character / sappho_prop:is_character_in: link character and expression
     if any(g.triples((None, RDF.type, INTRO.INT_Character))):
