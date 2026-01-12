@@ -737,6 +737,14 @@ def main(argv=None):
         g.add((SAPPHO_PROP.expr_relation, RDF.type, OWL.SymmetricProperty))
         g.add((SAPPHO_PROP.expr_relation, SKOS.closeMatch, DC.relation))
         g.add((SAPPHO_PROP.expr_relation, SKOS.closeMatch, MIMOTEXT.P34))  # relation
+        g.add((SAPPHO_PROP.expr_relation, SKOS.narrowMatch, POSTDATA_ANALYSIS.hasDerivedWork))
+        g.add((SAPPHO_PROP.expr_relation, SKOS.narrowMatch, POSTDATA_ANALYSIS.isDerivedFrom))
+        g.add((SAPPHO_PROP.expr_relation, SKOS.closeMatch, POSTDATA_ANALYSIS.hasRelationsWith))
+        g.add((SAPPHO_PROP.expr_relation, SKOS.closeMatch, POSTDATA_ANALYSIS.isRelatedWith))
+        g.add((SAPPHO_PROP.expr_relation, SKOS.narrowMatch, POSTDATA_ANALYSIS.isRelatedContemporaneouslyWith))
+        g.add((SAPPHO_PROP.expr_relation, SKOS.narrowMatch, POSTDATA_ANALYSIS.hasContemporaryRelation))
+        g.add((SAPPHO_PROP.expr_relation, SKOS.narrowMatch, POSTDATA_ANALYSIS.usesAsSource))
+        g.add((SAPPHO_PROP.expr_relation, SKOS.narrowMatch, POSTDATA_ANALYSIS.isSource))
         g.add((SAPPHO_PROP.expr_relation, SKOS.narrowMatch, URW.influenced))
         g.add((SAPPHO_PROP.expr_relation, SKOS.narrowMatch, URW.influencedBy))
         g.add((SAPPHO_PROP.expr_relation, RDFS.domain, LRMOO.F2_Expression))
@@ -893,9 +901,16 @@ def main(argv=None):
             for act in g.objects(expr, INTRO.R18_showsActualization):
                 for target in g.objects(act, ECRM.P67_refers_to):
                     g.add((expr, SAPPHO_PROP.expr_references, target))
+                    if (target, RDF.type, ECRM.E21_Person) in g:
+                        g.add((expr, SAPPHO_PROP.references_person, target))
+                    elif (target, RDF.type, ECRM.E53_Place) in g:
+                        g.add((expr, SAPPHO_PROP.references_place, target))
+                    elif (target, RDF.type, LRMOO.F2_Expression) in g:
+                        pass
         
         g.add((SAPPHO_PROP.expr_references, SKOS.closeMatch, DC.references))
         g.add((DC.isReferencedBy, OWL.inverseOf, DC.references))
+        g.add((SAPPHO_PROP.expr_references, SKOS.closeMatch, POSTDATA_ANALYSIS.reference))
         
         g.add((SAPPHO_PROP.expr_references, SKOS.narrowMatch, MIMOTEXT.P50)) # mentions
         g.add((MIMOTEXT.P51, OWL.inverseOf, MIMOTEXT.P50))
@@ -904,6 +919,46 @@ def main(argv=None):
         g.add((POSTDATA_CORE.isMentionedIn, OWL.inverseOf, POSTDATA_CORE.mentions))
         
         g.add((SCHEMA.mentions, SKOS.broadMatch, SAPPHO_PROP.expr_references))
+
+    if any(g.triples((None, ECRM.P67_refers_to, ECRM.E21_Person))):
+        g.add((SAPPHO_PROP.references_person, RDF.type, OWL.ObjectProperty))
+        g.add((SAPPHO_PROP.references_person, RDFS.label, Literal("Reference to person", lang="en")))
+        chain_bnode = BNode()
+        Collection(g, chain_bnode, [INTRO.R18_showsActualization, ECRM.P67_refers_to])
+        g.add((SAPPHO_PROP.references_person, OWL.propertyChainAxiom, chain_bnode))
+        g.add((SAPPHO_PROP.references_person, RDFS.domain, LRMOO.F2_Expression))
+        g.add((SAPPHO_PROP.references_person, RDFS.range, ECRM.E21_Person))
+        g.add((SAPPHO_PROP.references_person, RDFS.subPropertyOf, ECRM.P67_refers_to))
+
+        g.add((SAPPHO_PROP.person_referenced_by, RDF.type, OWL.ObjectProperty))
+        g.add((SAPPHO_PROP.person_referenced_by, RDFS.label, Literal("Person referenced by expression", lang="en")))
+        g.add((SAPPHO_PROP.person_referenced_by, OWL.inverseOf, SAPPHO_PROP.references_person))
+        g.add((SAPPHO_PROP.person_referenced_by, RDFS.domain, LRMOO.F2_Expression))
+        g.add((SAPPHO_PROP.person_referenced_by, RDFS.range, ECRM.E21_Person))
+        g.add((SAPPHO_PROP.person_referenced_by, RDFS.subPropertyOf, ECRM.P67i_is_referred_to_by))
+
+        g.add((POSTDATA_ANALYSIS.refersTo, SKOS.broadMatch, SAPPHO_PROP.references_person))
+        g.add((POSTDATA_ANALYSIS.refersTo, OWL.inverseOf, POSTDATA_ANALYSIS.refersTo))
+
+    if any(g.triples((None, ECRM.P67_refers_to, ECRM.E53_Place))):
+        g.add((SAPPHO_PROP.references_place, RDF.type, OWL.ObjectProperty))
+        g.add((SAPPHO_PROP.references_place, RDFS.label, Literal("Reference to place", lang="en")))
+        chain_bnode = BNode()
+        Collection(g, chain_bnode, [INTRO.R18_showsActualization, ECRM.P67_refers_to])
+        g.add((SAPPHO_PROP.references_place, OWL.propertyChainAxiom, chain_bnode))
+        g.add((SAPPHO_PROP.references_place, RDFS.domain, LRMOO.F2_Expression))
+        g.add((SAPPHO_PROP.references_place, RDFS.range, ECRM.E53_Place))
+        g.add((SAPPHO_PROP.references_place, RDFS.subPropertyOf, ECRM.P67_refers_to))
+
+        g.add((SAPPHO_PROP.place_referenced_by, RDF.type, OWL.ObjectProperty))
+        g.add((SAPPHO_PROP.place_referenced_by, RDFS.label, Literal("Place referenced by expression", lang="en")))
+        g.add((SAPPHO_PROP.place_referenced_by, OWL.inverseOf, SAPPHO_PROP.references_place))
+        g.add((SAPPHO_PROP.place_referenced_by, RDFS.domain, LRMOO.F2_Expression))
+        g.add((SAPPHO_PROP.place_referenced_by, RDFS.range, ECRM.E53_Place))
+        g.add((SAPPHO_PROP.place_referenced_by, RDFS.subPropertyOf, ECRM.P67i_is_referred_to_by))
+
+        g.add((POSTDATA_ANALYSIS.refersTo, SKOS.broadMatch, SAPPHO_PROP.references_person))
+        g.add((POSTDATA_ANALYSIS.refersTo, OWL.inverseOf, POSTDATA_ANALYSIS.refersTo))
 
     # sappho_prop:has_character / sappho_prop:is_character_in: link character and expression
     if any(g.triples((None, RDF.type, INTRO.INT_Character))):
