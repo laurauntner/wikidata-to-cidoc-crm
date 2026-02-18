@@ -14,6 +14,11 @@ The goal is to enable CIDOC CRM-based semantic enrichment from Wikidata and othe
 
 To improve inference capabilities, all ECRM classes and properties have been mapped to CIDOC CRM using `owl:equivalentClass` and `owl:equivalentProperty`. Also, all LRMoo classes and properties have been mapped to [FRBRoo](https://www.iflastandards.info/fr/frbr/frbroo) and [eFRBRoo](https://erlangen-crm.org/efrbroo).
 
+Ontology versions used:
+- Erlangen CRM 240307 (based on CIDOC CRM 7.1.3)
+- LRMoo 1.1.1
+- INTRO beta202506
+
 ---
 
 The `authors`, `works` and `relations` modules model basic biographical, bibliographical, and intertextual information based on data from Wikidata and can be dynamically extended. The scripts generate—depending on the module—an ontology (`owl:Ontology`) for authors, works, or intertexts. 
