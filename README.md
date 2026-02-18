@@ -180,13 +180,13 @@ Special thanks to [Bernhard Oberreither](https://github.com/BOberreither) for fe
 The [authors.py](https://github.com/laurauntner/wikidata-to-cidoc-crm/blob/main/src/wiki2crm/authors.py) script reads a list of Wikidata QIDs for authors from a CSV file and creates RDF triples using CIDOC CRM (eCRM, mapped to CRM). It models:
 
 - `E21_Person` with:
-  - `E82_Actor_Appellation` (names, derived from labels)
+  - `E41_Appellation` (names, derived from labels)
   - `E42_Identifier` (Wikidata QIDs, derived from given QIDs)
   - `E67_Birth` and `E69_Death` events, linked to:
     - `E53_Place` (birth places, derived from `wdt:P19`, and death places, derived from `wdt:P20`)
     - `E52_Time-Span` (birth dates, derived from `wdt:P569`, and death dates, derived from `wdt:P570`)
   - `E55_Type` (genders, derived from `wdt:P21`)
-  - `E36_Visual_Item` (visual representations) and `E38_Image` (image reference with Wikimedia `seeAlso`, derived from `wdt:P18`)
+  - `E36_Visual_Item` (visual representations) (image reference with Wikimedia `seeAlso`, derived from `wdt:P18`)
 
 ![Overview](https://github.com/laurauntner/wikidata-to-cidoc-crm/blob/main/docs/authors_simple.png?raw=true)
 
@@ -214,9 +214,10 @@ Namespace declarations and mappings to CRM are applied but not shown in this exe
     ecrm:P1_is_identified_by <https://sappho-digital.com/identifier/Q469571> ;
     ecrm:P2_has_type <https://sappho-digital.com/gender/Q6581072> ;
     ecrm:P98i_was_born <https://sappho-digital.com/birth/Q469571> ;
+    ecrm:P138i_has_representation <https://sappho-digital.com/visual_item/Q469571> ;
     owl:sameAs <http://www.wikidata.org/entity/Q469571> .
 
-<https://sappho-digital.com/appellation/Q469571> a ecrm:E82_Actor_Appellation ;
+<https://sappho-digital.com/appellation/Q469571> a ecrm:E41_Appellation ;
     rdfs:label "Anna Louisa Karsch"@en ;
     ecrm:P131i_identifies <https://sappho-digital.com/person/Q469571> ;
     prov:wasDerivedFrom <http://www.wikidata.org/entity/Q469571> .
@@ -272,15 +273,11 @@ Namespace declarations and mappings to CRM are applied but not shown in this exe
     rdfs:label "Wikidata Gender"@en ;
     ecrm:P2i_is_type_of <https://sappho-digital.com/gender/Q6581072> .
 
-<https://sappho-digital.com/image/Q469571> a ecrm:E38_Image ;
-    ecrm:P65_shows_visual_item <https://sappho-digital.com/visual_item/Q469571> ;
-    rdfs:seeAlso <http://commons.wikimedia.org/wiki/Special:FilePath/Karschin%20bild.JPG> ;
-    prov:wasDerivedFrom <http://www.wikidata.org/entity/Q469571> .
-
 <https://sappho-digital.com/visual_item/Q469571> a ecrm:E36_Visual_Item ;
     rdfs:label "Visual representation of Anna Louisa Karsch"@en ;
     ecrm:P138_represents <https://sappho-digital.com/person/Q469571> ;
-    ecrm:P65i_is_shown_by <https://sappho-digital.com/image/Q469571> .
+    rdfs:seeAlso <http://commons.wikimedia.org/wiki/Special:FilePath/Karschin%20bild.JPG> ;
+    prov:wasDerivedFrom <http://www.wikidata.org/entity/Q469571> .
 ```
 </details>
 
@@ -295,16 +292,16 @@ The [works.py](https://github.com/laurauntner/wikidata-to-cidoc-crm/blob/main/sr
   - `E21_Person` (authors, derived from `wdt:P50`, see authors module)
 - `F2_Expression` (realizations of abstract works) and `F28_Expression_Creation` with:
   - `E52_Time-Span` (creation years, derived from `wdt:P571` or `wdt:P2754`)
-  - `E35_Title` and `E62_String` (titles, derived from `wdt:P1476` or labels)
+  - `E35_Title` (titles, derived from `wdt:P1476` or labels)
   - `E42_Identifier` (Wikidata QIDs, derived from given QIDs)
   - `E55_Type` (genres, derived from `wdt:P136`)
   - `E73_Information_Object` (digital surrogates, derived from `wdt:P953`)
 - `F3_Manifestation` (publications of expressions) and `F30_Manifestation_Creation` with:
-  - `E21_Person` (editors, derived from `wdt:P98`) with `E82_Actor_Appellation` (names, derived from labels)
-  - `E35_Title` and `E62_String` (titles, only different if the text is part of another text (`wdt:P1433` or `wdt:P361`))
-  - `E40_Legal_Body` (publishers, derived from `wdt:P123`)
+  - `E21_Person` (editors, derived from `wdt:P98`) with `E41_Appellation` (names, derived from labels)
+  - `E35_Title` (titles, only different if the text is part of another text (`wdt:P1433` or `wdt:P361`))
   - `E52_Time-Span` (publication years, derived from `wdt:P577`)
   - `E53_Place` (publication places, derived from `wdt:P291`)
+  - `E74_Group` (publishers, derived from `wdt:P123`)
 - `F5_Item` (specific copies of manifestations) and `F32_Item_Production_Event`
 
 Translators are not modeled per default, but the data model can, of course, be extended or adapted accordingly.
@@ -371,12 +368,8 @@ Namespace declarations and mappings to CRM, FRBRoo and eFRBRoo are applied but n
     prov:wasDerivedFrom <http://www.wikidata.org/entity/Q1242002> .
 
 <https://sappho-digital.com/title/expression/Q1242002> a ecrm:E35_Title ;
-    ecrm:P102i_is_title_of <https://sappho-digital.com/expression/Q1242002> ;
-    ecrm:P190_has_symbolic_content <https://sappho-digital.com/title_string/expression/Q1242002> .
-
-<https://sappho-digital.com/title_string/expression/Q1242002> a ecrm:E62_String ;
     rdfs:label "Sappho"@de ;
-    ecrm:P190i_is_content_of <https://sappho-digital.com/title/expression/Q1242002> .
+    ecrm:P102i_is_title_of <https://sappho-digital.com/expression/Q1242002> .
 
 <https://sappho-digital.com/identifier/Q1242002> a ecrm:E42_Identifier ;
     rdfs:label "Q1242002" ;
@@ -412,7 +405,7 @@ Namespace declarations and mappings to CRM, FRBRoo and eFRBRoo are applied but n
     lrmoo:R24_created <https://sappho-digital.com/manifestation/Q1242002> ;
     prov:wasDerivedFrom <http://www.wikidata.org/entity/Q1242002> .
 
-<https://sappho-digital.com/publisher/Q133849481> a ecrm:E40_Legal_Body ;
+<https://sappho-digital.com/publisher/Q133849481> a ecrm:E74_Group ;
     rdfs:label "Wallishausser’sche Buchhandlung"@en ;
     ecrm:P14i_performed <https://sappho-digital.com/manifestation_creation/Q1242002> ;
     owl:sameAs <http://www.wikidata.org/entity/Q133849481> .
@@ -435,12 +428,8 @@ Namespace declarations and mappings to CRM, FRBRoo and eFRBRoo are applied but n
     lrmoo:R7i_is_exemplified_by <https://sappho-digital.com/item/Q1242002> .
 
 <https://sappho-digital.com/title/manifestation/Q1242002> a ecrm:E35_Title ;
-    ecrm:P102i_is_title_of <https://sappho-digital.com/manifestation/Q1242002> ;
-    ecrm:P190_has_symbolic_content <https://sappho-digital.com/title_string/manifestation/Q1242002> .
-
-<https://sappho-digital.com/title_string/manifestation/Q1242002> a ecrm:E62_String ;
     rdfs:label "Sappho"@de ;
-    ecrm:P190i_is_content_of <https://sappho-digital.com/title/manifestation/Q1242002> .
+    ecrm:P102i_is_title_of <https://sappho-digital.com/manifestation/Q1242002> .
 
 <https://sappho-digital.com/item_production/Q1242002> a lrmoo:F32_Item_Production_Event ;
     rdfs:label "Item production event of Sappho"@en ;

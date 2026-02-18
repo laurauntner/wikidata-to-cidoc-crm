@@ -12,15 +12,13 @@ ecrm:E21_Person owl:equivalentClass crm:E21_Person .
 
 ecrm:E36_Visual_Item owl:equivalentClass crm:E36_Visual_Item .
 
-ecrm:E38_Image owl:equivalentClass crm:E38_Image .
-
 ecrm:E42_Identifier owl:equivalentClass crm:E42_Identifier .
 
 ecrm:E67_Birth owl:equivalentClass crm:E67_Birth .
 
 ecrm:E69_Death owl:equivalentClass crm:E69_Death .
 
-ecrm:E82_Actor_Appellation owl:equivalentClass crm:E82_Actor_Appellation .
+ecrm:E41_Appellation owl:equivalentClass crm:E41_Appellation .
 
 ecrm:P100_was_death_of owl:equivalentProperty crm:P100_was_death_of ;
     owl:inverseOf ecrm:P100i_died_in .
@@ -76,7 +74,7 @@ ecrm:P98_brought_into_life owl:equivalentProperty crm:P98_brought_into_life ;
 ecrm:P98i_was_born owl:equivalentProperty crm:P98i_was_born ;
     owl:inverseOf ecrm:P98_brought_into_life .
 
-<https://sappho-digital.com/appellation/Q469571> a ecrm:E82_Actor_Appellation ;
+<https://sappho-digital.com/appellation/Q469571> a ecrm:E41_Appellation ;
     rdfs:label "Anna Louisa Karsch"@en ;
     ecrm:P131i_identifies <https://sappho-digital.com/person/Q469571> ;
     prov:wasDerivedFrom <http://www.wikidata.org/entity/Q469571> .
@@ -88,11 +86,6 @@ ecrm:P98i_was_born owl:equivalentProperty crm:P98i_was_born ;
 <https://sappho-digital.com/id_type/wikidata> a ecrm:E55_Type ;
     rdfs:label "Wikidata ID"@en ;
     ecrm:P2i_is_type_of <https://sappho-digital.com/identifier/Q469571> .
-
-<https://sappho-digital.com/image/Q469571> a ecrm:E38_Image ;
-    ecrm:P65_shows_visual_item <https://sappho-digital.com/visual_item/Q469571> ;
-    rdfs:seeAlso <http://commons.wikimedia.org/wiki/Special:FilePath/Karschin%20bild.JPG> ;
-    prov:wasDerivedFrom <http://www.wikidata.org/entity/Q469571> .
 
 <https://sappho-digital.com/place/Q64> a ecrm:E53_Place ;
     rdfs:label "Berlin"@en ;
@@ -130,7 +123,8 @@ ecrm:E53_Place owl:equivalentClass crm:E53_Place .
 <https://sappho-digital.com/visual_item/Q469571> a ecrm:E36_Visual_Item ;
     rdfs:label "Visual representation of Anna Louisa Karsch"@en ;
     ecrm:P138_represents <https://sappho-digital.com/person/Q469571> ;
-    ecrm:P65i_is_shown_by <https://sappho-digital.com/image/Q469571> .
+    rdfs:seeAlso <http://commons.wikimedia.org/wiki/Special:FilePath/Karschin%20bild.JPG> ;
+    prov:wasDerivedFrom <http://www.wikidata.org/entity/Q469571> .
 
 ecrm:E55_Type owl:equivalentClass crm:E55_Type .
 
@@ -156,5 +150,6 @@ ecrm:E55_Type owl:equivalentClass crm:E55_Type .
     ecrm:P1_is_identified_by <https://sappho-digital.com/identifier/Q469571> ;
     ecrm:P2_has_type <https://sappho-digital.com/gender/Q6581072> ;
     ecrm:P98i_was_born <https://sappho-digital.com/birth/Q469571> ;
+    ecrm:P138i_has_representation <https://sappho-digital.com/visual_item/Q469571> ;
     owl:sameAs <http://www.wikidata.org/entity/Q469571> .
 

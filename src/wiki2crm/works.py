@@ -171,10 +171,9 @@ def create_graph() -> Graph:
         ("E52_Time-Span",),
         ("E53_Place",),
         ("E55_Type",),
-        ("E62_String",),
         ("E73_Information_Object",),
-        ("E82_Actor_Appellation",),
-        ("E40_Legal_Body",),
+        ("E41_Appellation",),
+        ("E74_Group",),
     ]
 
     for cls in ecrm_to_crm:
@@ -398,10 +397,7 @@ def process(g: Graph, qids: List[str]) -> None:
             g.add((expression_uri, ECRM.P102_has_title, title_uri))
             g.add((title_uri, ECRM.P102i_is_title_of, expression_uri))
             g.add((title_uri, RDF.type, ECRM.E35_Title))
-            g.add((title_uri, ECRM.P190_has_symbolic_content, title_string_uri))
-            g.add((title_string_uri, ECRM.P190i_is_content_of, title_uri))
-            g.add((title_string_uri, RDF.type, ECRM.E62_String))
-            g.add((title_string_uri, RDFS.label, Literal(label, lang=lang)))
+            g.add((title_uri, ECRM.P190i_is_content_of, title_uri))
 
             if "genre" in r:
                 genre_qid = r["genre"]["value"].split("/")[-1]
@@ -471,9 +467,7 @@ def process(g: Graph, qids: List[str]) -> None:
             g.add((manifestation_title_uri, ECRM.P102i_is_title_of, manifestation_uri))
             g.add((manifestation_title_uri, RDF.type, ECRM.E35_Title))
             g.add((manifestation_title_uri, ECRM.P190_has_symbolic_content, manifestation_title_string_uri))
-            g.add((manifestation_title_string_uri, ECRM.P190i_is_content_of, manifestation_title_uri))
-            g.add((manifestation_title_string_uri, RDF.type, ECRM.E62_String))
-            g.add((manifestation_title_string_uri, RDFS.label, Literal(manifestation_label, lang=manifestation_lang)))
+            g.add((manifestation_title_uri, RDFS.label, Literal(manifestation_label, lang=manifestation_lang)))
 
             # Manifestation Creation
             manifestation_creation_uri = URIRef(f"{SAPPHO_BASE_URI}manifestation_creation/{qid}")
@@ -491,7 +485,7 @@ def process(g: Graph, qids: List[str]) -> None:
                 if publisher_qid not in publisher_cache:
                     publisher_uri = URIRef(f"{SAPPHO_BASE_URI}publisher/{publisher_qid}")
                     publisher_cache[publisher_qid] = publisher_uri
-                    g.add((publisher_uri, RDF.type, ECRM.E40_Legal_Body))
+                    g.add((publisher_uri, RDF.type, ECRM.E74_Group))
                     g.add((publisher_uri, RDFS.label, Literal(r.get("publisherLabel", {}).get("value", "Unknown"), lang="en")))
                     g.add((publisher_uri, OWL.sameAs, URIRef(r["publisher"]["value"])))
                 g.add((manifestation_creation_uri, ECRM.P14_carried_out_by, publisher_cache[publisher_qid]))
@@ -529,7 +523,7 @@ def process(g: Graph, qids: List[str]) -> None:
                 app_uri = URIRef(f"{SAPPHO_BASE_URI}appellation/{editor_qid}")
                 g.add((editor_uri, ECRM.P131_is_identified_by, app_uri))
                 g.add((app_uri, ECRM.P131i_identifies, editor_uri))
-                g.add((app_uri, RDF.type, ECRM.E82_Actor_Appellation))
+                g.add((app_uri, RDF.type, ECRM.E41_Appellation))
                 g.add((app_uri, RDFS.label, Literal(r.get("editorLabel", {}).get("value", "Unknown"))))
                 g.add((app_uri, PROV.wasDerivedFrom, URIRef(r["editor"]["value"])))
 

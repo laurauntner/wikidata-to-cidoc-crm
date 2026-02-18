@@ -154,7 +154,7 @@ def create_graph() -> Graph:
     ecrm_to_crm = [
         # Classes
         "E21_Person", "E67_Birth", "E69_Death", "E52_Time-Span", "E53_Place",
-        "E36_Visual_Item", "E38_Image", "E55_Type", "E42_Identifier", "E82_Actor_Appellation"
+        "E36_Visual_Item", "E55_Type", "E42_Identifier", "E41_Appellation"
     ]
 
     for cls in ecrm_to_crm:
@@ -284,7 +284,7 @@ def process_authors(g: Graph, all_qids: List[str]) -> None:
             g.add((person_uri, OWL.sameAs, URIRef(uri)))
             g.add((person_uri, ECRM.P131_is_identified_by, name_uri))
             g.add((name_uri, ECRM.P131i_identifies, person_uri))
-            g.add((name_uri, RDF.type, ECRM.E82_Actor_Appellation))
+            g.add((name_uri, RDF.type, ECRM.E41_Appellation))
             g.add((name_uri, RDFS.label, Literal(label, lang="en")))
             g.add((name_uri, PROV.wasDerivedFrom, URIRef(uri)))
             g.add((person_uri, RDFS.label, Literal(label, lang="en")))
@@ -365,11 +365,8 @@ def process_authors(g: Graph, all_qids: List[str]) -> None:
                 g.add((visual_item_uri, RDFS.label, Literal(f"Visual representation of {label}", lang="en")))
                 g.add((visual_item_uri, ECRM.P138_represents, person_uri))
                 g.add((person_uri, ECRM.P138i_has_representation, visual_item_uri))
-                g.add((image_instance_uri, RDF.type, ECRM.E38_Image))
-                g.add((image_instance_uri, ECRM.P65_shows_visual_item, visual_item_uri))
-                g.add((visual_item_uri, ECRM.P65i_is_shown_by, image_instance_uri))
-                g.add((image_instance_uri, RDFS.seeAlso, URIRef(image_url)))
-                g.add((image_instance_uri, PROV.wasDerivedFrom, URIRef(uri)))
+                g.add((visual_item_uri_uri, RDFS.seeAlso, URIRef(image_url)))
+                g.add((visual_item_uri_uri, PROV.wasDerivedFrom, URIRef(uri)))
 
 def parse_args(argv=None) -> argparse.Namespace:
     p = argparse.ArgumentParser(

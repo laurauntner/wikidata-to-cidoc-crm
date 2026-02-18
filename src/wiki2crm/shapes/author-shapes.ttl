@@ -49,10 +49,10 @@ sappho:PlaceShape
     sh:maxCount 1 ;
   ] .
 
-# Actor Appellation (name) for a Person
+# Appellation (name) for a Person
 sappho:AppellationShape
   a sh:NodeShape ;
-  sh:targetClass ecrm:E82_Actor_Appellation ;
+  sh:targetClass ecrm:E41_Appellation ;
   sh:property [
     sh:path rdfs:label ;
     sh:languageIn ("en") ;
@@ -254,21 +254,6 @@ sappho:VisualItemShape
   ] ;
   sh:property [
     sh:path [ sh:inversePath ecrm:P138i_has_representation ] ;
-    sh:minCount 1 ;
-  ] .
-
-# Image node (E38_Image)
-sappho:ImageShape
-  a sh:NodeShape ;
-  sh:targetClass ecrm:E38_Image ;
-  sh:property [
-    sh:path ecrm:P65_shows_visual_item ;
-    sh:node sappho:VisualItemShape ;
-    sh:minCount 1 ;
-    sh:maxCount 1 ;
-  ] ;
-  sh:property [
-    sh:path [ sh:inversePath ecrm:P65i_is_shown_by ] ;
     sh:minCount 1 ;
   ] ;
   sh:property [

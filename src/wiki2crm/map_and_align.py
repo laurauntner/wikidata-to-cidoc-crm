@@ -307,18 +307,13 @@ def main(argv=None):
     if any(g.triples((None, RDF.type, ECRM.E35_Title))):
         g.add((DOCO.Title, SKOS.closeMatch, ECRM.E35_Title))
     
-    # ecrm:E38_Image
-    if any(g.triples((None, RDF.type, ECRM.E38_Image))):
-        g.add((BIBO.Image, SKOS.closeMatch, ECRM.E38_Image))
-        g.add((FOAF.Image, SKOS.closeMatch, ECRM.E38_Image))
-    
-    # ecrm:E40_Legal_Body
-    if any(g.triples((None, RDF.type, ECRM.E40_Legal_Body))):
-        g.add((ECRM.E40_Legal_Body, SKOS.broadMatch, FOAF.Agent))
-        g.add((POSTDATA_CORE.Organisation, SKOS.broadMatch, ECRM.E40_Legal_Body))
-        g.add((POSTDATA_CORE.Organization, SKOS.broadMatch, ECRM.E40_Legal_Body))
-        g.add((URW.Organization, SKOS.broadMatch, ECRM.E40_Legal_Body))
-        g.add((URW.Publisher, SKOS.broadMatch, ECRM.E40_Legal_Body))
+    # ecrm:E74_Group
+    if any(g.triples((None, RDF.type, ECRM.E74_Group))):
+        g.add((ECRM.E74_Group, SKOS.broadMatch, FOAF.Agent))
+        g.add((POSTDATA_CORE.Organisation, SKOS.broadMatch, ECRM.E74_Group))
+        g.add((POSTDATA_CORE.Organization, SKOS.broadMatch, ECRM.E74_Group))
+        g.add((URW.Organization, SKOS.broadMatch, ECRM.E74_Group))
+        g.add((URW.Publisher, SKOS.broadMatch, ECRM.E74_Group))
 
     # ecrm:E52_Time-Span
     if any(g.triples((None, RDF.type, ECRM["E52_Time-Span"]))):

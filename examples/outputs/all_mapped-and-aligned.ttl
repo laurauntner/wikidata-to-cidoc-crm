@@ -67,7 +67,7 @@ dracor:printYear skos:broadMatch ecrm:P4_has_time-span .
 
 dracor:writtenYear skos:broadMatch ecrm:P4_has_time-span .
 
-postdata_core:Organisation skos:broadMatch ecrm:E40_Legal_Body .
+postdata_core:Organisation skos:broadMatch ecrm:E74_Group .
 
 postdata_core:Person skos:closeMatch ecrm:E21_Person .
 
@@ -111,8 +111,6 @@ dc1:type skos:broadMatch ecrm:P2_has_type .
 
 bibo:Book skos:broadMatch lrmoo:F3_Manifestation .
 
-bibo:Image skos:closeMatch ecrm:E38_Image .
-
 bibo:Manuscript skos:broadMatch lrmoo:F2_Expression .
 
 bibo:editor skos:broadMatch ecrm:P14_carried_out_by .
@@ -138,8 +136,6 @@ fabio:exemplar skos:closeMatch lrmoo:R7i_is_exemplified_by .
 fabio:hasPlaceOfPublication skos:broadMatch ecrm:P7_took_place_at .
 
 fabio:realization skos:closeMatch lrmoo:R3_is_realised_in .
-
-foaf:Image skos:closeMatch ecrm:E38_Image .
 
 foaf:gender skos:broadMatch ecrm:P2_has_type .
 
@@ -201,7 +197,7 @@ schema:locationCreated skos:broadMatch ecrm:P7_took_place_at .
 
 ecrm:E36_Visual_Item owl:equivalentClass crm:E36_Visual_Item .
 
-ecrm:E82_Actor_Appellation owl:equivalentClass crm:E82_Actor_Appellation .
+ecrm:E41_Appellation owl:equivalentClass crm:E41_Appellation .
 
 ecrm:P102i_is_title_of owl:equivalentProperty crm:P102i_is_title_of ;
     owl:inverseOf ecrm:P102_has_title .
@@ -278,7 +274,7 @@ lrmoo:R7_exemplifies owl:equivalentProperty efrbroo:R7_is_example_of,
         frbroo:R7_is_example_of ;
     owl:inverseOf lrmoo:R7i_is_exemplified_by .
 
-<https://sappho-digital.com/appellation/Q469571> a ecrm:E82_Actor_Appellation ;
+<https://sappho-digital.com/appellation/Q469571> a ecrm:E41_Appellation ;
     rdfs:label "Anna Louisa Karsch"@en ;
     ecrm:P131i_identifies <https://sappho-digital.com/person/Q469571> ;
     prov:wasDerivedFrom <http://www.wikidata.org/entity/Q469571> .
@@ -295,11 +291,6 @@ lrmoo:R7_exemplifies owl:equivalentProperty efrbroo:R7_is_example_of,
 <https://sappho-digital.com/genre_type/wikidata> a ecrm:E55_Type ;
     rdfs:label "Wikidata Genre"@en ;
     ecrm:P2i_is_type_of <https://sappho-digital.com/genre/Q80930> .
-
-<https://sappho-digital.com/image/Q469571> a ecrm:E38_Image ;
-    ecrm:P65_shows_visual_item <https://sappho-digital.com/visual_item/Q469571> ;
-    rdfs:seeAlso <http://commons.wikimedia.org/wiki/Special:FilePath/Karschin%20bild.JPG> ;
-    prov:wasDerivedFrom <http://www.wikidata.org/entity/Q469571> .
 
 <https://sappho-digital.com/place/Q1741> a ecrm:E53_Place ;
     rdfs:label "Vienna"@en ;
@@ -328,7 +319,7 @@ lrmoo:R7_exemplifies owl:equivalentProperty efrbroo:R7_is_example_of,
     owl:sameAs <http://sws.geonames.org/7532190/>,
         <http://www.wikidata.org/entity/Q659063> .
 
-<https://sappho-digital.com/publisher/Q133849481> a ecrm:E40_Legal_Body ;
+<https://sappho-digital.com/publisher/Q133849481> a ecrm:E74_Group ;
     rdfs:label "Wallishausser’sche Buchhandlung"@en ;
     ecrm:P14i_performed <https://sappho-digital.com/manifestation_creation/Q1242002> ;
     owl:sameAs <http://d-nb.info/gnd/1072986655>,
@@ -350,20 +341,10 @@ lrmoo:R7_exemplifies owl:equivalentProperty efrbroo:R7_is_example_of,
     rdfs:label "1819"^^xsd:gYear ;
     ecrm:P4i_is_time-span_of <https://sappho-digital.com/manifestation_creation/Q1242002> .
 
-<https://sappho-digital.com/title_string/expression/Q1242002> a ecrm:E62_String ;
-    rdfs:label "Sappho"@de ;
-    ecrm:P190i_is_content_of <https://sappho-digital.com/title/expression/Q1242002> .
-
-<https://sappho-digital.com/title_string/manifestation/Q1242002> a ecrm:E62_String ;
-    rdfs:label "Sappho"@de ;
-    ecrm:P190i_is_content_of <https://sappho-digital.com/title/manifestation/Q1242002> .
-
-ecrm:E40_Legal_Body owl:equivalentClass crm:E40_Legal_Body ;
+ecrm:E74_Group owl:equivalentClass crm:E74_Group ;
     skos:broadMatch foaf:Agent .
 
 ecrm:E42_Identifier owl:equivalentClass crm:E42_Identifier .
-
-ecrm:E62_String owl:equivalentClass crm:E62_String .
 
 ecrm:E67_Birth owl:equivalentClass crm:E67_Birth .
 
@@ -459,17 +440,14 @@ lrmoo:R19i_was_realised_through owl:equivalentProperty efrbroo:R19i_was_realised
     lrmoo:R28_produced <https://sappho-digital.com/item/Q1242002> .
 
 <https://sappho-digital.com/title/expression/Q1242002> a ecrm:E35_Title ;
-    ecrm:P102i_is_title_of <https://sappho-digital.com/expression/Q1242002> ;
-    ecrm:P190_has_symbolic_content <https://sappho-digital.com/title_string/expression/Q1242002> .
-
-<https://sappho-digital.com/title/manifestation/Q1242002> a ecrm:E35_Title ;
-    ecrm:P102i_is_title_of <https://sappho-digital.com/manifestation/Q1242002> ;
-    ecrm:P190_has_symbolic_content <https://sappho-digital.com/title_string/manifestation/Q1242002> .
+    rdfs:label "Sappho"@de ;
+    ecrm:P102i_is_title_of <https://sappho-digital.com/expression/Q1242002> .
 
 <https://sappho-digital.com/visual_item/Q469571> a ecrm:E36_Visual_Item ;
     rdfs:label "Visual representation of Anna Louisa Karsch"@en ;
     ecrm:P138_represents <https://sappho-digital.com/person/Q469571> ;
-    ecrm:P65i_is_shown_by <https://sappho-digital.com/image/Q469571> .
+    rdfs:seeAlso <http://commons.wikimedia.org/wiki/Special:FilePath/Karschin%20bild.JPG> ;
+    prov:wasDerivedFrom <http://www.wikidata.org/entity/Q469571> .
 
 <https://sappho-digital.com/work_creation/Q1242002> a lrmoo:F27_Work_Creation ;
     rdfs:label "Work creation of Sappho"@en ;
@@ -478,8 +456,6 @@ lrmoo:R19i_was_realised_through owl:equivalentProperty efrbroo:R19i_was_realised
     prov:wasDerivedFrom <http://www.wikidata.org/entity/Q1242002> .
 
 ecrm:E35_Title owl:equivalentClass crm:E35_Title .
-
-ecrm:E38_Image owl:equivalentClass crm:E38_Image .
 
 ecrm:P102_has_title owl:equivalentProperty crm:P102_has_title ;
     owl:inverseOf ecrm:P102i_is_title_of .
@@ -592,6 +568,7 @@ ecrm:E53_Place owl:equivalentClass crm:E53_Place .
     ecrm:P1_is_identified_by <https://sappho-digital.com/identifier/Q469571> ;
     ecrm:P2_has_type <https://sappho-digital.com/gender/Q6581072> ;
     ecrm:P98i_was_born <https://sappho-digital.com/birth/Q469571> ;
+    ecrm:P138i_has_representation <https://sappho-digital.com/visual_item/Q469571> ;
     owl:sameAs <http://d-nb.info/gnd/118560328>,
         <http://viaf.org/viaf/32075043>,
         <http://www.wikidata.org/entity/Q469571> .

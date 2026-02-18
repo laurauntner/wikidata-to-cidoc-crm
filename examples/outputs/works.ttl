@@ -8,7 +8,7 @@
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
-ecrm:E82_Actor_Appellation owl:equivalentClass crm:E82_Actor_Appellation .
+ecrm:E41_Appellation owl:equivalentClass crm:E41_Appellation .
 
 <https://sappho-digital.com/ontology/works> a owl:Ontology ;
     owl:imports ecrm:,
@@ -16,7 +16,7 @@ ecrm:E82_Actor_Appellation owl:equivalentClass crm:E82_Actor_Appellation .
 
 ecrm:E21_Person owl:equivalentClass crm:E21_Person .
 
-ecrm:E40_Legal_Body owl:equivalentClass crm:E40_Legal_Body .
+ecrm:E74_Group owl:equivalentClass crm:E74_Group .
 
 ecrm:E42_Identifier owl:equivalentClass crm:E42_Identifier .
 
@@ -193,7 +193,7 @@ lrmoo:R7i_is_exemplified_by owl:equivalentProperty efrbroo:R7i_has_example,
     ecrm:P7i_witnessed <https://sappho-digital.com/manifestation_creation/Q1242002> ;
     owl:sameAs <http://www.wikidata.org/entity/Q1741> .
 
-<https://sappho-digital.com/publisher/Q133849481> a ecrm:E40_Legal_Body ;
+<https://sappho-digital.com/publisher/Q133849481> a ecrm:E74_Group ;
     rdfs:label "Wallishausser’sche Buchhandlung"@en ;
     ecrm:P14i_performed <https://sappho-digital.com/manifestation_creation/Q1242002> ;
     owl:sameAs <http://www.wikidata.org/entity/Q133849481> .
@@ -206,19 +206,9 @@ lrmoo:R7i_is_exemplified_by owl:equivalentProperty efrbroo:R7i_has_example,
     rdfs:label "1819"^^xsd:gYear ;
     ecrm:P4i_is_time-span_of <https://sappho-digital.com/manifestation_creation/Q1242002> .
 
-<https://sappho-digital.com/title_string/expression/Q1242002> a ecrm:E62_String ;
-    rdfs:label "Sappho"@de ;
-    ecrm:P190i_is_content_of <https://sappho-digital.com/title/expression/Q1242002> .
-
-<https://sappho-digital.com/title_string/manifestation/Q1242002> a ecrm:E62_String ;
-    rdfs:label "Sappho"@de ;
-    ecrm:P190i_is_content_of <https://sappho-digital.com/title/manifestation/Q1242002> .
-
 ecrm:E35_Title owl:equivalentClass crm:E35_Title .
 
 ecrm:E52_Time-Span owl:equivalentClass crm:E52_Time-Span .
-
-ecrm:E62_String owl:equivalentClass crm:E62_String .
 
 <https://sappho-digital.com/genre/Q80930> a ecrm:E55_Type ;
     rdfs:label "tragedy"@en ;
@@ -242,12 +232,8 @@ ecrm:E62_String owl:equivalentClass crm:E62_String .
     lrmoo:R28_produced <https://sappho-digital.com/item/Q1242002> .
 
 <https://sappho-digital.com/title/expression/Q1242002> a ecrm:E35_Title ;
-    ecrm:P102i_is_title_of <https://sappho-digital.com/expression/Q1242002> ;
-    ecrm:P190_has_symbolic_content <https://sappho-digital.com/title_string/expression/Q1242002> .
-
-<https://sappho-digital.com/title/manifestation/Q1242002> a ecrm:E35_Title ;
-    ecrm:P102i_is_title_of <https://sappho-digital.com/manifestation/Q1242002> ;
-    ecrm:P190_has_symbolic_content <https://sappho-digital.com/title_string/manifestation/Q1242002> .
+    rdfs:label "Sappho"@de ;
+    ecrm:P102i_is_title_of <https://sappho-digital.com/expression/Q1242002> .
 
 <https://sappho-digital.com/work_creation/Q1242002> a lrmoo:F27_Work_Creation ;
     rdfs:label "Work creation of Sappho"@en ;

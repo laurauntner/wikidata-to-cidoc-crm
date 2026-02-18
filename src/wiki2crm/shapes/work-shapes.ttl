@@ -185,7 +185,7 @@ sappho:GenreTypeNodeShape
 # Publishers are Legal Bodies with owl:sameAs wd:Q…
 sappho:PublisherShape
   a sh:NodeShape ;
-  sh:targetClass ecrm:E40_Legal_Body ;
+  sh:targetClass ecrm:E74_Group ;
   sh:property [
     sh:path owl:sameAs ;
     sh:nodeKind sh:IRI ;
@@ -217,25 +217,9 @@ sappho:PublisherShape
 # Title nodes for Expression and Manifestation
 #################################################################
 
-# E35_Title with symbolic content node (E62_String)
 sappho:TitleShape
   a sh:NodeShape ;
   sh:targetClass ecrm:E35_Title ;
-  sh:property [
-    sh:path ecrm:P190_has_symbolic_content ;
-    sh:node sappho:TitleStringShape ;
-    sh:minCount 1 ;
-    sh:maxCount 1 ;
-  ] ;
-  sh:property [
-    sh:path [ sh:inversePath ecrm:P102_has_title ] ;
-    sh:minCount 1 ;
-  ] .
-
-# String node; your script may write @en or @de depending on source
-sappho:TitleStringShape
-  a sh:NodeShape ;
-  sh:targetClass ecrm:E62_String ;
   sh:property [
     sh:path rdfs:label ;
     sh:languageIn ("en" "de") ;
@@ -243,7 +227,7 @@ sappho:TitleStringShape
     sh:maxCount 1 ;
   ] ;
   sh:property [
-    sh:path [ sh:inversePath ecrm:P190_has_symbolic_content ] ;
+    sh:path [ sh:inversePath ecrm:P102_has_title ] ;
     sh:minCount 1 ;
   ] .
 
@@ -320,7 +304,7 @@ sappho:ExpressionShape
     sh:minCount 1 ;
     sh:maxCount 1 ;
   ] ;
-  # Title (E35/E62)
+  # Title (E35)
   sh:property [
     sh:path ecrm:P102_has_title ;
     sh:node sappho:TitleShape ;
