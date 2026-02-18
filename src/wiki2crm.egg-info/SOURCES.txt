@@ -3,13 +3,10 @@ MANIFEST.in
 README.md
 pyproject.toml
 docs/alignment_full.pdf
-docs/authors.png
 docs/authors_simple.png
 docs/meta.png
-docs/relations.png
 docs/relations_simple.png
 docs/workflow_overview.png
-docs/works.png
 docs/works_simple.png
 examples/inputs/author-qids.csv
 examples/inputs/work-qids.csv
