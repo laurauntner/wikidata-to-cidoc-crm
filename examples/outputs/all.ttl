@@ -24,8 +24,6 @@ ecrm:E69_Death owl:equivalentClass crm:E69_Death .
 
 ecrm:E73_Information_Object owl:equivalentClass crm:E73_Information_Object .
 
-ecrm:E41_Appellation owl:equivalentClass crm:E41_Appellation .
-
 ecrm:P100_was_death_of owl:equivalentProperty crm:P100_was_death_of ;
     owl:inverseOf ecrm:P100i_died_in .
 
@@ -37,12 +35,6 @@ ecrm:P102_has_title owl:equivalentProperty crm:P102_has_title ;
 
 ecrm:P102i_is_title_of owl:equivalentProperty crm:P102i_is_title_of ;
     owl:inverseOf ecrm:P102_has_title .
-
-ecrm:P131_is_identified_by owl:equivalentProperty crm:P131_is_identified_by ;
-    owl:inverseOf ecrm:P131i_identifies .
-
-ecrm:P131i_identifies owl:equivalentProperty crm:P131i_identifies ;
-    owl:inverseOf ecrm:P131_is_identified_by .
 
 ecrm:P138_represents owl:equivalentProperty crm:P138_represents ;
     owl:inverseOf ecrm:P138i_has_representation .
@@ -199,11 +191,6 @@ lrmoo:R7_exemplifies owl:equivalentProperty efrbroo:R7_is_example_of,
 lrmoo:R7i_is_exemplified_by owl:equivalentProperty efrbroo:R7i_has_example,
         frbroo:R7i_has_example ;
     owl:inverseOf lrmoo:R7_exemplifies .
-
-<https://sappho-digital.com/appellation/Q469571> a ecrm:E41_Appellation ;
-    rdfs:label "Anna Louisa Karsch"@en ;
-    ecrm:P131i_identifies <https://sappho-digital.com/person/Q469571> ;
-    prov:wasDerivedFrom <http://www.wikidata.org/entity/Q469571> .
 
 <https://sappho-digital.com/digital/Q1242002> a ecrm:E73_Information_Object ;
     rdfs:label "Digital copy of Sappho"@en ;
@@ -375,7 +362,6 @@ ecrm:E55_Type owl:equivalentClass crm:E55_Type .
 <https://sappho-digital.com/person/Q469571> a ecrm:E21_Person ;
     rdfs:label "Anna Louisa Karsch"@en ;
     ecrm:P100i_died_in <https://sappho-digital.com/death/Q469571> ;
-    ecrm:P131_is_identified_by <https://sappho-digital.com/appellation/Q469571> ;
     ecrm:P138i_has_representation <https://sappho-digital.com/visual_item/Q469571> ;
     ecrm:P1_is_identified_by <https://sappho-digital.com/identifier/Q469571> ;
     ecrm:P2_has_type <https://sappho-digital.com/gender/Q6581072> ;

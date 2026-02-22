@@ -154,7 +154,7 @@ def create_graph() -> Graph:
     ecrm_to_crm = [
         # Classes
         "E21_Person", "E67_Birth", "E69_Death", "E52_Time-Span", "E53_Place",
-        "E36_Visual_Item", "E55_Type", "E42_Identifier", "E41_Appellation"
+        "E36_Visual_Item", "E55_Type", "E42_Identifier"
     ]
 
     for cls in ecrm_to_crm:
@@ -169,7 +169,6 @@ def create_graph() -> Graph:
         ("P65_shows_visual_item", "P65i_is_shown_by"),
         ("P98_brought_into_life", "P98i_was_born"),
         ("P100_was_death_of", "P100i_died_in"),
-        ("P131_is_identified_by", "P131i_identifies"),
         ("P138_represents", "P138i_has_representation")
     ]
 
@@ -282,11 +281,6 @@ def process_authors(g: Graph, all_qids: List[str]) -> None:
             # Person core data
             g.add((person_uri, RDF.type, ECRM.E21_Person))
             g.add((person_uri, OWL.sameAs, URIRef(uri)))
-            g.add((person_uri, ECRM.P131_is_identified_by, name_uri))
-            g.add((name_uri, ECRM.P131i_identifies, person_uri))
-            g.add((name_uri, RDF.type, ECRM.E41_Appellation))
-            g.add((name_uri, RDFS.label, Literal(label, lang="en")))
-            g.add((name_uri, PROV.wasDerivedFrom, URIRef(uri)))
             g.add((person_uri, RDFS.label, Literal(label, lang="en")))
 
             g.add((person_uri, ECRM.P1_is_identified_by, identifier_uri))

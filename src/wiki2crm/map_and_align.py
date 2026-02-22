@@ -584,7 +584,8 @@ def main(argv=None):
     ):
         g.add((SAPPHO_PROP.has_manifestation, RDF.type, OWL.ObjectProperty))
         g.add((SAPPHO_PROP.has_manifestation, RDFS.label, 
-            Literal("has manifestation", lang="en")))
+            Literal("has_manifestation", lang="en")))
+        g.add((SAPPHO_PROP.has_manifestation, RDFS.comment, Literal("A F1_Work has a F3_Manifestation.", lang="en")))
         g.add((SAPPHO_PROP.has_manifestation, SKOS.closeMatch, FABIO.hasManifestation))
         g.add((SAPPHO_PROP.has_manifestation, SKOS.closeMatch, POSTDATA_CORE.isRealisedThrough))
         g.add((POSTDATA_CORE.isRealisedThrough, OWL.inverseOf, POSTDATA_CORE.realises))
@@ -610,7 +611,9 @@ def main(argv=None):
     ):
         g.add((SAPPHO_PROP.has_portrayal, RDF.type, OWL.ObjectProperty))
         g.add((SAPPHO_PROP.has_portrayal, RDFS.label, 
-            Literal("has portrayal", lang="en")))
+            Literal("has_portrayal", lang="en")))
+        g.add((SAPPHO_PROP.has_portrayal, RDFS.comment, 
+            Literal("A F1_Work has a F5_Item.", lang="en")))
         g.add((SAPPHO_PROP.has_portrayal, SKOS.closeMatch, FABIO.hasPortrayal))
         g.add((SAPPHO_PROP.has_portrayal, RDFS.domain, LRMOO.F1_Work))
         g.add((SAPPHO_PROP.has_portrayal, RDFS.range,  LRMOO.F5_Item))
@@ -635,7 +638,9 @@ def main(argv=None):
     ):
         g.add((SAPPHO_PROP.has_representation, RDF.type, OWL.ObjectProperty))
         g.add((SAPPHO_PROP.has_representation, RDFS.label, 
-            Literal("has representation", lang="en")))
+            Literal("has_representation", lang="en")))
+        g.add((SAPPHO_PROP.has_representation, RDFS.comment, 
+            Literal("A F2_Expression has a F5_Item.", lang="en")))
         g.add((SAPPHO_PROP.has_representation, SKOS.closeMatch, FABIO.hasRepresentation))
         g.add((SAPPHO_PROP.has_representation, RDFS.domain, LRMOO.F2_Expression))
         g.add((SAPPHO_PROP.has_representation, RDFS.range,  LRMOO.F5_Item))
@@ -691,7 +696,10 @@ def main(argv=None):
     if any(g.triples((None, RDF.type, INTRO.INT_Topic))):
         g.add((SAPPHO_PROP.about, RDF.type, OWL.ObjectProperty))
         g.add((SAPPHO_PROP.about, RDFS.label,
-            Literal("Link from expression to topic", lang="en")))
+            Literal("about", lang="en")))
+        g.add((SAPPHO_PROP.about, RDFS.comment,
+            Literal("Link from a F2_Expression to an INT_Topic.", lang="en")))
+            
         b_about = BNode()
         Collection(g, b_about, [
             INTRO.R18_showsActualization,
@@ -715,7 +723,9 @@ def main(argv=None):
     if any(g.triples((None, RDF.type, INTRO.INT31_IntertextualRelation))):
         g.add((SAPPHO_PROP.expr_relation, RDF.type, OWL.ObjectProperty))
         g.add((SAPPHO_PROP.expr_relation, RDFS.label,
-            Literal("Relation between two expressions", lang="en")))
+            Literal("expr_relation", lang="en")))
+        g.add((SAPPHO_PROP.expr_relation, RDFS.comment,
+            Literal("A relation between two F2_Expressions.", lang="en")))
 
         first_elem = BNode()
         g.add((first_elem, OWL.inverseOf, INTRO.R18i_actualizationFoundOn))
@@ -774,7 +784,9 @@ def main(argv=None):
 
         g.add((SAPPHO_PROP.expr_possibly_cites, RDF.type, OWL.ObjectProperty))
         g.add((SAPPHO_PROP.expr_possibly_cites, RDFS.label,
-            Literal("Younger expression possibly cites older expression", lang="en")))
+            Literal("expr_possibly_cites", lang="en")))
+        g.add((SAPPHO_PROP.expr_possibly_cites, RDFS.comment,
+            Literal("A F2_Expression possibly cites a F2_Expression.", lang="en")))
         g.add((SAPPHO_PROP.expr_possibly_cites, RDFS.domain, LRMOO.F2_Expression))
         g.add((SAPPHO_PROP.expr_possibly_cites, RDFS.range, LRMOO.F2_Expression))
 
@@ -793,8 +805,8 @@ def main(argv=None):
         g.add((SAPPHO_PROP.expr_possibly_cites, OWL.propertyChainAxiom, chain_bnode))
 
         g.add((SAPPHO_PROP.expr_possibly_cited_by, RDF.type, OWL.ObjectProperty))
-        g.add((SAPPHO_PROP.expr_possibly_cites, RDFS.label,
-            Literal("Older expression possibly cited by younger expression", lang="en")))
+        g.add((SAPPHO_PROP.expr_possibly_cited_by, RDFS.label, Literal("expr_possibly_cited_by", lang="en")))
+        g.add((SAPPHO_PROP.expr_possibly_cited_by, RDFS.comment, Literal("A F2_Expression is possibly cited by a F2_Expression.", lang="en")))
         g.add((SAPPHO_PROP.expr_possibly_cited_by, OWL.inverseOf,
             SAPPHO_PROP.expr_possibly_cites))
         g.add((SAPPHO_PROP.expr_possibly_cited_by, RDFS.domain, LRMOO.F2_Expression))
@@ -826,20 +838,24 @@ def main(argv=None):
                             
         g.add((SAPPHO_PROP.tp_possibly_cites, RDF.type, OWL.ObjectProperty))
         g.add((SAPPHO_PROP.tp_possibly_cites, RDFS.label,
-            Literal("The younger text possibly cites the text passage of the older text", lang="en")))
+            Literal("tp_possibly_cites", lang="en")))
+        g.add((SAPPHO_PROP.tp_possibly_cites, RDFS.comment,
+            Literal("A F2_Expression possibly cites an INT21_TextPassage.", lang="en")))
         g.add((SAPPHO_PROP.tp_possibly_cites, RDFS.domain, LRMOO.F2_Expression))
         g.add((SAPPHO_PROP.tp_possibly_cites, RDFS.range, INTRO.INT21_TextPassage))
         
         g.add((SAPPHO_PROP.tp_possibly_cited_by, RDF.type, OWL.ObjectProperty))
         g.add((SAPPHO_PROP.tp_possibly_cited_by, RDFS.label,
-            Literal("The older text is possibly cited by the younger text passage", lang="en")))
+            Literal("tp_possibly_cited_by", lang="en")))
+        g.add((SAPPHO_PROP.tp_possibly_cited_by, RDFS.comment,
+            Literal("An INT21_TextPassage is possibly cited by a F2_Expression.", lang="en")))
         g.add((SAPPHO_PROP.tp_possibly_cited_by, RDFS.domain, INTRO.INT21_TextPassage))
         g.add((SAPPHO_PROP.tp_possibly_cited_by, RDFS.range, LRMOO.F2_Expression))
         
         g.add((SAPPHO_PROP.tp_possibly_cited_by, OWL.inverseOf, SAPPHO_PROP.tp_possibly_cites))
         
         g.add((LRMOO.R75_incorporates,  SKOS.broadMatch, SAPPHO_PROP.tp_possibly_cites))
-        g.add((LRMOO.R75i_is_incorporated_in, SKOS.broadMatch, SAPPHO_PROP.tp_possibly_cites))
+        g.add((LRMOO.R75i_is_incorporated_in, SKOS.broadMatch, SAPPHO_PROP.tp_possibly_cited_by))
         
         g.add((SAPPHO_PROP.tp_possibly_cites, RDFS.subPropertyOf, ECRM.P148_has_component))
         g.add((SAPPHO_PROP.tp_possibly_cited_by, RDFS.subPropertyOf, ECRM.P148i_is_component_of))   
@@ -867,7 +883,9 @@ def main(argv=None):
     if any(g.triples((None, ECRM.P67_refers_to, None))):
         g.add((SAPPHO_PROP.expr_references, RDF.type, OWL.ObjectProperty))
         g.add((SAPPHO_PROP.expr_references, RDFS.label,
-            Literal("Reference from expression to person, place or expression", lang="en")))
+            Literal("expr_references", lang="en")))
+        g.add((SAPPHO_PROP.expr_references, RDFS.comment,
+            Literal("A F2_Expression references an E21_Person, an E53_Place or a F2_Expression.", lang="en")))
         chain_bnode = BNode()
         Collection(g, chain_bnode, [
             INTRO.R18_showsActualization,
@@ -883,7 +901,9 @@ def main(argv=None):
         
         g.add((SAPPHO_PROP.referenced_by_expr, RDF.type, OWL.ObjectProperty))
         g.add((SAPPHO_PROP.referenced_by_expr, RDFS.label,
-            Literal("Person, place or expression referenced by expression", lang="en")))
+            Literal("referenced_by_expr", lang="en")))
+        g.add((SAPPHO_PROP.referenced_by_expr, RDFS.comment,
+            Literal("An E21_Person, an E53_Place or a F2_Expression is referenced by a F2_Expression.", lang="en")))
         g.add((SAPPHO_PROP.referenced_by_expr, OWL.inverseOf, SAPPHO_PROP.expr_references))
         g.add((SAPPHO_PROP.referenced_by_expr, RDFS.domain, ECRM.E21_Person))
         g.add((SAPPHO_PROP.referenced_by_expr, RDFS.domain, ECRM.E53_Place))
@@ -916,7 +936,8 @@ def main(argv=None):
 
     if any(g.triples((None, ECRM.P67_refers_to, ECRM.E21_Person))):
         g.add((SAPPHO_PROP.references_person, RDF.type, OWL.ObjectProperty))
-        g.add((SAPPHO_PROP.references_person, RDFS.label, Literal("Reference to person", lang="en")))
+        g.add((SAPPHO_PROP.references_person, RDFS.label, Literal("references_person", lang="en")))
+        g.add((SAPPHO_PROP.references_person, RDFS.comment, Literal("A F2_Expression references an E21_Person.", lang="en")))
         chain_bnode = BNode()
         Collection(g, chain_bnode, [INTRO.R18_showsActualization, ECRM.P67_refers_to])
         g.add((SAPPHO_PROP.references_person, OWL.propertyChainAxiom, chain_bnode))
@@ -925,18 +946,20 @@ def main(argv=None):
         g.add((SAPPHO_PROP.references_person, RDFS.subPropertyOf, ECRM.P67_refers_to))
 
         g.add((SAPPHO_PROP.person_referenced_by, RDF.type, OWL.ObjectProperty))
-        g.add((SAPPHO_PROP.person_referenced_by, RDFS.label, Literal("Person referenced by expression", lang="en")))
+        g.add((SAPPHO_PROP.person_referenced_by, RDFS.label, Literal("person_referenced_by", lang="en")))
+        g.add((SAPPHO_PROP.person_referenced_by, RDFS.comment, Literal("An E21_Person is referenced by a F2_Expression.", lang="en")))
         g.add((SAPPHO_PROP.person_referenced_by, OWL.inverseOf, SAPPHO_PROP.references_person))
         g.add((SAPPHO_PROP.person_referenced_by, RDFS.domain, LRMOO.F2_Expression))
         g.add((SAPPHO_PROP.person_referenced_by, RDFS.range, ECRM.E21_Person))
         g.add((SAPPHO_PROP.person_referenced_by, RDFS.subPropertyOf, ECRM.P67i_is_referred_to_by))
 
         g.add((POSTDATA_ANALYSIS.refersTo, SKOS.broadMatch, SAPPHO_PROP.references_person))
-        g.add((POSTDATA_ANALYSIS.refersTo, OWL.inverseOf, POSTDATA_ANALYSIS.refersTo))
+        g.add((POSTDATA_ANALYSIS.isReferredToBy, OWL.inverseOf, POSTDATA_ANALYSIS.refersTo))
 
     if any(g.triples((None, ECRM.P67_refers_to, ECRM.E53_Place))):
         g.add((SAPPHO_PROP.references_place, RDF.type, OWL.ObjectProperty))
-        g.add((SAPPHO_PROP.references_place, RDFS.label, Literal("Reference to place", lang="en")))
+        g.add((SAPPHO_PROP.references_place, RDFS.label, Literal("references_place", lang="en")))
+        g.add((SAPPHO_PROP.references_place, RDFS.comment, Literal("A F2_Expression references an E53_Place.", lang="en")))
         chain_bnode = BNode()
         Collection(g, chain_bnode, [INTRO.R18_showsActualization, ECRM.P67_refers_to])
         g.add((SAPPHO_PROP.references_place, OWL.propertyChainAxiom, chain_bnode))
@@ -945,13 +968,14 @@ def main(argv=None):
         g.add((SAPPHO_PROP.references_place, RDFS.subPropertyOf, ECRM.P67_refers_to))
 
         g.add((SAPPHO_PROP.place_referenced_by, RDF.type, OWL.ObjectProperty))
-        g.add((SAPPHO_PROP.place_referenced_by, RDFS.label, Literal("Place referenced by expression", lang="en")))
+        g.add((SAPPHO_PROP.place_referenced_by, RDFS.label, Literal("place_referenced_by", lang="en")))
+        g.add((SAPPHO_PROP.place_referenced_by, RDFS.comment, Literal("An E53_Place is referenced by a F2_Expression.", lang="en")))
         g.add((SAPPHO_PROP.place_referenced_by, OWL.inverseOf, SAPPHO_PROP.references_place))
         g.add((SAPPHO_PROP.place_referenced_by, RDFS.domain, LRMOO.F2_Expression))
         g.add((SAPPHO_PROP.place_referenced_by, RDFS.range, ECRM.E53_Place))
         g.add((SAPPHO_PROP.place_referenced_by, RDFS.subPropertyOf, ECRM.P67i_is_referred_to_by))
 
-        g.add((POSTDATA_ANALYSIS.refersTo, SKOS.broadMatch, SAPPHO_PROP.references_person))
+        g.add((POSTDATA_ANALYSIS.refersTo, SKOS.broadMatch, SAPPHO_PROP.references_place))
         g.add((POSTDATA_ANALYSIS.refersTo, OWL.inverseOf, POSTDATA_ANALYSIS.refersTo))
 
     # sappho_prop:has_character / sappho_prop:is_character_in: link character and expression

@@ -172,7 +172,6 @@ def create_graph() -> Graph:
         ("E53_Place",),
         ("E55_Type",),
         ("E73_Information_Object",),
-        ("E41_Appellation",),
         ("E74_Group",),
     ]
 
@@ -187,7 +186,6 @@ def create_graph() -> Graph:
         ("P7_took_place_at", "P7i_witnessed"),
         ("P14_carried_out_by", "P14i_performed"),
         ("P102_has_title", "P102i_is_title_of"),
-        ("P131_is_identified_by", "P131i_identifies"),
         ("P138_represents", "P138i_has_representation"),
         ("P190_has_symbolic_content", "P190i_is_content_of")
     ]
@@ -519,13 +517,6 @@ def process(g: Graph, qids: List[str]) -> None:
                 g.add((editor_uri, RDF.type, ECRM.E21_Person))
                 g.add((editor_uri, RDFS.label, Literal(r.get("editorLabel", {}).get("value", "Unknown"))))
                 g.add((editor_uri, OWL.sameAs, URIRef(r["editor"]["value"])))
-
-                app_uri = URIRef(f"{SAPPHO_BASE_URI}appellation/{editor_qid}")
-                g.add((editor_uri, ECRM.P131_is_identified_by, app_uri))
-                g.add((app_uri, ECRM.P131i_identifies, editor_uri))
-                g.add((app_uri, RDF.type, ECRM.E41_Appellation))
-                g.add((app_uri, RDFS.label, Literal(r.get("editorLabel", {}).get("value", "Unknown"))))
-                g.add((app_uri, PROV.wasDerivedFrom, URIRef(r["editor"]["value"])))
 
                 id_uri = URIRef(f"{SAPPHO_BASE_URI}identifier/{editor_qid}")
                 g.add((editor_uri, ECRM.P1_is_identified_by, id_uri))

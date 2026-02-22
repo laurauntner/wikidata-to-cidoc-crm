@@ -49,28 +49,6 @@ sappho:PlaceShape
     sh:maxCount 1 ;
   ] .
 
-# Appellation (name) for a Person
-sappho:AppellationShape
-  a sh:NodeShape ;
-  sh:targetClass ecrm:E41_Appellation ;
-  sh:property [
-    sh:path rdfs:label ;
-    sh:languageIn ("en") ;
-    sh:minCount 1 ;
-    sh:maxCount 1 ;
-  ] ;
-  sh:property [
-    sh:path prov:wasDerivedFrom ;
-    sh:nodeKind sh:IRI ;
-    sh:minCount 1 ;
-  ] ;
-  # The name identifies a Person (FORWARD edge, not inverse)
-  sh:property [
-    sh:path ecrm:P131i_identifies ;
-    sh:class ecrm:E21_Person ;
-    sh:minCount 1 ;
-  ] .
-
 # Identifier node (E42_Identifier) with QID label and fixed type
 sappho:IdentifierShape
   a sh:NodeShape ;
@@ -301,14 +279,6 @@ sappho:PersonShape
         FILTER (!STRSTARTS(STR(?wd), STR(wd:Q)))
       }
     """ ;
-  ] ;
-
-  # P131_is_identified_by → Appellation node (name)
-  sh:property [
-    sh:path ecrm:P131_is_identified_by ;
-    sh:node sappho:AppellationShape ;
-    sh:minCount 1 ;
-    sh:maxCount 1 ;
   ] ;
 
   # P1_is_identified_by → Identifier node (QID)

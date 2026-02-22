@@ -39,8 +39,6 @@ mimotext:P5 skos:broadMatch ecrm:P14_carried_out_by .
 
 mimotext:P7 skos:broadMatch ecrm:P14i_performed .
 
-mimotext:P8 skos:broadMatch ecrm:P131_is_identified_by .
-
 mimotext:P9 skos:broadMatch ecrm:P4_has_time-span .
 
 mimotext:Q10 skos:closeMatch ecrm:E21_Person .
@@ -145,8 +143,6 @@ foaf:made skos:broadMatch ecrm:P14i_performed .
 
 foaf:maker skos:broadMatch ecrm:P14_carried_out_by .
 
-foaf:name skos:broadMatch ecrm:P131_is_identified_by .
-
 intertext_ab:Reference skos:broadMatch lrmoo:F2_Expression .
 
 intertext_af:Work skos:broadMatch lrmoo:F2_Expression .
@@ -197,13 +193,8 @@ schema:locationCreated skos:broadMatch ecrm:P7_took_place_at .
 
 ecrm:E36_Visual_Item owl:equivalentClass crm:E36_Visual_Item .
 
-ecrm:E41_Appellation owl:equivalentClass crm:E41_Appellation .
-
 ecrm:P102i_is_title_of owl:equivalentProperty crm:P102i_is_title_of ;
     owl:inverseOf ecrm:P102_has_title .
-
-ecrm:P131i_identifies owl:equivalentProperty crm:P131i_identifies ;
-    owl:inverseOf ecrm:P131_is_identified_by .
 
 ecrm:P138_represents owl:equivalentProperty crm:P138_represents ;
     owl:inverseOf ecrm:P138i_has_representation .
@@ -273,11 +264,6 @@ lrmoo:R4_embodies owl:equivalentProperty efrbroo:R4i_comprises_carriers_of,
 lrmoo:R7_exemplifies owl:equivalentProperty efrbroo:R7_is_example_of,
         frbroo:R7_is_example_of ;
     owl:inverseOf lrmoo:R7i_is_exemplified_by .
-
-<https://sappho-digital.com/appellation/Q469571> a ecrm:E41_Appellation ;
-    rdfs:label "Anna Louisa Karsch"@en ;
-    ecrm:P131i_identifies <https://sappho-digital.com/person/Q469571> ;
-    prov:wasDerivedFrom <http://www.wikidata.org/entity/Q469571> .
 
 <https://sappho-digital.com/digital/Q1242002> a ecrm:E73_Information_Object ;
     rdfs:label "Digital copy of Sappho"@en ;
@@ -460,9 +446,6 @@ ecrm:E35_Title owl:equivalentClass crm:E35_Title .
 ecrm:P102_has_title owl:equivalentProperty crm:P102_has_title ;
     owl:inverseOf ecrm:P102i_is_title_of .
 
-ecrm:P131_is_identified_by owl:equivalentProperty crm:P131_is_identified_by ;
-    owl:inverseOf ecrm:P131i_identifies .
-
 ecrm:P138i_has_representation owl:equivalentProperty crm:P138i_has_representation ;
     owl:inverseOf ecrm:P138_represents .
 
@@ -563,7 +546,6 @@ ecrm:E53_Place owl:equivalentClass crm:E53_Place .
 <https://sappho-digital.com/person/Q469571> a ecrm:E21_Person ;
     rdfs:label "Anna Louisa Karsch"@en ;
     ecrm:P100i_died_in <https://sappho-digital.com/death/Q469571> ;
-    ecrm:P131_is_identified_by <https://sappho-digital.com/appellation/Q469571> ;
     ecrm:P138i_has_representation <https://sappho-digital.com/visual_item/Q469571> ;
     ecrm:P1_is_identified_by <https://sappho-digital.com/identifier/Q469571> ;
     ecrm:P2_has_type <https://sappho-digital.com/gender/Q6581072> ;
