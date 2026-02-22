@@ -29,7 +29,7 @@ twine check dist/*
 
 Test install locally:
 
-pip install dist/wiki2crm-0.1.5-py3-none-any.whl
+pip install dist/wiki2crm-1.0.4-py3-none-any.whl
 
 Then:
 

@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: wiki2crm
-Version: 1.0.3
+Version: 1.0.4
 Summary: Tools to convert Wikidata to CIDOC CRM (eCRM/LRMoo/INTRO)
 Author: Laura Untner
 License: MIT License
@@ -217,7 +217,6 @@ Special thanks to [Bernhard Oberreither](https://github.com/BOberreither) for fe
 The [authors.py](https://github.com/laurauntner/wikidata-to-cidoc-crm/blob/main/src/wiki2crm/authors.py) script reads a list of Wikidata QIDs for authors from a CSV file and creates RDF triples using CIDOC CRM (eCRM, mapped to CRM). It models:
 
 - `E21_Person` with:
-  - `E41_Appellation` (names, derived from labels)
   - `E42_Identifier` (Wikidata QIDs, derived from given QIDs)
   - `E67_Birth` and `E69_Death` events, linked to:
     - `E53_Place` (birth places, derived from `wdt:P19`, and death places, derived from `wdt:P20`)
@@ -246,18 +245,12 @@ Namespace declarations and mappings to CRM are applied but not shown in this exe
 <https://sappho-digital.com/person/Q469571> a ecrm:E21_Person ;
     rdfs:label "Anna Louisa Karsch"@en ;
     ecrm:P100i_died_in <https://sappho-digital.com/death/Q469571> ;
-    ecrm:P131_is_identified_by <https://sappho-digital.com/appellation/Q469571> ;
     ecrm:P138i_has_representation <https://sappho-digital.com/visual_item/Q469571> ;
     ecrm:P1_is_identified_by <https://sappho-digital.com/identifier/Q469571> ;
     ecrm:P2_has_type <https://sappho-digital.com/gender/Q6581072> ;
     ecrm:P98i_was_born <https://sappho-digital.com/birth/Q469571> ;
     ecrm:P138i_has_representation <https://sappho-digital.com/visual_item/Q469571> ;
     owl:sameAs <http://www.wikidata.org/entity/Q469571> .
-
-<https://sappho-digital.com/appellation/Q469571> a ecrm:E41_Appellation ;
-    rdfs:label "Anna Louisa Karsch"@en ;
-    ecrm:P131i_identifies <https://sappho-digital.com/person/Q469571> ;
-    prov:wasDerivedFrom <http://www.wikidata.org/entity/Q469571> .
 
 <https://sappho-digital.com/identifier/Q469571> a ecrm:E42_Identifier ;
     rdfs:label "Q469571" ;
@@ -334,7 +327,7 @@ The [works.py](https://github.com/laurauntner/wikidata-to-cidoc-crm/blob/main/sr
   - `E55_Type` (genres, derived from `wdt:P136`)
   - `E73_Information_Object` (digital surrogates, derived from `wdt:P953`)
 - `F3_Manifestation` (publications of expressions) and `F30_Manifestation_Creation` with:
-  - `E21_Person` (editors, derived from `wdt:P98`) with `E41_Appellation` (names, derived from labels)
+  - `E21_Person` (editors, derived from `wdt:P98`)
   - `E35_Title` (titles, only different if the text is part of another text (`wdt:P1433` or `wdt:P361`))
   - `E52_Time-Span` (publication years, derived from `wdt:P577`)
   - `E53_Place` (publication places, derived from `wdt:P291`)
