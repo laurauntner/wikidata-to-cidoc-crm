@@ -811,13 +811,6 @@ def main(argv=None):
             SAPPHO_PROP.expr_possibly_cites))
         g.add((SAPPHO_PROP.expr_possibly_cited_by, RDFS.domain, LRMOO.F2_Expression))
         g.add((SAPPHO_PROP.expr_possibly_cited_by, RDFS.range, LRMOO.F2_Expression))
-
-        # ecrm alignment
-        g.add((SAPPHO_PROP.expr_possibly_cites, RDFS.subPropertyOf, ECRM.P148_has_component))
-        g.add((SAPPHO_PROP.expr_possibly_cited_by, RDFS.subPropertyOf, ECRM.P148i_is_component_of))   
-                
-        g.add((SAPPHO_PROP.expr_possibly_cites, RDFS.subPropertyOf, ECRM.P130_shows_features_of))
-        g.add((SAPPHO_PROP.expr_possibly_cited_by, RDFS.subPropertyOf, ECRM.P130i_features_are_also_found_on))   
         
         # lrmoo alignment
         g.add((LRMOO.R76_is_derivative_of, SKOS.broadMatch, SAPPHO_PROP.expr_possibly_cites))
@@ -857,12 +850,6 @@ def main(argv=None):
         g.add((LRMOO.R75_incorporates,  SKOS.broadMatch, SAPPHO_PROP.tp_possibly_cites))
         g.add((LRMOO.R75i_is_incorporated_in, SKOS.broadMatch, SAPPHO_PROP.tp_possibly_cited_by))
         
-        g.add((SAPPHO_PROP.tp_possibly_cites, RDFS.subPropertyOf, ECRM.P148_has_component))
-        g.add((SAPPHO_PROP.tp_possibly_cited_by, RDFS.subPropertyOf, ECRM.P148i_is_component_of))   
-        
-        g.add((SAPPHO_PROP.tp_possibly_cites, RDFS.subPropertyOf, ECRM.P130_shows_features_of))
-        g.add((SAPPHO_PROP.tp_possibly_cited_by, RDFS.subPropertyOf, ECRM.P130i_features_are_also_found_on)) 
-        
         chain21 = [INTRO.R30_hasTextPassage]
         b21     = BNode()
         Collection(g, b21, chain21)
@@ -897,7 +884,6 @@ def main(argv=None):
         g.add((SAPPHO_PROP.expr_references, RDFS.range, ECRM.E21_Person))
         g.add((SAPPHO_PROP.expr_references, RDFS.range, ECRM.E53_Place))
         g.add((SAPPHO_PROP.expr_references, RDFS.range, LRMOO.F2_Expression))
-        g.add((SAPPHO_PROP.expr_references, RDFS.subPropertyOf, ECRM.P67_refers_to))
         
         g.add((SAPPHO_PROP.referenced_by_expr, RDF.type, OWL.ObjectProperty))
         g.add((SAPPHO_PROP.referenced_by_expr, RDFS.label,
@@ -909,7 +895,6 @@ def main(argv=None):
         g.add((SAPPHO_PROP.referenced_by_expr, RDFS.domain, ECRM.E53_Place))
         g.add((SAPPHO_PROP.referenced_by_expr, RDFS.domain, LRMOO.F2_Expression))
         g.add((SAPPHO_PROP.referenced_by_expr, RDFS.range,  LRMOO.F2_Expression))
-        g.add((SAPPHO_PROP.referenced_by_expr, RDFS.subPropertyOf, ECRM.P67i_is_referred_to_by))
         
         for expr in g.subjects(RDF.type, LRMOO.F2_Expression):
             for act in g.objects(expr, INTRO.R18_showsActualization):
@@ -943,7 +928,6 @@ def main(argv=None):
         g.add((SAPPHO_PROP.references_person, OWL.propertyChainAxiom, chain_bnode))
         g.add((SAPPHO_PROP.references_person, RDFS.domain, LRMOO.F2_Expression))
         g.add((SAPPHO_PROP.references_person, RDFS.range, ECRM.E21_Person))
-        g.add((SAPPHO_PROP.references_person, RDFS.subPropertyOf, ECRM.P67_refers_to))
 
         g.add((SAPPHO_PROP.person_referenced_by, RDF.type, OWL.ObjectProperty))
         g.add((SAPPHO_PROP.person_referenced_by, RDFS.label, Literal("person_referenced_by", lang="en")))
@@ -951,7 +935,6 @@ def main(argv=None):
         g.add((SAPPHO_PROP.person_referenced_by, OWL.inverseOf, SAPPHO_PROP.references_person))
         g.add((SAPPHO_PROP.person_referenced_by, RDFS.domain, LRMOO.F2_Expression))
         g.add((SAPPHO_PROP.person_referenced_by, RDFS.range, ECRM.E21_Person))
-        g.add((SAPPHO_PROP.person_referenced_by, RDFS.subPropertyOf, ECRM.P67i_is_referred_to_by))
 
         g.add((POSTDATA_ANALYSIS.refersTo, SKOS.broadMatch, SAPPHO_PROP.references_person))
         g.add((POSTDATA_ANALYSIS.isReferredToBy, OWL.inverseOf, POSTDATA_ANALYSIS.refersTo))
@@ -965,7 +948,6 @@ def main(argv=None):
         g.add((SAPPHO_PROP.references_place, OWL.propertyChainAxiom, chain_bnode))
         g.add((SAPPHO_PROP.references_place, RDFS.domain, LRMOO.F2_Expression))
         g.add((SAPPHO_PROP.references_place, RDFS.range, ECRM.E53_Place))
-        g.add((SAPPHO_PROP.references_place, RDFS.subPropertyOf, ECRM.P67_refers_to))
 
         g.add((SAPPHO_PROP.place_referenced_by, RDF.type, OWL.ObjectProperty))
         g.add((SAPPHO_PROP.place_referenced_by, RDFS.label, Literal("place_referenced_by", lang="en")))
@@ -973,7 +955,6 @@ def main(argv=None):
         g.add((SAPPHO_PROP.place_referenced_by, OWL.inverseOf, SAPPHO_PROP.references_place))
         g.add((SAPPHO_PROP.place_referenced_by, RDFS.domain, LRMOO.F2_Expression))
         g.add((SAPPHO_PROP.place_referenced_by, RDFS.range, ECRM.E53_Place))
-        g.add((SAPPHO_PROP.place_referenced_by, RDFS.subPropertyOf, ECRM.P67i_is_referred_to_by))
 
         g.add((POSTDATA_ANALYSIS.refersTo, SKOS.broadMatch, SAPPHO_PROP.references_place))
         g.add((POSTDATA_ANALYSIS.refersTo, OWL.inverseOf, POSTDATA_ANALYSIS.refersTo))
@@ -994,11 +975,9 @@ def main(argv=None):
             if local_name == "has_character":
                 g.add((prop, RDFS.domain, LRMOO.F2_Expression))
                 g.add((prop, RDFS.range,  INTRO.INT2_ActualizationOfFeature))
-                g.add((prop, RDFS.subPropertyOf, ECRM.P148_has_component))
             else:
                 g.add((prop, RDFS.domain, INTRO.INT2_ActualizationOfFeature))
                 g.add((prop, RDFS.range,  LRMOO.F2_Expression))
-                g.add((prop, RDFS.subPropertyOf, ECRM.P148i_is_component_of))
 
         for expr in g.subjects(RDF.type, LRMOO.F2_Expression):
             for act in g.objects(expr, INTRO.R18_showsActualization):
